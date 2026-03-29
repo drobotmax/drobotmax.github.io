@@ -539,15 +539,19 @@ function formatViews(n) {
 }
 
 function sanitizeHTML(html) {
-  // Strip tg-emoji wrappers and other heavy tags, keep allowed ones
   let s = html || '';
   // Remove <i class="emoji">...</i> wrappers but keep inner text
   s = s.replace(/<i class="emoji"[^>]*>(.*?)<\/i>/gi, '$1');
+  // Remove <tg-emoji ...>...</tg-emoji> wrappers but keep inner text
+  s = s.replace(/<tg-emoji[^>]*>(.*?)<\/tg-emoji>/gi, '$1');
   // Remove <span class="tg-spoiler">
   s = s.replace(/<span[^>]*class="tg-spoiler"[^>]*>/gi, '');
   s = s.replace(/<\/span>/gi, '');
-  // Strip onclick handlers from links
-  s = s.replace(/\s+onclick="[^"]*"/gi, '');
+  // Strip onclick/onmouseover/onerror handlers (both quote styles)
+  s = s.replace(/\s+on\w+="[^"]*"/gi, '');
+  s = s.replace(/\s+on\w+='[^']*'/gi, '');
+  // Strip confirm() wrappers in remaining attributes
+  s = s.replace(/return confirm\([^)]*\);?/gi, '');
   return s;
 }
 
@@ -652,7 +656,7 @@ function renderFeed() {
     const reactions = parseViews(p.reactions);
     const text = sanitizeHTML(p.text);
     const fwd = p.fwd_from ? '<div class="fwd-badge">Forwarded from ' + (p.fwd_link ? '<a href="' + p.fwd_link + '" target="_blank">' + p.fwd_from + '</a>' : p.fwd_from) + '</div>' : '';
-    const media = p.mediaUrl ? '<img class="media-preview" src="' + p.mediaUrl + '" loading="lazy" alt="" onerror="this.style.display='none'">' : '';
+    const media = p.mediaUrl ? '<img class="media-preview" src="' + p.mediaUrl + '" loading="lazy" alt="" onerror="this.style.display=&quot;none&quot;">' : '';
     const link = 'https://t.me/' + p.channel + '/' + p.id;
 
     return '<div class="card">' +
