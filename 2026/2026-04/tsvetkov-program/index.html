@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тактическая программа: AI-трансформация бизнеса - Дмитрий Цветков</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0A1628;
+  --navy-elevated: #0E1D33;
+  --navy-card: #12233D;
+  --navy-hover: #172B4A;
+  --emerald: #34D399;
+  --emerald-light: #6EE7B7;
+  --emerald-dim: rgba(52,211,153,0.08);
+  --emerald-border: rgba(52,211,153,0.2);
+  --white: #E8ECF1;
+  --gray: #8B9BB4;
+  --muted: #4A5E7A;
+  --border: #1A2D4A;
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: #F8F9FB;
+  color: #1A1A2E;
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ── */
+.page-header {
+  background: var(--navy);
+  padding: 72px 0 56px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--emerald), transparent);
+}
+.header-logo {
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--white);
+  letter-spacing: -0.04em;
+  margin-bottom: 32px;
+}
+.header-logo .dot { color: var(--emerald); }
+.header-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--emerald);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.header-label::before { content: '//'; opacity: 0.5; }
+.page-header h1 {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+.page-header .subtitle {
+  font-size: 16px;
+  color: var(--gray);
+  font-weight: 500;
+  margin-bottom: 32px;
+}
+.header-meta {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.meta-item .meta-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.meta-item .meta-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+/* ── Sections ── */
+.section { padding: 56px 0; border-bottom: 1px solid #E5E7EB; }
+.section:last-child { border-bottom: none; }
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--emerald);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::before { content: '//'; opacity: 0.5; }
+
+h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.section-desc {
+  font-size: 16px;
+  color: #6B7280;
+  max-width: 780px;
+  margin-bottom: 32px;
+  line-height: 1.75;
+}
+
+/* ── Value proposition ── */
+.value-block {
+  background: var(--navy);
+  border-radius: 16px;
+  padding: 40px 48px;
+  color: var(--white);
+  font-size: 17px;
+  line-height: 1.75;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.value-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: var(--emerald);
+}
+
+/* ── Overview table ── */
+.overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+}
+.overview-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--navy);
+}
+.overview-table td {
+  padding: 16px 18px;
+  font-size: 15px;
+  border-bottom: 1px solid #E5E7EB;
+  vertical-align: top;
+}
+.overview-table tr:last-child td { border-bottom: none; }
+.overview-table .day-num {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--emerald);
+  white-space: nowrap;
+}
+.overview-table .day-topic { font-weight: 600; color: var(--navy); }
+.overview-table .day-result { color: #6B7280; font-size: 13px; }
+.overview-table .weekend {
+  background: var(--emerald-dim);
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* ── Structure cards ── */
+.structure-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.structure-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+.structure-card .num {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--emerald);
+  margin-bottom: 4px;
+}
+.structure-card .label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.structure-card .desc {
+  font-size: 11px;
+  color: #6B7280;
+}
+
+/* ── Week divider ── */
+.week-divider {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 24px 32px;
+  margin: 48px 0 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.week-divider .week-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--emerald);
+}
+.week-divider .week-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+.week-divider .week-dates {
+  font-size: 13px;
+  color: var(--gray);
+  margin-left: auto;
+}
+
+/* ── Day block ── */
+.day-block {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.day-header {
+  background: var(--navy);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.day-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--navy);
+  background: var(--emerald);
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.day-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--white);
+}
+.day-date {
+  font-size: 13px;
+  color: var(--gray);
+  white-space: nowrap;
+  margin-left: auto;
+}
+.day-header { cursor: pointer; user-select: none; transition: background 0.2s; }
+.day-header:hover { background: var(--navy-elevated); }
+.day-toggle {
+  margin-left: auto;
+  width: 28px; height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.day-toggle svg { width: 14px; height: 14px; stroke: var(--gray); stroke-width: 2.5; fill: none; }
+.day-block.open .day-toggle { transform: rotate(180deg); }
+.day-body {
+  padding: 0 28px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+.day-block.open .day-body {
+  padding: 28px;
+  max-height: 3000px;
+}
+.day-note {
+  background: var(--emerald-dim);
+  border: 1px solid var(--emerald-border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--navy);
+  margin-bottom: 24px;
+  line-height: 1.65;
+}
+
+.day-section { margin-bottom: 24px; }
+.day-section:last-child { margin-bottom: 0; }
+.day-section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--emerald);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #F3F4F6;
+}
+.day-section ul {
+  list-style: none;
+  padding: 0;
+}
+.day-section li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #374151;
+}
+.day-section li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 9px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--emerald);
+}
+.day-section li.sub {
+  padding-left: 38px;
+  color: #6B7280;
+  font-size: 14px;
+}
+.day-section li.sub::before {
+  left: 18px;
+  width: 4px; height: 4px;
+  background: #D1D5DB;
+}
+.checklist li::before { display: none; }
+.checklist li {
+  padding-left: 24px;
+  position: relative;
+}
+.checklist li::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 5px;
+  width: 14px; height: 14px;
+  border: 2px solid #D1D5DB;
+  border-radius: 3px;
+}
+.link { color: #3B82F6; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+.day-result {
+  background: #F0FDF4;
+  border-left: 3px solid var(--emerald);
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #166534;
+  border-radius: 0 8px 8px 0;
+}
+
+/* ── Homework ── */
+.homework {
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.homework-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #92400E;
+  margin-bottom: 8px;
+}
+.homework ul {
+  list-style: none;
+  padding: 0;
+}
+.homework li {
+  padding-left: 18px;
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: #78350F;
+  position: relative;
+}
+.homework li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #F59E0B;
+}
+
+/* ── Tasks table ── */
+.tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tasks-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 2px solid var(--navy);
+}
+.tasks-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid #E5E7EB;
+}
+.tasks-table tr:last-child td { border-bottom: none; }
+.tasks-table .task-name { color: var(--navy); font-weight: 500; }
+.tasks-table .task-day {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--emerald);
+  white-space: nowrap;
+}
+
+/* ── Tools grid ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.tool-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.tool-day {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--emerald);
+  background: var(--emerald-dim);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.tool-info .tool-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.tool-info .tool-desc {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* ── Footer ── */
+.page-footer {
+  background: var(--navy);
+  padding: 40px 0;
+  text-align: center;
+  margin-top: 40px;
+}
+.footer-logo {
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--white);
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+.footer-logo .dot { color: var(--emerald); }
+.footer-text {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .page-header { padding: 48px 0 40px; }
+  .page-header h1 { font-size: 26px; }
+  .header-meta { flex-direction: column; gap: 16px; }
+  .structure-grid { grid-template-columns: repeat(2, 1fr); }
+  .tools-grid { grid-template-columns: 1fr; }
+  .day-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .day-date { margin-left: 0; }
+  .week-divider { flex-direction: column; align-items: flex-start; }
+  .week-divider .week-dates { margin-left: 0; }
+}
+
+@media print {
+  body { background: #fff; }
+  .day-block { break-inside: avoid; }
+  .week-divider { break-before: page; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="page-header">
+<div class="container">
+  <div class="header-logo">MD<span class="dot">.</span></div>
+  <div class="header-label">Тактическая программа</div>
+  <h1>AI-трансформация бизнеса</h1>
+  <div class="subtitle">Дмитрий Цветков, сеть лазерной эпиляции (Краснодар, Пенза)</div>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Старт</span>
+      <span class="meta-value">13 апреля 2026</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Формат</span>
+      <span class="meta-value">Пн-Пт, 13:00-15:00 МСК</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Срок</span>
+      <span class="meta-value">2 недели (10 дней)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Формула</span>
+      <span class="meta-value">Практика + самоподготовка</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="container">
+
+<!-- ═══ VALUE PROP ═══ -->
+<div class="section">
+  <div class="value-block">
+    Полный стек AI-инструментов, которым я работаю каждый день - настроенный под твой бизнес. Не теория про "возможности искусственного интеллекта", а рабочая система: утром открыл - AI показал расписание, задачи, важные сообщения. Нужен скрипт для менеджера - AI написал. Нужно проверить качество звонков - AI проаудировал и дал отчёт. Все твои задачи по ОП, CRM, каналам и ботам мы решаем прямо на программе - как практические кейсы.
+  </div>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="section">
+  <div class="section-label">Обзор программы</div>
+  <h2>10 дней, 14 инструментов, 12 бизнес-задач</h2>
+  <table class="overview-table">
+    <thead>
+      <tr><th>День</th><th>Тема</th><th>Результат</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="day-num">01</td><td class="day-topic">Как работают модели + экскурсия по стеку</td><td class="day-result">Понимаешь ландшафт AI, видишь полную картину</td></tr>
+      <tr><td class="day-num">02</td><td class="day-topic">Claude: глубокая работа + co-work</td><td class="day-result">Владеешь Claude продвинуто, аудит ОП готов</td></tr>
+      <tr><td class="day-num">03</td><td class="day-topic">Архитектура знаний + база знаний</td><td class="day-result">База знаний создана, бизнес-процессы описаны</td></tr>
+      <tr><td class="day-num">04</td><td class="day-topic">Claude Code + Cursor: сборка продуктов</td><td class="day-result">Мини-лендинг для промоутеров опубликован</td></tr>
+      <tr><td class="day-num">05</td><td class="day-topic">Codex + CRM: автономная работа AI</td><td class="day-result">amoCRM настроена, автоматизации работают</td></tr>
+      <tr class="weekend"><td></td><td colspan="2" style="text-align:center">Выходные: практика + домашнее задание</td></tr>
+      <tr><td class="day-num">06</td><td class="day-topic">Подключаем календарь, задачи, почту к AI</td><td class="day-result">Ежедневный AI-ритуал настроен</td></tr>
+      <tr><td class="day-num">07</td><td class="day-topic">Google Docs/Sheets + скрипты продаж</td><td class="day-result">4 скрипта + дашборд, всё через AI</td></tr>
+      <tr><td class="day-num">08</td><td class="day-topic">Мессенджеры: Telegram, WhatsApp, VK Max</td><td class="day-result">Все каналы подключены, шаблоны готовы</td></tr>
+      <tr><td class="day-num">09</td><td class="day-topic">Аудит звонков через AI + бот-квалификатор</td><td class="day-result">Умеешь аудировать ОП, архитектура бота готова</td></tr>
+      <tr><td class="day-num">10</td><td class="day-topic">Онлайн-продукт + сборка системы</td><td class="day-result">Всё работает как единая система</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ STRUCTURE ═══ -->
+<div class="section">
+  <div class="section-label">Как устроен каждый день</div>
+  <h2>4 блока = максимальный результат</h2>
+  <div class="structure-grid">
+    <div class="structure-card"><div class="num">1</div><div class="label">Чеклист</div><div class="desc">Что установить и подготовить</div></div>
+    <div class="structure-card"><div class="num">2</div><div class="label">Самоподготовка</div><div class="desc">Видео, статьи (1-1.5ч)</div></div>
+    <div class="structure-card"><div class="num">3</div><div class="label">Практика</div><div class="desc">Совместная работа (2ч)</div></div>
+    <div class="structure-card"><div class="num">4</div><div class="label">Домашка</div><div class="desc">Практика до след. дня</div></div>
+  </div>
+  <p style="font-size:14px;color:#6B7280;">Все бизнес-задачи (amoCRM, бот-квалификатор, каналы, воронка) - не отдельный блок. Это материал, на котором учимся.</p>
+</div>
+
+<!-- ═══ WEEK 1 ═══ -->
+<div class="week-divider">
+  <div class="week-num">Неделя 1</div>
+  <div class="week-title">Фундамент + архитектура знаний</div>
+  <div class="week-dates">13-17 апреля</div>
+</div>
+
+<!-- Day 1 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 1</span>
+    <span class="day-title">Как работают модели + экскурсия по стеку</span>
+    <span class="day-date">Пн 13.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Ноутбук, стабильный интернет</li>
+        <li>Открыть claude.ai и chat.openai.com - проверить что всё работает</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~1.5ч)</div>
+      <ul>
+        <li>Andrej Karpathy "Intro to Large Language Models" (<a class="link" href="https://www.youtube.com/watch?v=zjkBMFhNj_g" target="_blank">YouTube, ~1ч</a>) - фундамент: что такое языковые модели, как работают</li>
+        <li>Сравнение моделей: <a class="link" href="https://improvado.io/blog/claude-vs-chatgpt-vs-gemini-vs-deepseek" target="_blank">Claude vs ChatGPT vs Gemini</a> - разбор с примерами</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Базовые принципы: токены, контекстное окно, температура - что это на практике</li>
+        <li>Разница моделей: Claude (Opus/Sonnet/Haiku) vs GPT-4o vs Grok - когда какую</li>
+        <li>Промптинг на твоих задачах: не "напиши текст", а "думай вместе со мной"</li>
+        <li>Экскурсия по моему стеку: как я работаю каждый день</li>
+        <li class="sub">Claude для стратегии и анализа</li>
+        <li class="sub">Claude Code для автоматизации</li>
+        <li class="sub">Cursor для сборки продуктов</li>
+        <li class="sub">Подключённые инструменты: календарь, почта, мессенджеры, задачи</li>
+        <li class="sub">Obsidian как второй мозг</li>
+        <li class="sub">Granola для записи встреч</li>
+        <li>Ты пробуешь каждый инструмент на своей задаче (5 мин на инструмент)</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 2)</div>
+      <ul>
+        <li>Решить 5 реальных бизнес-задач через Claude (любых)</li>
+        <li>Записать: что получилось хорошо, где модель "не поняла"</li>
+        <li>Попробовать ту же задачу в ChatGPT и Claude - сравнить</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 2 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 2</span>
+    <span class="day-title">Claude: глубокая работа + co-work</span>
+    <span class="day-date">Вт 14.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Подготовить 2-3 бизнес-документа (выгрузки из CRM, отчёты, договоры)</li>
+        <li>Выгрузить из amoCRM: сделки, задачи по городам (CSV/Excel)</li>
+        <li>Запросить у AImop: текстовые логи переписок бота или записи звонков</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~1ч)</div>
+      <ul>
+        <li>Блог Anthropic про Projects: <a class="link" href="https://www.anthropic.com/news/projects" target="_blank">anthropic.com/news/projects</a></li>
+        <li>Extended Thinking: <a class="link" href="https://www.anthropic.com/news/visible-extended-thinking" target="_blank">anthropic.com/news/visible-extended-thinking</a></li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Разбор домашнего задания</li>
+        <li>Projects в Claude: рабочее пространство, чтобы AI "помнил" твой бизнес</li>
+        <li>Extended thinking: "режим размышлений" для сложных задач</li>
+        <li>Co-work: совместная работа в реальном времени</li>
+        <li>Работа с таблицами и документами: загрузка, анализ, выводы</li>
+        <li><strong>Кейс:</strong> аудит текущей ситуации с ОП</li>
+        <li class="sub">Загружаем выгрузку из amoCRM - где теряются лиды, какие города просаживаются</li>
+        <li class="sub">Анализ бота AImop: логи переписок или аудио звонков через Claude</li>
+        <li class="sub">Формулируем требования к собственному ОП</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 3)</div>
+      <ul>
+        <li>Создать Project в Claude для бизнеса: инструкции + 3-5 документов</li>
+        <li>Задать проекту 10 вопросов про бизнес - оценить качество ответов</li>
+        <li>Список знаний, которые "в голове" и нигде не записаны</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 3 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 3</span>
+    <span class="day-title">Архитектура знаний + база знаний</span>
+    <span class="day-date">Ср 15.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Установить Obsidian (<a class="link" href="https://obsidian.md" target="_blank">obsidian.md</a>) - создать пустое хранилище</li>
+        <li>Список знаний "из головы" (из домашки Дня 2)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~1ч)</div>
+      <ul>
+        <li>Nicole van der Hoeven - <a class="link" href="https://www.youtube.com/playlist?list=PL-1Nqb2waX4Vba6QDVS5rhnSb9pZGTO4b" target="_blank">плейлист по Obsidian</a> (первые 2-3 видео)</li>
+        <li>Zettelkasten метод: <a class="link" href="https://productuniversity.ru/zettelkasten-method" target="_blank">productuniversity.ru</a> (9 коротких роликов на русском)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Зачем база знаний: чтобы AI работал с твоими знаниями и бизнес масштабировался</li>
+        <li>Obsidian: структура, связи, теги</li>
+        <li>Альтернативы (если Obsidian не ложится):</li>
+        <li class="sub">Notion - проще интерфейс, облачный, есть встроенный AI</li>
+        <li class="sub">Capacities - удобен если мыслишь объектами (клиенты, процедуры, сделки)</li>
+        <li>Архитектура знаний: процедуры, скрипты, FAQ, возражения, бизнес-процессы</li>
+        <li><strong>Кейс:</strong> создаём структуру + 10-15 заметок</li>
+        <li class="sub">FAQ по процедурам (потом пойдёт в бота)</li>
+        <li class="sub">База возражений (потом пойдёт в скрипты менеджера)</li>
+        <li>Как AI помогает наполнять: генерация из разговоров, структурирование хаоса</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 4)</div>
+      <ul>
+        <li>Заполнить ещё 10 заметок (процедуры, FAQ, возражения)</li>
+        <li>Карта бизнес-процессов: путь клиента от первого касания до повторного визита</li>
+        <li>Дать Claude базу возражений и попросить дополнить</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 4 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 4</span>
+    <span class="day-title">Claude Code + Cursor: сборка продуктов</span>
+    <span class="day-date">Чт 16.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">Тебе не нужно становиться программистом. Это 5 команд в терминале, которые нужны чтобы AI работал за тебя - собирал страницы, автоматизации, интеграции. Ты говоришь что сделать, AI делает.</div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Установить Cursor (<a class="link" href="https://cursor.com" target="_blank">cursor.com</a>)</li>
+        <li>Установить Claude Code extension в Cursor</li>
+        <li>Пройти мини-туториал по терминалу (из самоподготовки)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~1ч)</div>
+      <ul>
+        <li>Claude Code: <a class="link" href="https://www.anthropic.com/news/claude-3-7-sonnet" target="_blank">anthropic.com анонс</a></li>
+        <li>Cursor: <a class="link" href="https://cursor.com/learn" target="_blank">cursor.com/learn</a> - туториалы</li>
+        <li>Команды терминала: cd, ls, pwd, cat (YouTube, 15 мин) - это всё что нужно</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Когда что использовать:</li>
+        <li class="sub">Claude - думать, анализировать, писать</li>
+        <li class="sub">Claude Code - автоматизировать, строить, подключать</li>
+        <li class="sub">Cursor + Claude Code - редактировать в контексте проекта</li>
+        <li>CLAUDE.md - файл-инструкция, который учит AI понимать твой проект</li>
+        <li><strong>Кейс:</strong> мини-лендинг для промоутеров</li>
+        <li class="sub">QR-код на листовке - WhatsApp / Telegram / Звонок</li>
+        <li class="sub">Собираем в Cursor, публикуем в интернет</li>
+        <li class="sub">Ты делаешь правки сам</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 5)</div>
+      <ul>
+        <li>3 правки в мини-лендинге через Cursor (цвета, текст, кнопки)</li>
+        <li>Написать CLAUDE.md для своего бизнеса</li>
+        <li>Попробовать Claude Code на любой задаче</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 5 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 5</span>
+    <span class="day-title">Codex + CRM: автономная работа AI</span>
+    <span class="day-date">Пт 17.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Доступ к amoCRM (новый аккаунт или отдельная воронка)</li>
+        <li>API-ключ amoCRM (запросить у техподдержки заранее)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~1ч)</div>
+      <ul>
+        <li>OpenAI Codex: <a class="link" href="https://openai.com/index/codex-now-generally-available/" target="_blank">openai.com анонс</a></li>
+        <li>Разница: Claude Code (вместе) vs Codex (автономно)</li>
+        <li>amoCRM Academy (бесплатный курс)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Codex: даёшь задачу и занимаешься другим, пока AI работает</li>
+        <li><strong>Кейс:</strong> настройка новой amoCRM</li>
+        <li class="sub">Отдельная воронка для твоих городов</li>
+        <li class="sub">Поля: город, источник, категория лида, промоутер</li>
+        <li class="sub">Автопостановка задач менеджеру</li>
+        <li class="sub">Фильтрация по городам (Краснодар, Пенза)</li>
+        <li class="sub">Импорт активных сделок + автоматизации</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание на выходные (показать в Дне 6)</div>
+      <ul>
+        <li>10 промптов для ежедневных задач, решить через Claude</li>
+        <li>5-10 новых заметок в базе знаний</li>
+        <li>1 день с новой CRM: 3-5 реальных сделок</li>
+        <li>Дать Codex одну задачу самостоятельно</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WEEK 2 ═══ -->
+<div class="week-divider">
+  <div class="week-num">Неделя 2</div>
+  <div class="week-title">Подключение инструментов + автоматизации</div>
+  <div class="week-dates">21-25 апреля</div>
+</div>
+
+<!-- Day 6 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 6</span>
+    <span class="day-title">Подключаем календарь, задачи, почту к AI</span>
+    <span class="day-date">Пн 21.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Google аккаунт (Calendar, Gmail)</li>
+        <li>Аккаунт в таск-менеджере (Todoist или другой)</li>
+        <li>Claude Code работает (из Дня 4)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~1ч)</div>
+      <ul>
+        <li>MCP: <a class="link" href="https://www.anthropic.com/news/model-context-protocol" target="_blank">anthropic.com/news/model-context-protocol</a> - "руки" для AI</li>
+        <li>Обзор Todoist - базовые функции, 15 мин</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Подключаем Google Calendar, таск-менеджер, Gmail</li>
+        <li><strong>Кейс:</strong> твой ежедневный ритуал</li>
+        <li class="sub">Утро: "расписание + задачи + важные письма"</li>
+        <li class="sub">День: "добавь задачу", "перенеси встречу"</li>
+        <li class="sub">Вечер: "что сделано, что на завтра"</li>
+        <li class="sub">Автонапоминания о follow-up лидов</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 7)</div>
+      <ul>
+        <li>Прожить 1 день с AI-ритуалом: утро / день / вечер</li>
+        <li>Записать: что ускорилось, что неудобно</li>
+        <li>Через AI: 5 задач на неделю + 3 события в календарь</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 7 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 7</span>
+    <span class="day-title">Google Docs/Sheets + скрипты продаж</span>
+    <span class="day-date">Вт 22.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Google аккаунт (Docs, Sheets)</li>
+        <li>Текущие скрипты менеджера "как есть" (текстом)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Подключаем Google Docs и Sheets к AI</li>
+        <li><strong>Кейс:</strong> скрипты продаж + дашборд</li>
+        <li class="sub">Скрипт обработки горячего лида</li>
+        <li class="sub">Скрипт подтверждения записи (за день до визита)</li>
+        <li class="sub">Оффер: карбоновый пилинг бесплатно при первом визите</li>
+        <li class="sub">Скрипт допродажи</li>
+        <li class="sub">Дашборд: лиды / записи / приходы по городам и каналам</li>
+        <li class="sub">Цель: конверсия записей в приходы >= 65%</li>
+        <li>Всё создаём через AI, не руками</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 8)</div>
+      <ul>
+        <li>Дать менеджеру скрипты на тест - собрать обратную связь</li>
+        <li>Заполнить дашборд реальными данными</li>
+        <li>Создать через AI ещё 1 документ (КП, инструкция, чеклист)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 8 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 8</span>
+    <span class="day-title">Мессенджеры: Telegram, WhatsApp, VK Max</span>
+    <span class="day-date">Ср 23.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Telegram, WhatsApp, VK Max - основные аккаунты</li>
+        <li>Список чатов/каналов, важных для бизнеса</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li>Подключаем Telegram, WhatsApp, VK Max к AI</li>
+        <li>WABA (WhatsApp Business API): шаблоны, рассылки, интеграция с CRM</li>
+        <li><strong>Кейс:</strong> мультиканальная коммуникация</li>
+        <li class="sub">AI читает входящие, подсказывает ответы</li>
+        <li class="sub">Шаблоны: SMS - мессенджер - звонок</li>
+        <li class="sub">Ротация номеров и аккаунтов (карусель SIM)</li>
+        <li class="sub">Связка: лид в CRM - переписка - задача менеджеру</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 9)</div>
+      <ul>
+        <li>Обработать 5 входящих от клиентов с помощью AI</li>
+        <li>10 шаблонов ответов на типовые вопросы</li>
+        <li>Собрать записи/логи звонков AImop (для Дня 9)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 9 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 9</span>
+    <span class="day-title">Аудит звонков через AI + бот-квалификатор</span>
+    <span class="day-date">Чт 24.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Записи звонков AImop (аудио или текстовые логи)</li>
+        <li>Установить Granola (<a class="link" href="https://granola.ai" target="_blank">granola.ai</a>)</li>
+        <li>Перечитать FAQ и возражения из базы знаний</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~1ч)</div>
+      <ul>
+        <li>Granola: <a class="link" href="https://www.granola.ai/blog/announcement" target="_blank">granola.ai/blog/announcement</a></li>
+        <li>Квалификация лидов: горячий / тёплый / холодный</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li><strong>Аудит звонков через AI</strong> - контроль ОП без специальных знаний:</li>
+        <li class="sub">Загружаем записи в Claude (аудио или логи)</li>
+        <li class="sub">Чеклист качества: приветствие, квалификация, предложение, закрытие</li>
+        <li class="sub">AI оценивает и даёт рекомендации</li>
+        <li class="sub">Еженедельный ритуал: аудит 10-15 звонков</li>
+        <li>Granola: тестируем на нашей сессии</li>
+        <li><strong>Кейс:</strong> бот-квалификатор</li>
+        <li class="sub">3 категории: горячий / тёплый / отказ</li>
+        <li class="sub">Бот честно представляется как помощник</li>
+        <li class="sub">SMS - мини-лендинг - мессенджер, ротация SIM</li>
+        <li class="sub">Триггер: горячий лид = уведомление за < 1 мин</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 10)</div>
+      <ul>
+        <li>Проаудировать 5 звонков самостоятельно по чеклисту</li>
+        <li>Отчёт: топ-3 проблемы и рекомендации</li>
+        <li>Список вопросов и пробелов за 2 недели</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Day 10 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 10</span>
+    <span class="day-title">Онлайн-продукт + сборка системы</span>
+    <span class="day-date">Пт 25.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Практика (13:00-15:00)</div>
+      <ul>
+        <li><strong>Кейс:</strong> воронка онлайн-продукта (мастер-майнд 250K-1M+)</li>
+        <li class="sub">Трафик - бот - лид-магнит - анкета - скрипт</li>
+        <li class="sub">Проектируем через весь стек</li>
+        <li>Полная карта: что, где, когда использовать</li>
+        <li>Ежедневные ритуалы: утренний чекин + вечерний wrap-up</li>
+        <li><strong>Финальное ревью</strong></li>
+        <li class="sub">Claude/Cursor/Claude Code/Codex - самостоятельно</li>
+        <li class="sub">Все инструменты подключены и работают</li>
+        <li class="sub">amoCRM, скрипты, дашборд, база знаний</li>
+        <li class="sub">Аудит звонков, бот-квалификатор, Granola</li>
+        <li>План развития на следующий месяц</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOOLS ═══ -->
+<div class="section">
+  <div class="section-label">Инструменты программы</div>
+  <h2>14 инструментов, которые ты освоишь</h2>
+  <div class="tools-grid">
+    <div class="tool-card"><span class="tool-day">01-02</span><div class="tool-info"><div class="tool-name">Claude</div><div class="tool-desc">Думать, анализировать, стратегия</div></div></div>
+    <div class="tool-card"><span class="tool-day">03</span><div class="tool-info"><div class="tool-name">Obsidian / Notion</div><div class="tool-desc">Второй мозг, база знаний</div></div></div>
+    <div class="tool-card"><span class="tool-day">04</span><div class="tool-info"><div class="tool-name">Claude Code</div><div class="tool-desc">Автоматизация, сборка</div></div></div>
+    <div class="tool-card"><span class="tool-day">04</span><div class="tool-info"><div class="tool-name">Cursor</div><div class="tool-desc">Сборка продуктов с AI</div></div></div>
+    <div class="tool-card"><span class="tool-day">05</span><div class="tool-info"><div class="tool-name">Codex</div><div class="tool-desc">Автономные задачи</div></div></div>
+    <div class="tool-card"><span class="tool-day">06</span><div class="tool-info"><div class="tool-name">Google Calendar</div><div class="tool-desc">Расписание через AI</div></div></div>
+    <div class="tool-card"><span class="tool-day">06</span><div class="tool-info"><div class="tool-name">Gmail</div><div class="tool-desc">Почта через AI</div></div></div>
+    <div class="tool-card"><span class="tool-day">06</span><div class="tool-info"><div class="tool-name">Todoist</div><div class="tool-desc">Задачи через AI</div></div></div>
+    <div class="tool-card"><span class="tool-day">07</span><div class="tool-info"><div class="tool-name">Google Docs/Sheets</div><div class="tool-desc">Документы, таблицы, дашборды</div></div></div>
+    <div class="tool-card"><span class="tool-day">08</span><div class="tool-info"><div class="tool-name">Telegram</div><div class="tool-desc">Чаты через AI</div></div></div>
+    <div class="tool-card"><span class="tool-day">08</span><div class="tool-info"><div class="tool-name">WhatsApp + WABA</div><div class="tool-desc">Клиентская коммуникация</div></div></div>
+    <div class="tool-card"><span class="tool-day">08</span><div class="tool-info"><div class="tool-name">VK Max</div><div class="tool-desc">Мессенджер через AI</div></div></div>
+    <div class="tool-card"><span class="tool-day">09</span><div class="tool-info"><div class="tool-name">Аудит звонков</div><div class="tool-desc">Контроль качества ОП</div></div></div>
+    <div class="tool-card"><span class="tool-day">09</span><div class="tool-info"><div class="tool-name">Granola</div><div class="tool-desc">AI-записи встреч</div></div></div>
+  </div>
+</div>
+
+<!-- ═══ BUSINESS TASKS ═══ -->
+<div class="section">
+  <div class="section-label">Бизнес-задачи в программе</div>
+  <h2>Всё, что обсудили 7 апреля - встроено как кейсы</h2>
+  <table class="tasks-table">
+    <thead><tr><th>Задача</th><th>День</th></tr></thead>
+    <tbody>
+      <tr><td class="task-name">Аудит AImop и текущего ОП</td><td class="task-day">02</td></tr>
+      <tr><td class="task-name">Пересоздать amoCRM отдельно от совместного ОП</td><td class="task-day">05</td></tr>
+      <tr><td class="task-name">Фильтрация задач по городам (Краснодар, Пенза)</td><td class="task-day">05</td></tr>
+      <tr><td class="task-name">Автопостановка задач менеджеру на входящие лиды</td><td class="task-day">05</td></tr>
+      <tr><td class="task-name">Мини-лендинг для промоутеров (QR-код)</td><td class="task-day">04</td></tr>
+      <tr><td class="task-name">Бот-квалификатор: горячий / тёплый / отказ</td><td class="task-day">09</td></tr>
+      <tr><td class="task-name">Бот не притворяется человеком</td><td class="task-day">09</td></tr>
+      <tr><td class="task-name">Стратегия SMS - мессенджер - звонок</td><td class="task-day">08-09</td></tr>
+      <tr><td class="task-name">Конверсия записей в приходы 65% + допродажа</td><td class="task-day">07</td></tr>
+      <tr><td class="task-name">Аудит и контроль качества звонков</td><td class="task-day">09</td></tr>
+      <tr><td class="task-name">VK Max + стратегия против блокировок</td><td class="task-day">08</td></tr>
+      <tr><td class="task-name">Воронка онлайн-продукта (мастер-майнд)</td><td class="task-day">10</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /container -->
+
+<!-- ═══ FOOTER ═══ -->
+<div class="page-footer">
+  <div class="footer-logo">MD<span class="dot">.</span></div>
+  <div class="footer-text">ИП Дробот М.В. | Автономные системы продаж</div>
+</div>
+
+<script>
+document.querySelectorAll('.day-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const block = header.closest('.day-block');
+    block.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
