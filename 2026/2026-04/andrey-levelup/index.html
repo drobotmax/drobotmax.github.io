@@ -386,61 +386,10 @@
       <div class="section-num ai">AI</div>
       <h2>Курс по ИИ</h2>
     </div>
-    <p style="color: var(--text2); font-size: 14px; margin-bottom: 24px;">
-      15 минут в день. Один модуль за раз. Отмечай пройденные - прогресс сохраняется.
-    </p>
-    <div class="ai-course">
-      <h3>Модули курса</h3>
-      <div class="ai-module" onclick="toggleModule(0)">
-        <div class="mod-check" id="mod-0"></div>
-        <div class="mod-info">
-          <div class="mod-title">1. Что такое ИИ и как он думает</div>
-          <div class="mod-desc">Нейросети, обучение на данных, как ChatGPT генерирует текст</div>
-          <div class="mod-lessons">3 урока</div>
-        </div>
-      </div>
-      <div class="ai-module" onclick="toggleModule(1)">
-        <div class="mod-check" id="mod-1"></div>
-        <div class="mod-info">
-          <div class="mod-title">2. Промпты - как разговаривать с ИИ</div>
-          <div class="mod-desc">Как писать запросы, чтобы получать крутые результаты</div>
-          <div class="mod-lessons">4 урока</div>
-        </div>
-      </div>
-      <div class="ai-module" onclick="toggleModule(2)">
-        <div class="mod-check" id="mod-2"></div>
-        <div class="mod-info">
-          <div class="mod-title">3. ИИ для учебы</div>
-          <div class="mod-desc">Как использовать ИИ для домашки, проектов, подготовки к контрольным</div>
-          <div class="mod-lessons">3 урока</div>
-        </div>
-      </div>
-      <div class="ai-module" onclick="toggleModule(3)">
-        <div class="mod-check" id="mod-3"></div>
-        <div class="mod-info">
-          <div class="mod-title">4. Генерация картинок и видео</div>
-          <div class="mod-desc">Midjourney, DALL-E, Sora - создаем визуальный контент</div>
-          <div class="mod-lessons">3 урока</div>
-        </div>
-      </div>
-      <div class="ai-module" onclick="toggleModule(4)">
-        <div class="mod-check" id="mod-4"></div>
-        <div class="mod-info">
-          <div class="mod-title">5. Автоматизация с ИИ</div>
-          <div class="mod-desc">Боты, автоматизации, ИИ-агенты - делаем вещи которые работают сами</div>
-          <div class="mod-lessons">4 урока</div>
-        </div>
-      </div>
-      <div class="ai-module" onclick="toggleModule(5)">
-        <div class="mod-check" id="mod-5"></div>
-        <div class="mod-info">
-          <div class="mod-title">6. Свой проект</div>
-          <div class="mod-desc">Делаешь что-то свое с помощью ИИ: бот, сайт, приложение</div>
-          <div class="mod-lessons">Финальный проект</div>
-        </div>
-      </div>
-      <div class="ai-progress-bar"><div class="ai-progress-fill" id="ai-progress" style="width: 0%"></div></div>
-      <div class="ai-progress-text" id="ai-progress-text">0 / 6 модулей</div>
+    <div class="ai-course" style="text-align: center;">
+      <h3 style="margin-bottom: 12px;">15 минут в день - один урок</h3>
+      <p style="color: var(--text2); font-size: 14px; margin-bottom: 24px;">Открывай курс, проходи следующий урок, отмечай в чеклисте.</p>
+      <a href="https://drobotmax.github.io/ai-course-andrey/" target="_blank" style="display: inline-block; background: var(--purple); color: white; font-weight: 700; font-size: 18px; padding: 16px 40px; border-radius: 10px; text-decoration: none; transition: opacity 0.2s;">Открыть курс &rarr;</a>
     </div>
   </section>
 
@@ -483,9 +432,9 @@
 
     <h3 style="font-size: 16px; color: var(--text2); margin-bottom: 16px;">Курс по ИИ</h3>
     <div class="milestone-grid">
-      <div class="milestone-card"><div class="week">Неделя 1</div><div class="target">1/6</div><div class="desc">Понимаешь что такое ИИ</div></div>
-      <div class="milestone-card mid"><div class="week">Неделя 8</div><div class="target">4/6</div><div class="desc">Умеешь использовать ИИ</div></div>
-      <div class="milestone-card final"><div class="week">Неделя 12</div><div class="target">6/6</div><div class="desc">Свой проект готов</div></div>
+      <div class="milestone-card"><div class="week">Неделя 1</div><div class="target">Start</div><div class="desc">Открыл курс, начал</div></div>
+      <div class="milestone-card mid"><div class="week">Неделя 6</div><div class="target">50%</div><div class="desc">Половина пройдена</div></div>
+      <div class="milestone-card final"><div class="week">Неделя 12</div><div class="target">Done</div><div class="desc">Курс завершен</div></div>
     </div>
   </section>
 
@@ -684,37 +633,6 @@ function pluralize(n, one, few, many) {
   return many;
 }
 
-// === AI COURSE ===
-function initModules() {
-  const data = load();
-  const modules = data.modules || Array(TOTAL_MODULES).fill(false);
-  for (let i = 0; i < TOTAL_MODULES; i++) {
-    updateModuleUI(i, modules[i]);
-  }
-  updateAIProgress(modules);
-}
-
-function toggleModule(idx) {
-  const data = load();
-  const modules = data.modules || Array(TOTAL_MODULES).fill(false);
-  modules[idx] = !modules[idx];
-  data.modules = modules;
-  save(data);
-  updateModuleUI(idx, modules[idx]);
-  updateAIProgress(modules);
-}
-
-function updateModuleUI(idx, done) {
-  document.getElementById('mod-' + idx).className = 'mod-check' + (done ? ' done' : '');
-}
-
-function updateAIProgress(modules) {
-  const done = modules.filter(Boolean).length;
-  const pct = Math.round((done / TOTAL_MODULES) * 100);
-  document.getElementById('ai-progress').style.width = pct + '%';
-  document.getElementById('ai-progress-text').textContent = done + ' / ' + TOTAL_MODULES + ' модулей' + (done === TOTAL_MODULES ? ' - КУРС ПРОЙДЕН!' : '');
-}
-
 // === TRACKER ===
 function initTracker() {
   const data = load();
@@ -770,7 +688,6 @@ function resetAll() {
 
 // === INIT ===
 initDaily();
-initModules();
 initTracker();
 </script>
 </body>
