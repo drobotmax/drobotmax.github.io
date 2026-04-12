@@ -149,6 +149,14 @@
   .footer-quote { font-size: 20px; font-weight: 700; font-style: italic; color: var(--accent); margin-bottom: 8px; }
   .footer-sub { font-size: 13px; color: var(--text2); }
 
+  /* REPORT BUTTON */
+  .report-btn { display: block; width: 100%; margin-top: 20px; padding: 16px; background: var(--blue); color: white; border: none; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+  .report-btn:hover { opacity: 0.85; }
+  .report-btn:active { transform: scale(0.98); }
+  .report-copied { display: none; text-align: center; margin-top: 12px; padding: 12px; background: rgba(6, 214, 160, 0.15); color: var(--green); border-radius: 8px; font-size: 14px; font-weight: 600; }
+  .report-copied.show { display: block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
   /* RESET BUTTON */
   .reset-btn { background: none; border: 1px solid var(--border); color: var(--text2); font-family: 'Inter', sans-serif; font-size: 12px; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-top: 16px; transition: all 0.2s; }
   .reset-btn:hover { border-color: #e74c3c; color: #e74c3c; }
@@ -217,6 +225,8 @@
 
       <div class="unlock-status locked" id="unlock-status">Телефон заблокирован - выполни задания</div>
       <div class="streak-counter" id="streak-counter"></div>
+      <button class="report-btn" id="report-btn" onclick="sendReport()">Отправить отчет папе</button>
+      <div class="report-copied" id="report-copied">Скопировано! Открой Telegram и отправь папе</div>
     </div>
   </section>
 
@@ -631,6 +641,48 @@ function pluralize(n, one, few, many) {
   if (mod10 === 1 && mod100 !== 11) return one;
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
   return many;
+}
+
+// === REPORT ===
+function sendReport() {
+  const data = load();
+  const now = new Date();
+  const todayKey = 'daily-' + now.toISOString().slice(0,10);
+  const todayData = data[todayKey] || [false, false, false];
+  const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+  const dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+
+  const check = (v) => v ? '\u2705' : '\u274c';
+  let streakCount = 0;
+  for (let i = 0; i < 100; i++) {
+    const d = new Date(now); d.setDate(d.getDate() - i);
+    if (d.getDay() === 0) continue;
+    const key = 'daily-' + d.toISOString().slice(0,10);
+    const dd = data[key];
+    if (dd && dd[0] && dd[1]) streakCount++; else if (i > 0) break;
+  }
+
+  let msg = '\ud83d\udcca Level Up - ' + days[now.getDay()] + ', ' + dateStr + '\n\n';
+  msg += check(todayData[0]) + ' Тренировка\n';
+  msg += check(todayData[1]) + ' Курс ИИ\n';
+  msg += check(todayData[2]) + ' Завтрак с белком\n';
+  msg += '\n' + (todayData[0] && todayData[1] ? '\ud83d\udd13 UNLOCKED' : '\ud83d\udd12 Ещё не разблокировано') + '\n';
+  if (streakCount > 0) msg += '\ud83d\udd25 Серия: ' + streakCount + ' ' + pluralize(streakCount, 'день', 'дня', 'дней') + '\n';
+
+  // Try native share (mobile), fallback to clipboard + Telegram link
+  if (navigator.share) {
+    navigator.share({ text: msg }).catch(() => fallbackCopy(msg));
+  } else {
+    fallbackCopy(msg);
+  }
+}
+
+function fallbackCopy(msg) {
+  navigator.clipboard.writeText(msg).then(() => {
+    const el = document.getElementById('report-copied');
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  });
 }
 
 // === TRACKER ===
