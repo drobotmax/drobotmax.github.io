@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Андрей: Level Up</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #242424; --border: #333;
+    --text: #e8e8e8; --text2: #999; --accent: #ff6b35; --accent2: #ffd166;
+    --green: #06d6a0; --blue: #118ab2; --purple: #9b5de5;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+  @media print {
+    body { background: white; color: #111; }
+    :root { --bg: white; --surface: #f5f5f5; --surface2: #eee; --border: #ddd; --text: #111; --text2: #666; }
+    .page-break { page-break-before: always; }
+    .no-print { display: none !important; }
+  }
+  .container { max-width: 840px; margin: 0 auto; padding: 40px 32px; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 60px 0 40px; border-bottom: 2px solid var(--accent); margin-bottom: 48px; }
+  .hero-label { font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .hero h1 { font-size: 48px; font-weight: 900; line-height: 1.1; margin-bottom: 12px; }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub { font-size: 18px; color: var(--text2); }
+  .hero-stats { display: flex; justify-content: center; gap: 48px; margin-top: 32px; }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-size: 36px; font-weight: 800; color: var(--accent2); }
+  .hero-stat .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); }
+
+  /* SECTIONS */
+  section { margin-bottom: 48px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-num { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: white; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-num.ai { background: var(--purple); }
+  .section-header h2 { font-size: 24px; font-weight: 700; }
+
+  /* UNLOCK */
+  .unlock-box { background: var(--surface); border: 2px solid var(--accent); border-radius: 12px; padding: 28px; margin-bottom: 32px; }
+  .unlock-box h3 { font-size: 20px; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+  .unlock-steps { display: flex; gap: 16px; align-items: stretch; flex-wrap: wrap; }
+  .unlock-step { flex: 1; min-width: 120px; background: var(--surface2); border-radius: 8px; padding: 20px 16px; text-align: center; }
+  .unlock-step .icon { font-size: 32px; margin-bottom: 8px; }
+  .unlock-step .step-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .unlock-step .step-desc { font-size: 12px; color: var(--text2); }
+  .unlock-arrow { display: flex; align-items: center; font-size: 24px; color: var(--accent); font-weight: 700; }
+
+  /* RULES */
+  .rules-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .rule-card { background: var(--surface); border-radius: 10px; padding: 20px; }
+  .rule-card .rule-icon { font-size: 24px; margin-bottom: 8px; }
+  .rule-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .rule-card p { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* PHASE */
+  .phase { background: var(--surface); border-radius: 12px; padding: 28px; margin-bottom: 24px; border-left: 4px solid var(--accent); }
+  .phase.phase-2 { border-left-color: var(--accent2); }
+  .phase.phase-3 { border-left-color: var(--green); }
+  .phase-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; flex-wrap: wrap; gap: 8px; }
+  .phase-title { font-size: 20px; font-weight: 700; }
+  .phase-weeks { font-size: 13px; color: var(--text2); font-weight: 500; }
+  .phase-goal { font-size: 14px; color: var(--accent2); font-weight: 500; margin-bottom: 16px; padding: 8px 12px; background: rgba(255, 209, 102, 0.1); border-radius: 6px; display: inline-block; }
+  .phase.phase-3 .phase-goal { color: var(--green); background: rgba(6, 214, 160, 0.1); }
+
+  /* TABLES */
+  .workout-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .workout-table th { text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .workout-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .workout-table tr:last-child td { border-bottom: none; }
+  .day-badge { font-weight: 700; font-size: 12px; padding: 3px 10px; border-radius: 4px; background: var(--surface2); display: inline-block; white-space: nowrap; }
+  .exercise-name { font-weight: 600; }
+  .sets { color: var(--accent2); font-weight: 600; white-space: nowrap; }
+
+  /* MILESTONES */
+  .milestone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .milestone-card { background: var(--surface); border-radius: 10px; padding: 24px 20px; text-align: center; }
+  .milestone-card .week { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 8px; }
+  .milestone-card .target { font-size: 28px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+  .milestone-card.mid .target { color: var(--accent2); }
+  .milestone-card.final .target { color: var(--green); }
+  .milestone-card .desc { font-size: 13px; color: var(--text2); }
+
+  /* NUTRITION */
+  .nutrition-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .meal-card { background: var(--surface); border-radius: 10px; padding: 20px; }
+  .meal-card .meal-time { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+  .meal-card .meal-name { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+  .meal-card ul { list-style: none; padding: 0; }
+  .meal-card li { font-size: 13px; color: var(--text2); padding: 3px 0 3px 16px; position: relative; }
+  .meal-card li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); position: absolute; left: 0; top: 10px; }
+  .meal-card .calories { margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--accent2); }
+  .nutrition-totals { background: var(--surface); border: 2px solid var(--green); border-radius: 10px; padding: 24px; margin-top: 16px; text-align: center; }
+  .nutrition-totals h4 { color: var(--green); margin-bottom: 12px; }
+  .macro-row { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+  .macro { text-align: center; }
+  .macro .val { font-size: 24px; font-weight: 800; }
+  .macro .unit { font-size: 12px; color: var(--text2); }
+
+  /* AI COURSE */
+  .ai-course { background: var(--surface); border: 2px solid var(--purple); border-radius: 12px; padding: 28px; }
+  .ai-course h3 { color: var(--purple); font-size: 20px; margin-bottom: 16px; }
+  .ai-module { background: var(--surface2); border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; }
+  .ai-module:last-child { margin-bottom: 0; }
+  .ai-module .mod-check { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--purple); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+  .ai-module .mod-check.done { background: var(--purple); border-color: var(--purple); }
+  .ai-module .mod-check.done::after { content: '\2713'; color: white; font-weight: 700; font-size: 14px; }
+  .ai-module .mod-info { flex: 1; }
+  .ai-module .mod-title { font-weight: 700; font-size: 15px; }
+  .ai-module .mod-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .ai-module .mod-lessons { font-size: 12px; color: var(--purple); font-weight: 600; }
+  .ai-progress-bar { margin-top: 20px; background: var(--surface2); border-radius: 8px; height: 12px; overflow: hidden; }
+  .ai-progress-fill { height: 100%; background: linear-gradient(90deg, var(--purple), var(--accent)); border-radius: 8px; transition: width 0.5s; }
+  .ai-progress-text { text-align: center; margin-top: 8px; font-size: 13px; color: var(--text2); }
+
+  /* DAILY CHECKLIST */
+  .daily-box { background: var(--surface); border: 2px solid var(--green); border-radius: 12px; padding: 28px; }
+  .daily-box h3 { color: var(--green); font-size: 20px; margin-bottom: 8px; }
+  .daily-date { font-size: 14px; color: var(--text2); margin-bottom: 20px; }
+  .daily-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .daily-item:last-child { border-bottom: none; }
+  .daily-check { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .daily-check.done { background: var(--green); border-color: var(--green); }
+  .daily-check.done::after { content: '\2713'; color: white; font-weight: 700; font-size: 12px; }
+  .daily-item.completed .daily-text { text-decoration: line-through; color: var(--text2); }
+  .daily-text { font-size: 15px; font-weight: 500; }
+  .daily-text small { font-weight: 400; color: var(--text2); display: block; font-size: 12px; }
+  .unlock-status { text-align: center; padding: 20px; margin-top: 20px; border-radius: 10px; font-size: 18px; font-weight: 700; transition: all 0.3s; }
+  .unlock-status.locked { background: rgba(255, 107, 53, 0.1); color: var(--accent); }
+  .unlock-status.unlocked { background: rgba(6, 214, 160, 0.15); color: var(--green); }
+  .streak-counter { text-align: center; margin-top: 12px; font-size: 14px; color: var(--text2); }
+
+  /* TRACKER */
+  .tracker-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tracker-table th { text-align: center; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); padding: 10px 6px; border-bottom: 2px solid var(--border); }
+  .tracker-table td { text-align: center; padding: 8px 4px; border-bottom: 1px solid var(--border); }
+  .tracker-table .week-num { font-weight: 700; color: var(--accent); }
+  .tracker-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; text-align: center; width: 60px; padding: 6px 4px; transition: border-color 0.2s; }
+  .tracker-input:focus { outline: none; border-color: var(--accent); }
+  .tracker-input.has-value { border-color: var(--green); background: rgba(6, 214, 160, 0.05); }
+  .phase-marker { font-size: 11px; color: var(--accent2); font-weight: 600; white-space: nowrap; }
+  .phase-marker.final { color: var(--green); }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border); margin-top: 48px; }
+  .footer-quote { font-size: 20px; font-weight: 700; font-style: italic; color: var(--accent); margin-bottom: 8px; }
+  .footer-sub { font-size: 13px; color: var(--text2); }
+
+  /* RESET BUTTON */
+  .reset-btn { background: none; border: 1px solid var(--border); color: var(--text2); font-family: 'Inter', sans-serif; font-size: 12px; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-top: 16px; transition: all 0.2s; }
+  .reset-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+
+  @media (max-width: 600px) {
+    .container { padding: 20px 16px; }
+    .hero h1 { font-size: 32px; }
+    .hero-stats { gap: 24px; }
+    .hero-stat .num { font-size: 24px; }
+    .milestone-grid { grid-template-columns: 1fr; }
+    .nutrition-grid { grid-template-columns: 1fr; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .unlock-steps { flex-direction: column; align-items: center; }
+    .unlock-arrow { transform: rotate(90deg); }
+    .tracker-input { width: 48px; }
+    .macro-row { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">Персональная программа</div>
+    <h1>Андрей: <span>Level Up</span></h1>
+    <div class="hero-sub">12 недель до новой версии себя</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">12</div>
+        <div class="label">недель</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">35 &rarr; 40</div>
+        <div class="label">кг</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">3</div>
+        <div class="label">фазы</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY CHECKLIST -->
+  <section class="no-print">
+    <div class="section-header">
+      <div class="section-num" style="background: var(--green);">!</div>
+      <h2>Сегодня</h2>
+    </div>
+    <div class="daily-box">
+      <h3>Ежедневный Unlock</h3>
+      <div class="daily-date" id="today-date"></div>
+
+      <div class="daily-item" onclick="toggleDaily(0)">
+        <div class="daily-check" id="dc-0"></div>
+        <div class="daily-text">Тренировка по расписанию<small id="today-workout"></small></div>
+      </div>
+      <div class="daily-item" onclick="toggleDaily(1)">
+        <div class="daily-check" id="dc-1"></div>
+        <div class="daily-text">Курс ИИ - 1 урок / 15 мин<small>Открой курс и пройди один блок</small></div>
+      </div>
+      <div class="daily-item" onclick="toggleDaily(2)">
+        <div class="daily-check" id="dc-2"></div>
+        <div class="daily-text">Завтрак с белком<small>Яйца + каша + молоко</small></div>
+      </div>
+
+      <div class="unlock-status locked" id="unlock-status">Телефон заблокирован - выполни задания</div>
+      <div class="streak-counter" id="streak-counter"></div>
+    </div>
+  </section>
+
+  <!-- UNLOCK SYSTEM -->
+  <section>
+    <div class="section-header">
+      <div class="section-num">0</div>
+      <h2>Как это работает</h2>
+    </div>
+    <div class="unlock-box">
+      <h3>Система Unlock</h3>
+      <p style="color: var(--text2); margin-bottom: 20px; font-size: 14px;">
+        Каждый день начинается с блока. Телефон для развлечений разблокируется только после выполнения.
+      </p>
+      <div class="unlock-steps">
+        <div class="unlock-step">
+          <div class="icon">&#x1F4AA;</div>
+          <div class="step-title">Тренировка</div>
+          <div class="step-desc">10-20 мин по расписанию</div>
+        </div>
+        <div class="unlock-arrow">&rarr;</div>
+        <div class="unlock-step">
+          <div class="icon">&#x1F9E0;</div>
+          <div class="step-title">Курс ИИ</div>
+          <div class="step-desc">15 мин / 1 урок</div>
+        </div>
+        <div class="unlock-arrow">&rarr;</div>
+        <div class="unlock-step">
+          <div class="icon">&#x1F513;</div>
+          <div class="step-title">Unlock</div>
+          <div class="step-desc">Телефон открыт</div>
+        </div>
+      </div>
+    </div>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-icon">&#x2705;</div>
+        <h4>Минимальный порог</h4>
+        <p>Плохой день? 5 отжиманий + 5 минут курса = unlock. Главное - не пропускать, а не быть идеальным.</p>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon">&#x1F4C8;</div>
+        <h4>Записывай цифры</h4>
+        <p>Каждый день пиши результат в трекер. Через 2 недели ты увидишь рост - это лучшая мотивация.</p>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon">&#x1F3AF;</div>
+        <h4>Цель на скалодроме</h4>
+        <p>Выбери трассу, которую хочешь пролезть. Каждая тренировка - шаг к ней.</p>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon">&#x1F504;</div>
+        <h4>Воскресенье = отдых</h4>
+        <p>Мышцы растут во время отдыха. Воскресенье - выходной от всего. Можно просто гулять.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="page-break"></div>
+
+  <!-- TRAINING PLAN -->
+  <section>
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Тренировочный план</h2>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-title">Фаза 1: Фундамент</div>
+        <div class="phase-weeks">Недели 1-4</div>
+      </div>
+      <div class="phase-goal">Цель: прокачать подтягивания + усложнить отжимания. *Негативные = запрыгнуть наверх, медленно опускаться 5 сек</div>
+      <table class="workout-table">
+        <thead><tr><th>День</th><th>Фокус</th><th>Упражнения</th><th>Подходы</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="day-badge">Пн / Чт</span></td>
+            <td>Верх + хват</td>
+            <td><div class="exercise-name">Отжимания алмазные (узкий хват)</div><div class="exercise-name">Подтягивания (негативные*)</div><div class="exercise-name">Вис на турнике</div></td>
+            <td><div class="sets">3 x max</div><div class="sets">3 x 3-5</div><div class="sets">3 x max сек</div></td>
+          </tr>
+          <tr>
+            <td><span class="day-badge">Вт / Пт</span></td>
+            <td>Кор + ноги</td>
+            <td><div class="exercise-name">Скручивания</div><div class="exercise-name">Приседания</div><div class="exercise-name">Выпады</div></td>
+            <td><div class="sets">3 x 15</div><div class="sets">3 x 20</div><div class="sets">2 x 10 на ногу</div></td>
+          </tr>
+          <tr>
+            <td><span class="day-badge">Ср / Сб</span></td>
+            <td>Гибкость + хват</td>
+            <td><div class="exercise-name">Растяжка (полная)</div><div class="exercise-name">Эспандер кисти</div><div class="exercise-name">Стойка у стены на руках</div></td>
+            <td><div class="sets">10 мин</div><div class="sets">3 x 15</div><div class="sets">3 x 15 сек</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="phase phase-2">
+      <div class="phase-header">
+        <div class="phase-title">Фаза 2: Рост</div>
+        <div class="phase-weeks">Недели 5-8</div>
+      </div>
+      <div class="phase-goal">Цель: увеличить нагрузку, первые видимые результаты</div>
+      <table class="workout-table">
+        <thead><tr><th>День</th><th>Фокус</th><th>Упражнения</th><th>Подходы</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="day-badge">Пн / Чт</span></td>
+            <td>Верх + хват</td>
+            <td><div class="exercise-name">Отжимания с ногами на высоте</div><div class="exercise-name">Подтягивания (чистые)</div><div class="exercise-name">Вис с перехватами (wide/narrow)</div></td>
+            <td><div class="sets">4 x max</div><div class="sets">4 x max</div><div class="sets">3 x 20 сек</div></td>
+          </tr>
+          <tr>
+            <td><span class="day-badge">Вт / Пт</span></td>
+            <td>Кор + ноги</td>
+            <td><div class="exercise-name">Подъем ног в висе</div><div class="exercise-name">Приседания с паузой</div><div class="exercise-name">Прыжки на тумбу / ступеньку</div></td>
+            <td><div class="sets">3 x 8</div><div class="sets">3 x 15</div><div class="sets">3 x 10</div></td>
+          </tr>
+          <tr>
+            <td><span class="day-badge">Ср / Сб</span></td>
+            <td>Скалолазание + гибкость</td>
+            <td><div class="exercise-name">Траверс / боулдеринг</div><div class="exercise-name">Растяжка</div><div class="exercise-name">Эспандер кисти (жесткий)</div></td>
+            <td><div class="sets">20-30 мин</div><div class="sets">10 мин</div><div class="sets">3 x 20</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="phase phase-3">
+      <div class="phase-header">
+        <div class="phase-title">Фаза 3: Прорыв</div>
+        <div class="phase-weeks">Недели 9-12</div>
+      </div>
+      <div class="phase-goal">Цель: сложные элементы, уверенность на скалодроме</div>
+      <table class="workout-table">
+        <thead><tr><th>День</th><th>Фокус</th><th>Упражнения</th><th>Подходы</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="day-badge">Пн / Чт</span></td>
+            <td>Сила + взрыв</td>
+            <td><div class="exercise-name">Отжимания с хлопком</div><div class="exercise-name">Подтягивания широким хватом</div><div class="exercise-name">Вис на одной руке (попеременно)</div></td>
+            <td><div class="sets">3 x max</div><div class="sets">4 x max</div><div class="sets">3 x max сек</div></td>
+          </tr>
+          <tr>
+            <td><span class="day-badge">Вт / Пт</span></td>
+            <td>Полное тело</td>
+            <td><div class="exercise-name">Берпи</div><div class="exercise-name">Подъем ног в висе (прямые)</div><div class="exercise-name">Выпады с прыжком</div></td>
+            <td><div class="sets">3 x 8</div><div class="sets">3 x 10</div><div class="sets">3 x 8 на ногу</div></td>
+          </tr>
+          <tr>
+            <td><span class="day-badge">Ср / Сб</span></td>
+            <td>Скалолазание + навыки</td>
+            <td><div class="exercise-name">Целевая трасса на скалодроме</div><div class="exercise-name">Кампус-борд (если есть)</div><div class="exercise-name">Растяжка</div></td>
+            <td><div class="sets">30 мин</div><div class="sets">3 x 5 перехватов</div><div class="sets">10 мин</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="page-break"></div>
+
+  <!-- AI COURSE -->
+  <section>
+    <div class="section-header">
+      <div class="section-num ai">AI</div>
+      <h2>Курс по ИИ</h2>
+    </div>
+    <p style="color: var(--text2); font-size: 14px; margin-bottom: 24px;">
+      15 минут в день. Один модуль за раз. Отмечай пройденные - прогресс сохраняется.
+    </p>
+    <div class="ai-course">
+      <h3>Модули курса</h3>
+      <div class="ai-module" onclick="toggleModule(0)">
+        <div class="mod-check" id="mod-0"></div>
+        <div class="mod-info">
+          <div class="mod-title">1. Что такое ИИ и как он думает</div>
+          <div class="mod-desc">Нейросети, обучение на данных, как ChatGPT генерирует текст</div>
+          <div class="mod-lessons">3 урока</div>
+        </div>
+      </div>
+      <div class="ai-module" onclick="toggleModule(1)">
+        <div class="mod-check" id="mod-1"></div>
+        <div class="mod-info">
+          <div class="mod-title">2. Промпты - как разговаривать с ИИ</div>
+          <div class="mod-desc">Как писать запросы, чтобы получать крутые результаты</div>
+          <div class="mod-lessons">4 урока</div>
+        </div>
+      </div>
+      <div class="ai-module" onclick="toggleModule(2)">
+        <div class="mod-check" id="mod-2"></div>
+        <div class="mod-info">
+          <div class="mod-title">3. ИИ для учебы</div>
+          <div class="mod-desc">Как использовать ИИ для домашки, проектов, подготовки к контрольным</div>
+          <div class="mod-lessons">3 урока</div>
+        </div>
+      </div>
+      <div class="ai-module" onclick="toggleModule(3)">
+        <div class="mod-check" id="mod-3"></div>
+        <div class="mod-info">
+          <div class="mod-title">4. Генерация картинок и видео</div>
+          <div class="mod-desc">Midjourney, DALL-E, Sora - создаем визуальный контент</div>
+          <div class="mod-lessons">3 урока</div>
+        </div>
+      </div>
+      <div class="ai-module" onclick="toggleModule(4)">
+        <div class="mod-check" id="mod-4"></div>
+        <div class="mod-info">
+          <div class="mod-title">5. Автоматизация с ИИ</div>
+          <div class="mod-desc">Боты, автоматизации, ИИ-агенты - делаем вещи которые работают сами</div>
+          <div class="mod-lessons">4 урока</div>
+        </div>
+      </div>
+      <div class="ai-module" onclick="toggleModule(5)">
+        <div class="mod-check" id="mod-5"></div>
+        <div class="mod-info">
+          <div class="mod-title">6. Свой проект</div>
+          <div class="mod-desc">Делаешь что-то свое с помощью ИИ: бот, сайт, приложение</div>
+          <div class="mod-lessons">Финальный проект</div>
+        </div>
+      </div>
+      <div class="ai-progress-bar"><div class="ai-progress-fill" id="ai-progress" style="width: 0%"></div></div>
+      <div class="ai-progress-text" id="ai-progress-text">0 / 6 модулей</div>
+    </div>
+  </section>
+
+  <div class="page-break"></div>
+
+  <!-- MILESTONES -->
+  <section>
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Чего ты достигнешь</h2>
+    </div>
+
+    <h3 style="font-size: 16px; color: var(--text2); margin-bottom: 16px;">Отжимания (сложные варианты)</h3>
+    <div class="milestone-grid" style="margin-bottom: 24px;">
+      <div class="milestone-card"><div class="week">Неделя 1</div><div class="target">40</div><div class="desc">Обычные - уже легко</div></div>
+      <div class="milestone-card mid"><div class="week">Неделя 8</div><div class="target">15-20</div><div class="desc">Алмазные / с ногами на высоте</div></div>
+      <div class="milestone-card final"><div class="week">Неделя 12</div><div class="target">60+</div><div class="desc">Обычных / 25+ алмазных</div></div>
+    </div>
+
+    <h3 style="font-size: 16px; color: var(--text2); margin-bottom: 16px;">Подтягивания</h3>
+    <div class="milestone-grid" style="margin-bottom: 24px;">
+      <div class="milestone-card"><div class="week">Неделя 1</div><div class="target">1-2</div><div class="desc">Главная точка роста</div></div>
+      <div class="milestone-card mid"><div class="week">Неделя 8</div><div class="target">5-8</div><div class="desc">Уже реальная сила</div></div>
+      <div class="milestone-card final"><div class="week">Неделя 12</div><div class="target">10-12</div><div class="desc">Серьезный уровень</div></div>
+    </div>
+
+    <h3 style="font-size: 16px; color: var(--text2); margin-bottom: 16px;">Вис на турнике</h3>
+    <div class="milestone-grid" style="margin-bottom: 24px;">
+      <div class="milestone-card"><div class="week">Неделя 1</div><div class="target">15 сек</div><div class="desc">Базовый хват</div></div>
+      <div class="milestone-card mid"><div class="week">Неделя 8</div><div class="target">45 сек</div><div class="desc">Хват для скалолазания</div></div>
+      <div class="milestone-card final"><div class="week">Неделя 12</div><div class="target">60+ сек</div><div class="desc">Железный хват</div></div>
+    </div>
+
+    <h3 style="font-size: 16px; color: var(--text2); margin-bottom: 16px;">Вес тела</h3>
+    <div class="milestone-grid" style="margin-bottom: 24px;">
+      <div class="milestone-card"><div class="week">Старт</div><div class="target">35 кг</div><div class="desc">Текущий вес</div></div>
+      <div class="milestone-card mid"><div class="week">Неделя 8</div><div class="target">37-38 кг</div><div class="desc">Первые кг мышц</div></div>
+      <div class="milestone-card final"><div class="week">Неделя 12</div><div class="target">39-41 кг</div><div class="desc">+5 кг чистой массы</div></div>
+    </div>
+
+    <h3 style="font-size: 16px; color: var(--text2); margin-bottom: 16px;">Курс по ИИ</h3>
+    <div class="milestone-grid">
+      <div class="milestone-card"><div class="week">Неделя 1</div><div class="target">1/6</div><div class="desc">Понимаешь что такое ИИ</div></div>
+      <div class="milestone-card mid"><div class="week">Неделя 8</div><div class="target">4/6</div><div class="desc">Умеешь использовать ИИ</div></div>
+      <div class="milestone-card final"><div class="week">Неделя 12</div><div class="target">6/6</div><div class="desc">Свой проект готов</div></div>
+    </div>
+  </section>
+
+  <div class="page-break"></div>
+
+  <!-- NUTRITION -->
+  <section>
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>Питание для набора массы</h2>
+    </div>
+    <p style="color: var(--text2); font-size: 14px; margin-bottom: 24px;">
+      Без еды мышцы не растут. Тренировка - это сигнал, еда - это материал. Минимум 4 приема пищи в день.
+    </p>
+    <div class="nutrition-grid">
+      <div class="meal-card">
+        <div class="meal-time">Завтрак - 8:00</div>
+        <div class="meal-name">Заряд на день</div>
+        <ul><li>Овсянка на молоке (200 г) + банан</li><li>2-3 яйца (вареные или омлет)</li><li>Стакан молока или кефира</li></ul>
+        <div class="calories">~450 ккал</div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-time">Обед - 13:00</div>
+        <div class="meal-name">Основной прием</div>
+        <ul><li>Рис / гречка / макароны (150 г)</li><li>Курица / рыба / мясо (120-150 г)</li><li>Овощи (салат, огурцы, помидоры)</li></ul>
+        <div class="calories">~550 ккал</div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-time">Перекус - 16:00</div>
+        <div class="meal-name">Восстановление</div>
+        <ul><li>Творог (150 г) + мед</li><li>Горсть орехов (30 г)</li><li>Фрукт (яблоко / груша)</li></ul>
+        <div class="calories">~350 ккал</div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-time">Ужин - 19:00</div>
+        <div class="meal-name">Строительство мышц</div>
+        <ul><li>Рыба / курица / яйца</li><li>Картофель / рис (100 г)</li><li>Овощи на пару или свежие</li></ul>
+        <div class="calories">~450 ккал</div>
+      </div>
+    </div>
+    <div class="nutrition-totals">
+      <h4>Дневная норма для набора массы</h4>
+      <div class="macro-row">
+        <div class="macro"><div class="val">1800-2000</div><div class="unit">ккал / день</div></div>
+        <div class="macro"><div class="val">70-80 г</div><div class="unit">белок</div></div>
+        <div class="macro"><div class="val">250 г</div><div class="unit">углеводы</div></div>
+        <div class="macro"><div class="val">60 г</div><div class="unit">жиры</div></div>
+      </div>
+    </div>
+    <div class="rules-grid" style="margin-top: 24px;">
+      <div class="rule-card"><div class="rule-icon">&#x1F95B;</div><h4>Молоко - друг</h4><p>Стакан молока после тренировки. Простой и дешевый способ добавить белок и калории.</p></div>
+      <div class="rule-card"><div class="rule-icon">&#x1F95C;</div><h4>Орехи каждый день</h4><p>30 г орехов = 180 ккал. Маленькая горсть, большой эффект. Грецкие, миндаль, кешью.</p></div>
+      <div class="rule-card"><div class="rule-icon">&#x1F34C;</div><h4>Банан до / после</h4><p>Быстрые углеводы для энергии. Перед тренировкой или сразу после.</p></div>
+      <div class="rule-card"><div class="rule-icon">&#x1F4A7;</div><h4>Вода</h4><p>Минимум 1.5 литра воды в день. Мышцы на 75% из воды - без неё не растут.</p></div>
+    </div>
+  </section>
+
+  <div class="page-break"></div>
+
+  <!-- TRACKER -->
+  <section>
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Трекер прогресса</h2>
+    </div>
+    <p style="color: var(--text2); font-size: 14px; margin-bottom: 20px;">
+      Каждое воскресенье заполняй одну строку. Замеряй max за один подход. Данные сохраняются автоматически.
+    </p>
+    <table class="tracker-table">
+      <thead>
+        <tr>
+          <th>Нед.</th>
+          <th>Отжим.</th>
+          <th>Подтяг.</th>
+          <th>Вис (сек)</th>
+          <th>Планка (сек)</th>
+          <th>Вес (кг)</th>
+          <th>Курс ИИ</th>
+        </tr>
+      </thead>
+      <tbody id="tracker-body"></tbody>
+    </table>
+    <div style="text-align: center;">
+      <button class="reset-btn no-print" onclick="resetAll()">Сбросить все данные</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-quote">"Сильный не тот, кто не падает. Сильный - тот, кто встает."</div>
+    <div class="footer-sub">Старт: 13 апреля 2026</div>
+  </div>
+
+</div>
+
+<script>
+const STORAGE_KEY = 'andrey-levelup';
+const TOTAL_MODULES = 6;
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+function save(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+// === DAILY CHECKLIST ===
+function initDaily() {
+  const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+  const now = new Date();
+  const dayName = days[now.getDay()];
+  const dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  document.getElementById('today-date').textContent = dayName + ', ' + dateStr;
+
+  const workouts = {
+    1: 'Пн - Верх + хват: алмазные отжимания, подтягивания, вис',
+    2: 'Вт - Кор + ноги: скручивания, приседания, выпады',
+    3: 'Ср - Гибкость + хват: растяжка, эспандер, стойка у стены',
+    4: 'Чт - Верх + хват: алмазные отжимания, подтягивания, вис',
+    5: 'Пт - Кор + ноги: скручивания, приседания, выпады',
+    6: 'Сб - Гибкость + хват: растяжка, эспандер, стойка у стены',
+    0: 'Воскресенье - отдых! Замерь результаты в трекере'
+  };
+  document.getElementById('today-workout').textContent = workouts[now.getDay()];
+
+  const data = load();
+  const todayKey = 'daily-' + now.toISOString().slice(0,10);
+  const todayData = data[todayKey] || [false, false, false];
+
+  for (let i = 0; i < 3; i++) {
+    updateDailyUI(i, todayData[i]);
+  }
+  updateUnlockStatus(todayData);
+  updateStreak(data);
+}
+
+function toggleDaily(idx) {
+  const data = load();
+  const todayKey = 'daily-' + new Date().toISOString().slice(0,10);
+  const todayData = data[todayKey] || [false, false, false];
+  todayData[idx] = !todayData[idx];
+  data[todayKey] = todayData;
+  save(data);
+  updateDailyUI(idx, todayData[idx]);
+  updateUnlockStatus(todayData);
+  updateStreak(data);
+}
+
+function updateDailyUI(idx, done) {
+  const check = document.getElementById('dc-' + idx);
+  const item = check.closest('.daily-item');
+  check.className = 'daily-check' + (done ? ' done' : '');
+  item.className = 'daily-item' + (done ? ' completed' : '');
+}
+
+function updateUnlockStatus(todayData) {
+  const el = document.getElementById('unlock-status');
+  const unlocked = todayData[0] && todayData[1];
+  if (unlocked) {
+    el.className = 'unlock-status unlocked';
+    el.textContent = 'UNLOCKED - телефон свободен!';
+  } else {
+    el.className = 'unlock-status locked';
+    const remaining = [];
+    if (!todayData[0]) remaining.push('тренировка');
+    if (!todayData[1]) remaining.push('курс ИИ');
+    el.textContent = 'Осталось: ' + remaining.join(' + ');
+  }
+}
+
+function updateStreak(data) {
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 100; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    if (d.getDay() === 0) continue; // skip sundays
+    const key = 'daily-' + d.toISOString().slice(0,10);
+    const dayData = data[key];
+    if (dayData && dayData[0] && dayData[1]) {
+      streak++;
+    } else if (i > 0) {
+      break;
+    }
+  }
+  const el = document.getElementById('streak-counter');
+  if (streak > 0) {
+    el.textContent = 'Серия: ' + streak + ' ' + pluralize(streak, 'день', 'дня', 'дней') + ' подряд';
+  } else {
+    el.textContent = 'Начни серию сегодня!';
+  }
+}
+
+function pluralize(n, one, few, many) {
+  const mod10 = n % 10, mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return one;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
+  return many;
+}
+
+// === AI COURSE ===
+function initModules() {
+  const data = load();
+  const modules = data.modules || Array(TOTAL_MODULES).fill(false);
+  for (let i = 0; i < TOTAL_MODULES; i++) {
+    updateModuleUI(i, modules[i]);
+  }
+  updateAIProgress(modules);
+}
+
+function toggleModule(idx) {
+  const data = load();
+  const modules = data.modules || Array(TOTAL_MODULES).fill(false);
+  modules[idx] = !modules[idx];
+  data.modules = modules;
+  save(data);
+  updateModuleUI(idx, modules[idx]);
+  updateAIProgress(modules);
+}
+
+function updateModuleUI(idx, done) {
+  document.getElementById('mod-' + idx).className = 'mod-check' + (done ? ' done' : '');
+}
+
+function updateAIProgress(modules) {
+  const done = modules.filter(Boolean).length;
+  const pct = Math.round((done / TOTAL_MODULES) * 100);
+  document.getElementById('ai-progress').style.width = pct + '%';
+  document.getElementById('ai-progress-text').textContent = done + ' / ' + TOTAL_MODULES + ' модулей' + (done === TOTAL_MODULES ? ' - КУРС ПРОЙДЕН!' : '');
+}
+
+// === TRACKER ===
+function initTracker() {
+  const data = load();
+  const tracker = data.tracker || {};
+  const tbody = document.getElementById('tracker-body');
+  const fields = ['pushups','pullups','hang','plank','weight','ai_course'];
+  const phaseMarkers = { 4: 'Конец Фазы 1', 8: 'Конец Фазы 2', 12: 'ФИНИШ' };
+
+  for (let w = 1; w <= 12; w++) {
+    const tr = document.createElement('tr');
+    const tdWeek = document.createElement('td');
+    tdWeek.className = 'week-num';
+    tdWeek.textContent = w;
+    tr.appendChild(tdWeek);
+
+    fields.forEach(field => {
+      const td = document.createElement('td');
+      if (phaseMarkers[w] && field === 'ai_course') {
+        const span = document.createElement('span');
+        span.className = 'phase-marker' + (w === 12 ? ' final' : '');
+        span.textContent = phaseMarkers[w];
+        td.appendChild(span);
+      } else {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'tracker-input';
+        input.placeholder = field === 'ai_course' ? '0/6' : '-';
+        const key = 'w' + w + '-' + field;
+        input.value = tracker[key] || '';
+        if (input.value) input.classList.add('has-value');
+        input.addEventListener('input', function() {
+          const d = load();
+          if (!d.tracker) d.tracker = {};
+          d.tracker[key] = this.value;
+          save(d);
+          this.classList.toggle('has-value', !!this.value);
+        });
+        td.appendChild(input);
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  }
+}
+
+// === RESET ===
+function resetAll() {
+  if (confirm('Точно сбросить ВСЕ данные? Это нельзя отменить.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+}
+
+// === INIT ===
+initDaily();
+initModules();
+initTracker();
+</script>
+</body>
+</html>
