@@ -2,251 +2,623 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Тристория - Дашборд продаж</title>
+<title>Тристория - Аналитика продаж</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#faf8f5;--card:#fff;--ink:#1a1a1a;--muted:#6b6b6b;--line:#e8e4dd;--wine:#722F37;--wine-soft:#a8545e;--wine-pale:#d4b5bb;--pos:#2d7a3e;--neg:#c0392b;--accent:#c9a961}
+:root{--bg:#faf8f5;--card:#fff;--ink:#1a1a1a;--muted:#6b6b6b;--line:#e8e4dd;--wine:#722F37;--wine-soft:#a8545e;--wine-pale:#d4b5bb;--pos:#2d7a3e;--neg:#c0392b;--accent:#c9a961;--A:#2d7a3e;--B:#c9a961;--C:#a85151}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:14px}
-.wrap{max-width:1320px;margin:0 auto;padding:32px 24px 60px}
-header{margin-bottom:24px}
-.brand{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--wine);font-weight:600;margin-bottom:6px}
-h1{font-size:30px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
-.period{color:var(--muted);font-size:14px}
-.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:28px;flex-wrap:wrap}
-.tab{padding:12px 20px;border:none;background:transparent;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;letter-spacing:.01em}
-.tab:hover{color:var(--ink)}
-.tab.active{color:var(--wine);border-bottom-color:var(--wine)}
-.tab-content{display:none}
-.tab-content.active{display:block}
-section{margin-bottom:36px}
-h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;font-weight:600}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.kpi{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:8px}
-.kpi-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px}
-.kpi-value{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1}
-.kpi-unit{font-size:13px;color:var(--muted);font-weight:500;margin-left:3px}
-.kpi-sub{font-size:12px;color:var(--muted);margin-top:6px}
-.kpi-delta{font-size:12px;font-weight:600;margin-top:6px}
-.pos{color:var(--pos)}.neg{color:var(--neg)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px}
-.row{display:grid;gap:16px}
-.row-2{grid-template-columns:1.5fr 1fr}
+.wrap{max-width:1400px;margin:0 auto;padding:28px 20px 60px}
+header{margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:14px}
+.brand{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--wine);font-weight:700;margin-bottom:4px}
+h1{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:3px}
+.period{color:var(--muted);font-size:13px}
+.nav{display:flex;gap:2px;border-bottom:2px solid var(--line);margin-bottom:24px;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);z-index:10;padding-top:4px}
+.nav-btn{padding:10px 16px;border:none;background:transparent;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;letter-spacing:.01em;white-space:nowrap}
+.nav-btn:hover{color:var(--ink)}
+.nav-btn.active{color:var(--wine);border-bottom-color:var(--wine)}
+.section-group{margin-top:8px;padding-top:4px;border-top:1px dashed var(--line)}
+section{margin-bottom:28px}
+h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:700}
+h3{font-size:14px;font-weight:700;margin-bottom:8px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi-grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);padding:14px 16px;border-radius:8px}
+.kpi-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.kpi-value{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.05}
+.kpi-unit{font-size:11px;color:var(--muted);font-weight:500;margin-left:2px}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi-delta{font-size:11px;font-weight:700;margin-top:4px}
+.pos{color:var(--pos)}.neg{color:var(--neg)}.mtd{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px}
+.row{display:grid;gap:14px}
+.row-2{grid-template-columns:1fr 1fr}
+.row-21{grid-template-columns:2fr 1fr}
 .row-3{grid-template-columns:repeat(3,1fr)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:8px 10px;font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+.row-4{grid-template-columns:repeat(4,1fr)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;padding:7px 9px;font-weight:700;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--line);cursor:pointer;user-select:none}
 th.num,td.num{text-align:right}
-td{padding:10px;border-bottom:1px solid var(--line)}
-tr:last-child td{border-bottom:none}
-.badge{display:inline-block;padding:2px 7px;font-size:10px;border-radius:10px;font-weight:600;letter-spacing:.04em}
+th.sortable:hover{color:var(--wine)}
+td{padding:7px 9px;border-bottom:1px solid var(--line)}
+tr:hover td{background:#faf6ef}
+tr.sep td{border-top:2px solid var(--ink);font-weight:700;background:#f5f1ea}
+.badge{display:inline-block;padding:1px 6px;font-size:10px;border-radius:8px;font-weight:700;letter-spacing:.04em}
+.badge-A{background:#e3f1e6;color:var(--A)}
+.badge-B{background:#fbf3dc;color:#7a5c17}
+.badge-C{background:#f6e1de;color:var(--C)}
+.badge-X{background:#e8f4e8;color:#2d5f2d}
+.badge-Y{background:#fff1d9;color:#7a5a17}
+.badge-Z{background:#fbe2da;color:#8a3020}
 .badge-up{background:#e3f1e6;color:var(--pos)}
 .badge-down{background:#f6e1de;color:var(--neg)}
 .badge-new{background:#f5ecd0;color:#7a5c17}
-.chart-wrap{position:relative;height:300px}
-.chart-wrap-sm{position:relative;height:240px}
-.callout{background:#fff8e7;border-left:3px solid var(--accent);padding:12px 16px;border-radius:4px;font-size:13px;color:#5a4a1a;margin-top:14px}
+.chart-wrap{position:relative;height:280px}
+.chart-wrap-sm{position:relative;height:220px}
+.chart-wrap-lg{position:relative;height:340px}
+.note{font-size:11px;color:var(--muted);margin-top:8px;font-style:italic}
+.callout{background:#fff8e7;border-left:3px solid var(--accent);padding:10px 14px;border-radius:4px;font-size:12.5px;color:#5a4a1a;margin-top:10px}
 .callout strong{color:#3d2f08}
-.note{font-size:12px;color:var(--muted);margin-top:10px;font-style:italic}
-.line-bar{display:flex;align-items:center;gap:8px}
-.line-bar-track{flex:1;height:7px;background:#f0ece6;border-radius:4px;overflow:hidden}
-.line-bar-fill{height:100%;background:var(--wine);border-radius:4px}
-.line-name{min-width:130px;font-weight:600}
-@media(max-width:900px){.kpi-grid,.row-3,.row-2{grid-template-columns:1fr}}
+.matrix{display:grid;grid-template-columns:60px repeat(3,1fr);gap:0;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.mcell{padding:12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:12px}
+.mcell:nth-child(4n){border-right:none}
+.mhead{background:#f5f1ea;font-weight:700;text-align:center}
+.mcell h4{font-size:15px;font-weight:700;margin-bottom:4px}
+.mcell .m-count{font-size:11px;color:var(--muted);margin-bottom:6px}
+.mcell .m-rev{font-weight:700;margin-bottom:4px}
+.mcell .m-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.m-AX{background:#e8f5e9}
+.m-AY{background:#f4f1e4}
+.m-AZ{background:#fbe7df}
+.m-BX{background:#edf2ed}
+.m-BY{background:#f8f6ee}
+.m-BZ{background:#f9ebe4}
+.heatmap{display:grid;grid-template-columns:80px repeat(12,1fr);gap:2px}
+.hcell{padding:6px 4px;text-align:center;font-size:11px;border-radius:3px;background:#f0ece6}
+.hhead{font-weight:700;background:#f5f1ea;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.hyear{font-weight:700;background:#f5f1ea;color:var(--ink)}
+.filter-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.filter-input{padding:6px 10px;border:1px solid var(--line);border-radius:4px;font-family:inherit;font-size:12px;flex:1;min-width:200px}
+.filter-btn{padding:6px 12px;border:1px solid var(--line);background:#fff;border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted)}
+.filter-btn.active{background:var(--wine);color:#fff;border-color:var(--wine)}
+.pill{display:inline-block;padding:1px 6px;font-size:9px;border-radius:8px;background:#f0ece6;color:var(--muted);margin-left:4px;font-weight:600}
+@media(max-width:960px){.kpi-grid,.row-2,.row-21,.row-3,.row-4,.kpi-grid-6{grid-template-columns:1fr 1fr}.heatmap{grid-template-columns:60px repeat(6,1fr)}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <div class="brand">Тристория · Винодельня</div>
+  <div class="brand">Тристория · Аналитика продаж</div>
   <h1>Дашборд розничных продаж</h1>
-  <div class="period">Данные: январь 2024 - 25 января 2026 · Вино как основной товар · Привлечённая выручка (товары, экскурсии, мёд) отдельно</div>
+  <div class="period">Янв 2024 - 25 янв 2026 · <strong>48 SKU вина</strong> · 4 магазина · ABC/XYZ анализ, сезонность, скидки, детализация</div>
 </header>
 
-<div class="tabs">
-  <button class="tab active" data-store="all">Все магазины</button>
-  <button class="tab" data-store="zavod">Завод</button>
-  <button class="tab" data-store="novorossiysk">Новороссийск</button>
-  <button class="tab" data-store="anapa">Анапа</button>
-  <button class="tab" data-store="yarmarka">Ярмарка</button>
+<div class="nav">
+  <button class="nav-btn active" data-view="overview">Обзор</button>
+  <button class="nav-btn" data-view="abc">ABC-анализ</button>
+  <button class="nav-btn" data-view="xyz">XYZ-анализ</button>
+  <button class="nav-btn" data-view="matrix">ABC×XYZ</button>
+  <button class="nav-btn" data-view="concentration">Концентрация</button>
+  <button class="nav-btn" data-view="season">Сезонность</button>
+  <button class="nav-btn" data-view="discounts">Скидки</button>
+  <button class="nav-btn" data-view="lines">Линейки</button>
+  <button class="nav-btn" data-view="catalog">Ассортимент</button>
+  <button class="nav-btn" data-view="store_all">Все магазины</button>
+  <button class="nav-btn" data-view="store_zavod">Завод</button>
+  <button class="nav-btn" data-view="store_novorossiysk">Новороссийск</button>
+  <button class="nav-btn" data-view="store_anapa">Анапа</button>
+  <button class="nav-btn" data-view="store_yarmarka">Ярмарка</button>
 </div>
 
-<div id="dashboard"></div>
+<div id="content"></div>
 
 </div>
 
 <script>
-const DATA = {"all":{"monthly":[{"ym":"2024-01","rev":1044165.73,"bot":1787.0,"disc_pct":5.831926748145799},{"ym":"2024-02","rev":1485267.34,"bot":2558.0,"disc_pct":21.1650745054994},{"ym":"2024-03","rev":1444609.66,"bot":2346.0,"disc_pct":7.752619543721434},{"ym":"2024-04","rev":1656745.61,"bot":2813.0,"disc_pct":8.226250657803623},{"ym":"2024-05","rev":1903487.85,"bot":3082.0,"disc_pct":8.582501037368308},{"ym":"2024-06","rev":2574744.26,"bot":4206.0,"disc_pct":10.866341968675156},{"ym":"2024-07","rev":3459268.19,"bot":5523.0,"disc_pct":11.73953802968118},{"ym":"2024-08","rev":3188649.06,"bot":5127.0,"disc_pct":9.102131246566723},{"ym":"2024-09","rev":2480914.28,"bot":3930.0,"disc_pct":7.541247121977479},{"ym":"2024-10","rev":1427915.75,"bot":2300.0,"disc_pct":11.473162944248982},{"ym":"2024-11","rev":1457313.63,"bot":2317.0,"disc_pct":10.784618464405405},{"ym":"2024-12","rev":1697349.82,"bot":2916.0,"disc_pct":16.7639358571989},{"ym":"2025-01","rev":1446527.64,"bot":2451.0,"disc_pct":29.429138744589594},{"ym":"2025-02","rev":960302.04,"bot":1641.0,"disc_pct":15.246278628480647},{"ym":"2025-03","rev":1433351.01,"bot":2319.0,"disc_pct":14.238077943462448},{"ym":"2025-04","rev":1687060.0,"bot":2824.0,"disc_pct":17.841334711848592},{"ym":"2025-05","rev":1364422.52,"bot":2206.0,"disc_pct":15.264627851170276},{"ym":"2025-06","rev":1728607.88,"bot":2933.0,"disc_pct":14.868541789377682},{"ym":"2025-07","rev":2039535.48,"bot":3450.0,"disc_pct":17.009636805982527},{"ym":"2025-08","rev":2789173.05,"bot":4775.0,"disc_pct":13.357654744375902},{"ym":"2025-09","rev":2901145.37,"bot":4641.0,"disc_pct":10.382965585199871},{"ym":"2025-10","rev":1979735.7,"bot":3512.0,"disc_pct":19.609734368096888},{"ym":"2025-11","rev":1964148.33,"bot":3404.0,"disc_pct":14.20018110956473},{"ym":"2025-12","rev":2083869.62,"bot":3965.0,"disc_pct":20.755259514241935},{"ym":"2026-01","rev":796299.48,"bot":1368.0,"disc_pct":15.200234283067193}],"yearly":[{"year":2024,"rev":23820431.18,"bot":38905.0,"disc_amt":2910766.8200000003,"disc_pct":10.889024951294738,"avg_price":612.271717774065},{"year":2025,"rev":22377878.64,"bot":38121.0,"disc_amt":4465934.359999999,"disc_pct":16.63673621925469,"avg_price":587.0223404422759},{"year":2026,"rev":796299.48,"bot":1368.0,"disc_amt":142735.52000000002,"disc_pct":15.200234283067193,"avg_price":582.0902631578947}],"lines_by_year":{"2024":[{"name":"Быки","rev":7887361.0,"bot":11155.0},{"name":"Аппелласьон","rev":4368722.5,"bot":9078.0},{"name":"АРТ","rev":4024259.72,"bot":3499.0},{"name":"Резерв","rev":2844166.0,"bot":3248.0},{"name":"Три стихии","rev":2814259.5,"bot":8962.0},{"name":"Экспериментальное","rev":946085.0,"bot":1370.0},{"name":"РГВ","rev":935577.46,"bot":1593.0}],"2025":[{"name":"Быки","rev":5026506.96,"bot":7591.0},{"name":"АРТ","rev":4648034.97,"bot":4920.0},{"name":"Резерв","rev":4324296.06,"bot":5996.0},{"name":"Аппелласьон","rev":2493184.23,"bot":5726.0},{"name":"Три стихии","rev":2414814.17,"bot":7397.0},{"name":"Экспериментальное","rev":1226468.51,"bot":2117.0},{"name":"РГВ","rev":1077492.27,"bot":2095.0},{"name":"Алеф","rev":853833.47,"bot":1683.0},{"name":"Бриз","rev":312848.0,"bot":595.0},{"name":"Корабли","rev":400.0,"bot":1.0}],"2026":[{"name":"АРТ","rev":241648.79,"bot":278.0},{"name":"Быки","rev":133907.62,"bot":219.0},{"name":"Резерв","rev":129859.09,"bot":178.0},{"name":"Три стихии","rev":63615.94,"bot":187.0},{"name":"Бриз","rev":61528.81,"bot":118.0},{"name":"Аппелласьон","rev":61188.2,"bot":153.0},{"name":"Алеф","rev":52124.54,"bot":120.0},{"name":"Экспериментальное","rev":30036.77,"bot":66.0},{"name":"РГВ","rev":22389.72,"bot":49.0}]},"top":[{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":4482672.91,"bot":6477.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":4296563.21,"bot":3759.0},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":2790105.81,"bot":3646.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":2689317.79,"bot":3113.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":2586139.93,"bot":8133.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":2349159.13,"bot":3554.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":2083330.36,"bot":3357.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":1809141.82,"bot":1936.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":1715404.78,"bot":2842.0},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":1510896.64,"bot":3440.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":1484851.14,"bot":1922.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":1415151.26,"bot":1396.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":1393087.19,"bot":1606.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","rev":1384202.58,"bot":4266.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира\"","rev":1363516.46,"bot":3071.0}],"attached":{"2024":[{"cat":"Мед","rev":163660.0},{"cat":"Товары для перепродажи","rev":1643095.75},{"cat":"Экскурсии","rev":607400.0}],"2025":[{"cat":"Мед","rev":121640.78},{"cat":"Товары для перепродажи","rev":1585373.23},{"cat":"Экскурсии","rev":339500.0}],"2026":[{"cat":"Мед","rev":5080.0},{"cat":"Товары для перепродажи","rev":58591.52},{"cat":"Экскурсии","rev":26049.0}]}},"zavod":{"monthly":[{"ym":"2024-01","rev":929583.43,"bot":1590.0,"disc_pct":6.279049626813375},{"ym":"2024-02","rev":1318699.34,"bot":2272.0,"disc_pct":22.81799388724292},{"ym":"2024-03","rev":1293108.36,"bot":2111.0,"disc_pct":8.425600441899737},{"ym":"2024-04","rev":1533943.42,"bot":2576.0,"disc_pct":7.8378884364727925},{"ym":"2024-05","rev":1744888.32,"bot":2792.0,"disc_pct":9.045220189813138},{"ym":"2024-06","rev":2450986.26,"bot":3943.0,"disc_pct":11.167955481522403},{"ym":"2024-07","rev":3258986.56,"bot":5131.0,"disc_pct":10.904045804093618},{"ym":"2024-08","rev":2957930.82,"bot":4676.0,"disc_pct":9.010037430417817},{"ym":"2024-09","rev":2228519.59,"bot":3509.0,"disc_pct":7.244728999658706},{"ym":"2024-10","rev":1337873.07,"bot":2112.0,"disc_pct":11.740191379668627},{"ym":"2024-11","rev":1347867.13,"bot":2104.0,"disc_pct":9.612035793943416},{"ym":"2024-12","rev":1535388.02,"bot":2531.0,"disc_pct":16.921987005229074},{"ym":"2025-01","rev":1266869.61,"bot":2112.0,"disc_pct":31.45924543307661},{"ym":"2025-02","rev":769167.95,"bot":1272.0,"disc_pct":14.190318675985791},{"ym":"2025-03","rev":1020596.01,"bot":1617.0,"disc_pct":14.437886743353737},{"ym":"2025-04","rev":1205157.6,"bot":1964.0,"disc_pct":19.267351565137698},{"ym":"2025-05","rev":971291.21,"bot":1558.0,"disc_pct":14.847867100803578},{"ym":"2025-06","rev":1364725.87,"bot":2283.0,"disc_pct":13.129508226983122},{"ym":"2025-07","rev":1702989.48,"bot":2821.0,"disc_pct":15.905948394672661},{"ym":"2025-08","rev":2240756.1,"bot":3780.0,"disc_pct":12.879522709776747},{"ym":"2025-09","rev":1747101.39,"bot":2915.0,"disc_pct":8.53695949893518},{"ym":"2025-10","rev":1593969.72,"bot":2754.0,"disc_pct":20.957252632163573},{"ym":"2025-11","rev":1451170.33,"bot":2441.0,"disc_pct":12.025810210234237},{"ym":"2025-12","rev":1421687.62,"bot":2669.0,"disc_pct":21.869454851010993},{"ym":"2026-01","rev":508041.03,"bot":836.0,"disc_pct":12.348687751890902}],"yearly":[{"year":2024,"rev":21937774.32,"bot":35347.0,"disc_amt":2683081.6799999997,"disc_pct":10.89759706161313,"avg_price":620.6403462811554},{"year":2025,"rev":16755482.89,"bot":28186.0,"disc_amt":3379516.1099999994,"disc_pct":16.784287448934066,"avg_price":594.4611825019514},{"year":2026,"rev":508041.03,"bot":836.0,"disc_amt":71574.96999999997,"disc_pct":12.348687751890902,"avg_price":607.704581339713}],"lines_by_year":{"2024":[{"name":"Быки","rev":7467304.5,"bot":10587.0},{"name":"Аппелласьон","rev":4072806.5,"bot":8485.0},{"name":"АРТ","rev":3788860.46,"bot":3305.0},{"name":"Резерв","rev":2589823.0,"bot":2925.0},{"name":"Три стихии","rev":2298489.0,"bot":7324.0},{"name":"РГВ","rev":901194.86,"bot":1535.0},{"name":"Экспериментальное","rev":819296.0,"bot":1186.0}],"2025":[{"name":"Быки","rev":3907587.17,"bot":5921.0},{"name":"АРТ","rev":3415607.07,"bot":3588.0},{"name":"Резерв","rev":3317066.93,"bot":4548.0},{"name":"Аппелласьон","rev":1970260.06,"bot":4531.0},{"name":"Три стихии","rev":1508694.21,"bot":4641.0},{"name":"РГВ","rev":914117.71,"bot":1775.0},{"name":"Экспериментальное","rev":817603.1,"bot":1417.0},{"name":"Алеф","rev":681308.1,"bot":1338.0},{"name":"Бриз","rev":222838.54,"bot":426.0},{"name":"Корабли","rev":400.0,"bot":1.0}],"2026":[{"name":"АРТ","rev":171899.41,"bot":196.0},{"name":"Быки","rev":102873.11,"bot":170.0},{"name":"Резерв","rev":70859.65,"bot":86.0},{"name":"Аппелласьон","rev":45218.4,"bot":116.0},{"name":"Бриз","rev":36269.34,"bot":71.0},{"name":"Алеф","rev":35149.61,"bot":81.0},{"name":"Три стихии","rev":21980.0,"bot":63.0},{"name":"Экспериментальное","rev":15491.79,"bot":34.0},{"name":"РГВ","rev":8299.72,"bot":19.0}]},"top":[{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":3886032.08,"bot":5588.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":3393869.18,"bot":2890.0},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":2524402.48,"bot":3291.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":2261762.79,"bot":2615.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":1860757.49,"bot":3013.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":1741855.11,"bot":5515.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":1738177.89,"bot":2546.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":1616371.55,"bot":1718.0},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":1365803.79,"bot":3128.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":1277913.55,"bot":2094.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":1236166.81,"bot":1600.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира\"","rev":1228898.23,"bot":2736.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":1193426.46,"bot":1173.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":1172699.75,"bot":1308.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":1159922.69,"bot":2213.0}],"attached":{"2024":[{"cat":"Мед","rev":158397.0},{"cat":"Товары для перепродажи","rev":1619640.75},{"cat":"Экскурсии","rev":607400.0}],"2025":[{"cat":"Мед","rev":112941.92},{"cat":"Товары для перепродажи","rev":1392578.58},{"cat":"Экскурсии","rev":339500.0}],"2026":[{"cat":"Мед","rev":5080.0},{"cat":"Товары для перепродажи","rev":46474.97},{"cat":"Экскурсии","rev":26049.0}]}},"novorossiysk":{"monthly":[{"ym":"2024-01","rev":59432.3,"bot":141.0,"disc_pct":3.8607871366408335},{"ym":"2024-02","rev":108818.0,"bot":222.0,"disc_pct":7.557299896358972},{"ym":"2024-03","rev":83671.3,"bot":162.0,"disc_pct":2.8230470836914323},{"ym":"2024-04","rev":89782.19,"bot":197.0,"disc_pct":16.73959734033181},{"ym":"2024-05","rev":94179.53,"bot":218.0,"disc_pct":5.212884590223333},{"ym":"2024-06","rev":96838.0,"bot":231.0,"disc_pct":5.605864176471162},{"ym":"2024-07","rev":200281.63,"bot":392.0,"disc_pct":23.42422967956046},{"ym":"2024-08","rev":230718.24,"bot":451.0,"disc_pct":10.2665188728779},{"ym":"2024-09","rev":142164.69,"bot":286.0,"disc_pct":16.597426901957103},{"ym":"2024-10","rev":90042.68,"bot":188.0,"disc_pct":7.306279596458727},{"ym":"2024-11","rev":109446.5,"bot":213.0,"disc_pct":23.07451713570806},{"ym":"2024-12","rev":161961.8,"bot":385.0,"disc_pct":15.235199296600241},{"ym":"2025-01","rev":125140.03,"bot":238.0,"disc_pct":8.226851376523564},{"ym":"2025-02","rev":113628.0,"bot":243.0,"disc_pct":17.317557685171035},{"ym":"2025-03","rev":121899.0,"bot":259.0,"disc_pct":12.450892376198514},{"ym":"2025-04","rev":269557.18,"bot":511.0,"disc_pct":14.716796436266307},{"ym":"2025-05","rev":179846.31,"bot":336.0,"disc_pct":19.071992980245692},{"ym":"2025-06","rev":149851.0,"bot":290.0,"disc_pct":12.775902211874273},{"ym":"2025-07","rev":159575.0,"bot":314.0,"disc_pct":18.877631425100024},{"ym":"2025-08","rev":291188.9,"bot":531.0,"disc_pct":18.947586706006785},{"ym":"2025-09","rev":212005.0,"bot":406.0,"disc_pct":18.172905835446507},{"ym":"2025-10","rev":183905.0,"bot":403.0,"disc_pct":11.468362474004469},{"ym":"2025-11","rev":230577.0,"bot":469.0,"disc_pct":16.27164680976226},{"ym":"2025-12","rev":256903.0,"bot":543.0,"disc_pct":17.44072448212254},{"ym":"2026-01","rev":184055.45,"bot":356.0,"disc_pct":24.608533053704328}],"yearly":[{"year":2024,"rev":1467336.86,"bot":3086.0,"disc_amt":227685.1399999999,"disc_pct":13.432577276283133,"avg_price":475.4818081659106},{"year":2025,"rev":2294075.42,"bot":4543.0,"disc_amt":438394.5800000001,"disc_pct":16.043893620058043,"avg_price":504.9692758089368},{"year":2026,"rev":184055.45,"bot":356.0,"disc_amt":60077.54999999999,"disc_pct":24.608533053704328,"avg_price":517.009691011236}],"lines_by_year":{"2024":[{"name":"Три стихии","rev":508420.5,"bot":1617.0},{"name":"Быки","rev":276856.5,"bot":389.0},{"name":"Аппелласьон","rev":257966.0,"bot":524.0},{"name":"Резерв","rev":200343.0,"bot":278.0},{"name":"АРТ","rev":103179.26,"bot":94.0},{"name":"Экспериментальное","rev":86189.0,"bot":126.0},{"name":"РГВ","rev":34382.6,"bot":58.0}],"2025":[{"name":"Три стихии","rev":607688.75,"bot":1868.0},{"name":"Быки","rev":468009.17,"bot":693.0},{"name":"АРТ","rev":329498.69,"bot":360.0},{"name":"Резерв","rev":310607.36,"bot":475.0},{"name":"Аппелласьон","rev":207840.19,"bot":471.0},{"name":"Экспериментальное","rev":185697.15,"bot":319.0},{"name":"РГВ","rev":76869.27,"bot":151.0},{"name":"Алеф","rev":72555.0,"bot":140.0},{"name":"Бриз","rev":35309.84,"bot":66.0}],"2026":[{"name":"Резерв","rev":47999.44,"bot":81.0},{"name":"АРТ","rev":38749.63,"bot":45.0},{"name":"Три стихии","rev":35336.0,"bot":106.0},{"name":"Быки","rev":16049.51,"bot":26.0},{"name":"Алеф","rev":12000.0,"bot":28.0},{"name":"Бриз","rev":11399.630000000001,"bot":21.0},{"name":"Экспериментальное","rev":8333.81,"bot":18.0},{"name":"РГВ","rev":7665.0,"bot":17.0},{"name":"Аппелласьон","rev":6522.43,"bot":14.0}]},"top":[{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":700550.14,"bot":2192.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","rev":322463.41,"bot":1005.0},{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":287012.5,"bot":430.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":241516.3,"bot":219.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":235048.95,"bot":378.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":227627.96,"bot":387.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":183809.35,"bot":244.0},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":142111.59,"bot":198.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория.Три стихии.Красное\"","rev":128431.7,"bot":394.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":121781.92,"bot":192.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":106740.5,"bot":177.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":98395.82,"bot":191.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппелласьон Шардоне Грюнер Вельтлинер\"","rev":96156.39,"bot":199.0},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":92824.83,"bot":199.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":89663.79000000001,"bot":97.0}],"attached":{"2024":[{"cat":"Мед","rev":5263.0},{"cat":"Товары для перепродажи","rev":23105.0}],"2025":[{"cat":"Мед","rev":4396.86},{"cat":"Товары для перепродажи","rev":70994.02}],"2026":[{"cat":"Товары для перепродажи","rev":6725.55}]}},"anapa":{"monthly":[{"ym":"2025-01","rev":54518.0,"bot":101.0,"disc_pct":16.189334194222816},{"ym":"2025-02","rev":77506.09,"bot":126.0,"disc_pct":21.914515706542552},{"ym":"2025-03","rev":210436.0,"bot":321.0,"disc_pct":15.169350092314144},{"ym":"2025-04","rev":141335.22,"bot":231.0,"disc_pct":15.301184169523216},{"ym":"2025-05","rev":213285.0,"bot":312.0,"disc_pct":13.765707631847071},{"ym":"2025-06","rev":214031.01,"bot":360.0,"disc_pct":25.613164562241288},{"ym":"2025-07","rev":176971.0,"bot":315.0,"disc_pct":24.93181249390236},{"ym":"2025-08","rev":257228.05,"bot":464.0,"disc_pct":10.653681833970133},{"ym":"2025-09","rev":331888.98,"bot":545.0,"disc_pct":20.42157584418512},{"ym":"2025-10","rev":201860.98,"bot":355.0,"disc_pct":15.304032961868955},{"ym":"2025-11","rev":282401.0,"bot":494.0,"disc_pct":22.479920064563238},{"ym":"2025-12","rev":405279.0,"bot":753.0,"disc_pct":18.75864474459666},{"ym":"2026-01","rev":104203.0,"bot":176.0,"disc_pct":9.613482990128897}],"yearly":[{"year":2025,"rev":2566740.33,"bot":4377.0,"disc_amt":589753.6699999999,"disc_pct":18.683820403270207,"avg_price":586.4154283755997},{"year":2026,"rev":104203.0,"bot":176.0,"disc_amt":11083.0,"disc_pct":9.613482990128897,"avg_price":592.0625}],"lines_by_year":{"2025":[{"name":"АРТ","rev":555269.21,"bot":598.0},{"name":"Резерв","rev":540421.77,"bot":802.0},{"name":"Быки","rev":478150.62,"bot":708.0},{"name":"Три стихии","rev":298431.21,"bot":888.0},{"name":"Аппелласьон","rev":230123.98,"bot":523.0},{"name":"Экспериментальное","rev":223168.26,"bot":381.0},{"name":"Алеф","rev":99970.37,"bot":205.0},{"name":"РГВ","rev":86505.29,"bot":169.0},{"name":"Бриз","rev":54699.62,"bot":103.0}],"2026":[{"name":"АРТ","rev":30999.75,"bot":37.0},{"name":"Быки","rev":14985.0,"bot":23.0},{"name":"Бриз","rev":13859.84,"bot":26.0},{"name":"Резерв","rev":11000.0,"bot":11.0},{"name":"Аппелласьон","rev":9447.369999999999,"bot":23.0},{"name":"РГВ","rev":6425.0,"bot":13.0},{"name":"Три стихии","rev":6299.9400000000005,"bot":18.0},{"name":"Экспериментальное","rev":6211.17,"bot":14.0},{"name":"Алеф","rev":4974.93,"bot":11.0}]},"top":[{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":394607.73,"bot":399.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":375932.29,"bot":630.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":182563.27,"bot":322.0},{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":177428.33,"bot":269.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":146945.65,"bot":154.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":141284.68,"bot":419.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","rev":92800.73,"bot":140.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория.Три стихии.Красное\"","rev":83852.67,"bot":246.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","rev":79593.8,"bot":241.0},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":69991.74,"bot":90.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":64904.85,"bot":67.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":63909.9,"bot":95.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":63770.95,"bot":97.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":62846.48,"bot":74.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":61667.51,"bot":132.0}],"attached":{"2025":[{"cat":"Мед","rev":4302.0},{"cat":"Товары для перепродажи","rev":115050.63}],"2026":[{"cat":"Товары для перепродажи","rev":5391.0}]}},"yarmarka":{"monthly":[{"ym":"2024-01","rev":55150.0,"bot":56.0,"disc_pct":0.0},{"ym":"2024-02","rev":57750.0,"bot":64.0,"disc_pct":0.0},{"ym":"2024-03","rev":67830.0,"bot":73.0,"disc_pct":0.0},{"ym":"2024-04","rev":33020.0,"bot":40.0,"disc_pct":0.0},{"ym":"2024-05","rev":64420.0,"bot":72.0,"disc_pct":0.0},{"ym":"2024-06","rev":26920.0,"bot":32.0,"disc_pct":0.0},{"ym":"2024-09","rev":110230.0,"bot":135.0,"disc_pct":0.0},{"ym":"2025-03","rev":80420.0,"bot":122.0,"disc_pct":11.820175438596491},{"ym":"2025-04","rev":71010.0,"bot":118.0,"disc_pct":8.610038610038611},{"ym":"2025-09","rev":610150.0,"bot":775.0,"disc_pct":6.267762500960135}],"yearly":[{"year":2024,"rev":415320.0,"bot":472.0,"disc_amt":0.0,"disc_pct":0.0,"avg_price":879.9152542372881},{"year":2025,"rev":761580.0,"bot":1015.0,"disc_amt":58270.0,"disc_pct":7.10739769470025,"avg_price":750.3251231527094}],"lines_by_year":{"2024":[{"name":"Быки","rev":143200.0,"bot":179.0},{"name":"АРТ","rev":132220.0,"bot":100.0},{"name":"Резерв","rev":54000.0,"bot":45.0},{"name":"Экспериментальное","rev":40600.0,"bot":58.0},{"name":"Аппелласьон","rev":37950.0,"bot":69.0},{"name":"Три стихии","rev":7350.0,"bot":21.0}],"2025":[{"name":"АРТ","rev":347660.0,"bot":374.0},{"name":"Быки","rev":172760.0,"bot":269.0},{"name":"Резерв","rev":156200.0,"bot":171.0},{"name":"Аппелласьон","rev":84960.0,"bot":201.0}]},"top":[{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":266570.0,"bot":251.0},{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":132200.0,"bot":190.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":113400.0,"bot":116.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":100050.0,"bot":101.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":96800.0,"bot":100.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":73000.0,"bot":75.0},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":53600.0,"bot":67.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","rev":51300.0,"bot":74.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":40260.0,"bot":47.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":37020.0,"bot":55.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппелласьон Шардоне Грюнер\"","rev":29610.0,"bot":70.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":27300.0,"bot":39.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":26400.0,"bot":56.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Фран Мерло\"","rev":25930.0,"bot":59.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Быки.Мерло\"0,75л.","rev":25300.0,"bot":39.0}],"attached":{"2024":[{"cat":"Товары для перепродажи","rev":350.0}],"2025":[{"cat":"Товары для перепродажи","rev":6750.0}]}}};
-
+const DATA = {"abc_summary":[{"class":"A","count":18,"rev":17839743.92,"share_sku":37.5,"share_rev":79.72044270591326},{"class":"B","count":11,"rev":3306504.49,"share_sku":22.916666666666664,"share_rev":14.775772731601517},{"class":"C","count":19,"rev":1231630.23,"share_sku":39.58333333333333,"share_rev":5.503784562485231}],"abc_items":[{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","line":"АРТ","rev":2439368.0,"bot":2375.0,"share":10.900800917025618,"cum":10.900800917025618,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","line":"Быки","rev":2163511.82,"bot":3235.0,"share":9.668082729400304,"cum":20.568883646425924,"abc":"A","xyz":"Y","cv":38.86442439980359},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","line":"Резерв","rev":1731465.91,"bot":2063.0,"share":7.7373996787391635,"cum":28.306283325165086,"abc":"A","xyz":"Y","cv":44.40268418436884},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75","line":"Резерв","rev":1448403.82,"bot":2416.0,"share":6.472480449558823,"cum":34.77876377472391,"abc":"A","xyz":"Z","cv":59.4929546040517},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","line":"Три стихии","rev":1175206.93,"bot":3610.0,"share":5.25164582803368,"cum":40.030409602757594,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","line":"Экспериментальное","rev":1034648.01,"bot":1819.0,"share":4.623530347289433,"cum":44.653939950047025,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","line":"Резерв","rev":1015723.64,"bot":1358.0,"share":4.538963037293511,"cum":49.19290298734054,"abc":"A","xyz":"Z","cv":59.4929546040517},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","line":"АРТ","rev":931736.12,"bot":1057.0,"share":4.163648105296901,"cum":53.35655109263744,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","line":"Три стихии","rev":833727.14,"bot":2588.0,"share":3.7256754914638326,"cum":57.08222658410127,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","line":"Быки","rev":798262.28,"bot":1289.0,"share":3.5671937132285745,"cum":60.64942029732985,"abc":"A","xyz":"Z","cv":59.4929546040517},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","line":"АРТ","rev":644678.89,"bot":679.0,"share":2.8808757986900946,"cum":63.53029609601994,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","line":"АРТ","rev":632251.96,"bot":809.0,"share":2.825343591192163,"cum":66.3556396872121,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира","line":"Аппелласьон","rev":602367.72,"bot":1600.0,"share":2.6917999229975265,"cum":69.04743961020964,"abc":"A","xyz":"Y","cv":33.44075493928166},{"sku":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","line":"Быки","rev":590968.31,"bot":801.0,"share":2.6408593929169686,"cum":71.6882990031266,"abc":"A","xyz":"Z","cv":84.7110597924272},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","line":"Быки","rev":569861.38,"bot":888.0,"share":2.546538879612049,"cum":74.23483788273865,"abc":"A","xyz":"Z","cv":59.4929546040517},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардо","line":"Аппелласьон","rev":422345.04,"bot":958.0,"share":1.8873327842839707,"cum":76.12217066702262,"abc":"A","xyz":"Y","cv":36.97061294802897},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория.Три стихии.Красное\"","line":"Три стихии","rev":405880.1,"bot":1199.0,"share":1.8137559262409155,"cum":77.93592659326353,"abc":"A","xyz":"Y","cv":49.5605103762023},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Быки.Мерло\"0,75л.","line":"Быки","rev":399336.85,"bot":603.0,"share":1.7845161126497195,"cum":79.72044270591326,"abc":"A","xyz":"Y","cv":44.40268418436884},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое розовое \"Тристория. Алеф. Розовое. Пино","line":"Алеф","rev":382942.27,"bot":753.0,"share":1.71125367225604,"cum":81.43169637816929,"abc":"B","xyz":"Y","cv":36.97061294802897},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое красное\"Тристория.Быки.Каберне Фран\"0,75л","line":"Быки","rev":379219.19,"bot":584.0,"share":1.6946163490320902,"cum":83.12631272720138,"abc":"B","xyz":"Z","cv":51.592295517399066},{"sku":"вино ЗГУ \"Кубань.Новороссийск\" белое \"Тристория Вионье Совиньон Блан Шардоне\"","line":"РГВ","rev":378787.75,"bot":774.0,"share":1.6926883736107345,"cum":84.81900110081212,"abc":"B","xyz":"Z","cv":67.48437337137567},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппелласьон Шардоне Грюнер\"","line":"Аппелласьон","rev":347716.34,"bot":822.0,"share":1.553839600231204,"cum":86.37284070104332,"abc":"B","xyz":"Y","cv":45.76379717026523},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Фран Мерло\"","line":"Аппелласьон","rev":334818.02,"bot":720.0,"share":1.496200892793831,"cum":87.86904159383715,"abc":"B","xyz":"Y","cv":33.44075493928166},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","line":"Аппелласьон","rev":293798.88,"bot":618.0,"share":1.3128987100450196,"cum":89.18194030388217,"abc":"B","xyz":"Y","cv":48.004061559626884},{"sku":"Российское вино с ЗГУ  \"кубань.Новороссийск\" сухое красное \"Тристория.РГВ.Каберне Фран Мер","line":"РГВ","rev":272667.48,"bot":529.0,"share":1.218468847679835,"cum":90.400409151562,"abc":"B","xyz":"Z","cv":51.82267811016913},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое красное \"Тристория. Алеф. Красное. Сира","line":"Алеф","rev":259943.05,"bot":517.0,"share":1.1616072022812614,"cum":91.56201635384326,"abc":"B","xyz":"Y","cv":36.97061294802897},{"sku":"вино ЗГУ \"Кубань.Новороссийск\" розовое \"Тристория Сира Пино Нуар\"","line":"Аппелласьон","rev":253842.86,"bot":521.0,"share":1.134347290391776,"cum":92.69636364423503,"abc":"B","xyz":"Z","cv":88.43645443781277},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое \"Тристория. Алеф. Белое. Гевюрцтр","line":"Алеф","rev":210948.15,"bot":413.0,"share":0.9426637501864654,"cum":93.6390273944215,"abc":"B","xyz":"Y","cv":36.97061294802897},{"sku":"Российское вино с зГУ «Кубань. Новороссийск» сухое розовое \"Тристория ла Роза\"","line":"Экспериментальное","rev":191820.5,"bot":298.0,"share":0.8571880430932571,"cum":94.49621543751476,"abc":"B","xyz":"Y","cv":41.2033035600919},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппелласьон Шардоне Грюнер Вельтлин","line":"Аппелласьон","rev":177537.75,"bot":361.0,"share":0.7933627349406341,"cum":95.28957817245539,"abc":"C","xyz":"Y","cv":45.76379717026523},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Тристория.РГВ.Шардоне Гевюрцтрам","line":"РГВ","rev":161018.43,"bot":310.0,"share":0.7195428690554377,"cum":96.00912104151082,"abc":"C","xyz":"Y","cv":36.97061294802897},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое розовое «Тристория.РГВ.Пино Нуар\" 0.75л","line":"РГВ","rev":135501.86,"bot":241.0,"share":0.6055170026608026,"cum":96.61463804417163,"abc":"C","xyz":"Y","cv":36.97061294802897},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое красное «Тристория. РГВ. Каберне Фран С","line":"РГВ","rev":120693.31,"bot":223.0,"share":0.5393420526656318,"cum":97.15398009683726,"abc":"C","xyz":"Y","cv":36.97061294802897},{"sku":"Вино ЗГУ сухое белое \"Тристория. Бриз. Рислинг Шардоне\"","line":"Бриз","rev":107779.78,"bot":196.0,"share":0.4816353763191201,"cum":97.63561547315638,"abc":"C","xyz":"Z","cv":157.33910594625686},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"полусладкое белое\"Тристория.Быки.Шардоне Мускат","line":"Быки","rev":101686.39,"bot":147.0,"share":0.4544058515816493,"cum":98.09002132473803,"abc":"C","xyz":"Z","cv":122.72695720177025},{"sku":"Вино ЗГУ сухое красное \"Тристория. Бриз. Каберне Фран Пти Вердо\"","line":"Бриз","rev":89699.19,"bot":178.0,"share":0.4008386650183388,"cum":98.49085998975637,"abc":"C","xyz":"Z","cv":165.10494700422078},{"sku":"вино с защищенным географическим указанием «Кубань. Новороссийск» сухое белое«Тристория Ре","line":"Резерв","rev":74392.92,"bot":94.0,"share":0.3324395542436457,"cum":98.82329954400002,"abc":"C","xyz":"Z","cv":139.18921213648682},{"sku":"вино ЗГУ \"Кубань.Новороссийск\" красное \"Тристория Каберне Совиньон Сира\"","line":"Аппелласьон","rev":60757.62,"bot":126.0,"share":0.27150750514571564,"cum":99.09480704914574,"abc":"C","xyz":"Z","cv":63.369289666286534},{"sku":"Вино ЗГУ сухое красное \"Тристория. Бриз. Каберне Совиньон Мерло\"","line":"Бриз","rev":57739.68,"bot":116.0,"share":0.2580212402117129,"cum":99.35282828935746,"abc":"C","xyz":"Z","cv":176.68074243560014},{"sku":"Вино ЗГУ сухое белое \"Тристория. Бриз. Вионье Шардоне\"","line":"Бриз","rev":57629.35,"bot":105.0,"share":0.25752820867027454,"cum":99.61035649802774,"abc":"C","xyz":"Z","cv":159.86079287408228},{"sku":"Вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория Шардоне Резерв\" 2019","line":"Резерв","rev":46490.0,"bot":54.0,"share":0.20774980840632534,"cum":99.81810630643406,"abc":"C","xyz":"Z","cv":103.58338378419612},{"sku":"Вино ЗГУ \"Кубань Новороссийск\" сухое розовое \"Тристория Розе\"2020","line":"Быки","rev":17660.34,"bot":35.0,"share":0.07891874061928508,"cum":99.89702504705335,"abc":"C","xyz":"Z","cv":253.4101371060877},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.РГВ.Шардоне Совиньон Бла","line":"РГВ","rev":8823.44,"bot":18.0,"share":0.03942929596654565,"cum":99.93645434301989,"abc":"C","xyz":"Z","cv":59.4929546040517},{"sku":"Вино ЗГУ «Кубань. Новороссийск» сухое белое «Тристория» 2020","line":"Быки","rev":5480.4,"bot":8.0,"share":0.024490257044311143,"cum":99.9609446000642,"abc":"C","xyz":"Z","cv":258.49213105659874},{"sku":"Вино ЗГУ \"Кубань.Новороссийск\" сухое красное\"Тристория Мерло Резерв\" 2019","line":"Резерв","rev":4600.0,"bot":8.0,"share":0.020556014598173727,"cum":99.98150061466237,"abc":"C","xyz":"-","cv":null},{"sku":"Вино ЗГУ \"Кубань.Новороссийск\" сухое красное\"Тристория Каберне Фран Резерв\" 2019","line":"Резерв","rev":3219.77,"bot":3.0,"share":0.0143881824179917,"cum":99.99588879708035,"abc":"C","xyz":"-","cv":null},{"sku":"Вино ЗГУ \"Кубань Новороссийск\" сухое красное \"Тристория\"2020","line":"Быки","rev":520.0,"bot":1.0,"share":0.002323723389358769,"cum":99.9982125204697,"abc":"C","xyz":"-","cv":null},{"sku":"Вино ЗГУ сухое белое \"Тристория Совиньон Блан\" 2019","line":"Корабли","rev":400.0,"bot":1.0,"share":0.001787479530275976,"cum":99.99999999999999,"abc":"C","xyz":"-","cv":null}],"xyz_summary":[{"class":"X","label":"Стабильный спрос (CV ≤ 25%)","count":1},{"class":"Y","label":"Колеблющийся спрос (CV 25-50%)","count":19},{"class":"Z","label":"Нерегулярный спрос (CV > 50%)","count":24}],"abc_xyz_matrix":{"AX":{"count":1,"rev":1175206.93,"skus":[{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тр","rev":1175206.93}]},"AY":{"count":12,"rev":11416363.7,"skus":[{"sku":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Ме","rev":2163511.82},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Т","rev":1731465.91},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Трист","rev":1448403.82},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Три","rev":1034648.01},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тр","rev":931736.12}]},"AZ":{"count":5,"rev":5248173.29,"skus":[{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «","rev":2439368.0},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Трис","rev":1015723.64},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «","rev":632251.96},{"sku":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Муск","rev":590968.31},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Трис","rev":569861.38}]},"BX":{"count":0,"rev":0,"skus":[]},"BY":{"count":5,"rev":1414327.82,"skus":[{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое розовое \"","rev":382942.27},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Апп","rev":334818.02},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Апп","rev":293798.88},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое \"Тр","rev":210948.15},{"sku":"Российское вино с зГУ «Кубань. Новороссийск» сухое розовое \"","rev":191820.5}]},"BZ":{"count":6,"rev":1892176.67,"skus":[{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое красное\"Три","rev":379219.19},{"sku":"вино ЗГУ \"Кубань.Новороссийск\" белое \"Тристория Вионье Совин","rev":378787.75},{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппел","rev":347716.34},{"sku":"Российское вино с ЗГУ  \"кубань.Новороссийск\" сухое красное \"","rev":272667.48},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое красное \"","rev":259943.05}]},"CX":{"count":0,"rev":0,"skus":[]},"CY":{"count":2,"rev":298231.06,"skus":[{"sku":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппел","rev":177537.75},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое красное «","rev":120693.31}]},"CZ":{"count":13,"rev":924659.3999999999,"skus":[{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Тр","rev":161018.43},{"sku":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое розовое «","rev":135501.86},{"sku":"Вино ЗГУ сухое белое \"Тристория. Бриз. Рислинг Шардоне\"","rev":107779.78},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"полусладкое белое","rev":101686.39},{"sku":"Вино ЗГУ сухое красное \"Тристория. Бриз. Каберне Фран Пти Ве","rev":89699.19}]},"нет данных":{"count":4,"rev":8739.77,"skus":[{"sku":"Вино ЗГУ \"Кубань.Новороссийск\" сухое красное\"Тристория Мерло","rev":4600.0},{"sku":"Вино ЗГУ \"Кубань.Новороссийск\" сухое красное\"Тристория Кабер","rev":3219.77},{"sku":"Вино ЗГУ \"Кубань Новороссийск\" сухое красное \"Тристория\"2020","rev":520.0},{"sku":"Вино ЗГУ сухое белое \"Тристория Совиньон Блан\" 2019","rev":400.0}]}},"season":[{"y":"2024","m":"01","rev":1044165.73,"bot":1787.0},{"y":"2024","m":"02","rev":1485267.34,"bot":2558.0},{"y":"2024","m":"03","rev":1444609.66,"bot":2346.0},{"y":"2024","m":"04","rev":1656745.61,"bot":2813.0},{"y":"2024","m":"05","rev":1903487.85,"bot":3082.0},{"y":"2024","m":"06","rev":2574744.26,"bot":4206.0},{"y":"2024","m":"07","rev":3459268.19,"bot":5523.0},{"y":"2024","m":"08","rev":3188649.06,"bot":5127.0},{"y":"2024","m":"09","rev":2480914.28,"bot":3930.0},{"y":"2024","m":"10","rev":1427915.75,"bot":2300.0},{"y":"2024","m":"11","rev":1457313.63,"bot":2317.0},{"y":"2024","m":"12","rev":1697349.82,"bot":2916.0},{"y":"2025","m":"01","rev":1446527.64,"bot":2451.0},{"y":"2025","m":"02","rev":960302.04,"bot":1641.0},{"y":"2025","m":"03","rev":1433351.01,"bot":2319.0},{"y":"2025","m":"04","rev":1687060.0,"bot":2824.0},{"y":"2025","m":"05","rev":1364422.52,"bot":2206.0},{"y":"2025","m":"06","rev":1728607.88,"bot":2933.0},{"y":"2025","m":"07","rev":2039535.48,"bot":3450.0},{"y":"2025","m":"08","rev":2789173.05,"bot":4775.0},{"y":"2025","m":"09","rev":2901145.37,"bot":4641.0},{"y":"2025","m":"10","rev":1979735.7,"bot":3512.0},{"y":"2025","m":"11","rev":1964148.33,"bot":3404.0},{"y":"2025","m":"12","rev":2083869.62,"bot":3965.0},{"y":"2026","m":"01","rev":796299.48,"bot":1368.0}],"stores":{"all":{"monthly":[{"YM":"2024-01","rev":1044165.73,"bot":1787.0,"avg_price":584.3121040850588,"disc_pct":5.831926748145799,"orders":67.0,"avg_check":15584.563134328359,"bot_per_order":26.671641791044777},{"YM":"2024-02","rev":1485267.34,"bot":2558.0,"avg_price":580.6361767005474,"disc_pct":21.1650745054994,"orders":55.0,"avg_check":27004.860727272728,"bot_per_order":46.50909090909091},{"YM":"2024-03","rev":1444609.66,"bot":2346.0,"avg_price":615.7756436487638,"disc_pct":7.752619543721434,"orders":59.0,"avg_check":24484.90949152542,"bot_per_order":39.76271186440678},{"YM":"2024-04","rev":1656745.61,"bot":2813.0,"avg_price":588.9604017063633,"disc_pct":8.226250657803623,"orders":60.0,"avg_check":27612.426833333335,"bot_per_order":46.88333333333333},{"YM":"2024-05","rev":1903487.85,"bot":3082.0,"avg_price":617.6144873458793,"disc_pct":8.582501037368308,"orders":67.0,"avg_check":28410.26641791045,"bot_per_order":46.0},{"YM":"2024-06","rev":2574744.26,"bot":4206.0,"avg_price":612.1598335710888,"disc_pct":10.866341968675156,"orders":60.0,"avg_check":42912.40433333333,"bot_per_order":70.1},{"YM":"2024-07","rev":3459268.19,"bot":5523.0,"avg_price":626.338618504436,"disc_pct":11.73953802968118,"orders":65.0,"avg_check":53219.51061538461,"bot_per_order":84.96923076923076},{"YM":"2024-08","rev":3188649.06,"bot":5127.0,"avg_price":621.932720889409,"disc_pct":9.102131246566723,"orders":59.0,"avg_check":54044.899322033896,"bot_per_order":86.89830508474576},{"YM":"2024-09","rev":2480914.28,"bot":3930.0,"avg_price":631.2758982188294,"disc_pct":7.541247121977479,"orders":58.0,"avg_check":42774.38413793103,"bot_per_order":67.75862068965517},{"YM":"2024-10","rev":1427915.75,"bot":2300.0,"avg_price":620.8329347826087,"disc_pct":11.473162944248982,"orders":57.0,"avg_check":25051.15350877193,"bot_per_order":40.35087719298246},{"YM":"2024-11","rev":1457313.63,"bot":2317.0,"avg_price":628.9657444971946,"disc_pct":10.784618464405405,"orders":53.0,"avg_check":27496.483584905658,"bot_per_order":43.716981132075475},{"YM":"2024-12","rev":1697349.82,"bot":2916.0,"avg_price":582.0815569272977,"disc_pct":16.7639358571989,"orders":64.0,"avg_check":26521.0909375,"bot_per_order":45.5625},{"YM":"2025-01","rev":1446527.64,"bot":2451.0,"avg_price":590.1785556915544,"disc_pct":29.429138744589594,"orders":59.0,"avg_check":24517.41762711864,"bot_per_order":41.54237288135593},{"YM":"2025-02","rev":960302.04,"bot":1641.0,"avg_price":585.1931992687386,"disc_pct":15.246278628480647,"orders":55.0,"avg_check":17460.037090909093,"bot_per_order":29.836363636363636},{"YM":"2025-03","rev":1433351.01,"bot":2319.0,"avg_price":618.0901293661061,"disc_pct":14.238077943462448,"orders":82.0,"avg_check":17479.89036585366,"bot_per_order":28.28048780487805},{"YM":"2025-04","rev":1687060.0,"bot":2824.0,"avg_price":597.400849858357,"disc_pct":17.841334711848592,"orders":80.0,"avg_check":21088.25,"bot_per_order":35.3},{"YM":"2025-05","rev":1364422.52,"bot":2206.0,"avg_price":618.5052221214869,"disc_pct":15.264627851170276,"orders":82.0,"avg_check":16639.299024390246,"bot_per_order":26.902439024390244},{"YM":"2025-06","rev":1728607.88,"bot":2933.0,"avg_price":589.3651142175247,"disc_pct":14.868541789377682,"orders":82.0,"avg_check":21080.583902439022,"bot_per_order":35.76829268292683},{"YM":"2025-07","rev":2039535.48,"bot":3450.0,"avg_price":591.169704347826,"disc_pct":17.009636805982527,"orders":80.0,"avg_check":25494.1935,"bot_per_order":43.125},{"YM":"2025-08","rev":2789173.05,"bot":4775.0,"avg_price":584.1200104712042,"disc_pct":13.357654744375902,"orders":82.0,"avg_check":34014.30548780488,"bot_per_order":58.23170731707317},{"YM":"2025-09","rev":2901145.37,"bot":4641.0,"avg_price":625.1121245421245,"disc_pct":10.382965585199871,"orders":85.0,"avg_check":34131.122,"bot_per_order":54.6},{"YM":"2025-10","rev":1979735.7,"bot":3512.0,"avg_price":563.7060649202733,"disc_pct":19.609734368096888,"orders":84.0,"avg_check":23568.28214285714,"bot_per_order":41.80952380952381},{"YM":"2025-11","rev":1964148.33,"bot":3404.0,"avg_price":577.011847826087,"disc_pct":14.20018110956473,"orders":114.0,"avg_check":17229.371315789474,"bot_per_order":29.859649122807017},{"YM":"2025-12","rev":2083869.62,"bot":3965.0,"avg_price":525.5661084489282,"disc_pct":20.755259514241935,"orders":119.0,"avg_check":17511.509411764706,"bot_per_order":33.319327731092436},{"YM":"2026-01","rev":796299.48,"bot":1368.0,"avg_price":582.0902631578947,"disc_pct":15.200234283067193,"orders":74.0,"avg_check":10760.803783783784,"bot_per_order":18.486486486486488}],"yearly":[{"year":"2024","rev":23820431.18,"bot":38905.0,"avg_price":612.271717774065,"disc_pct":10.889024951294738,"orders":724,"avg_check":32901.14803867403,"bot_per_order":53.73618784530387},{"year":"2025","rev":22377878.64,"bot":38121.0,"avg_price":587.0223404422759,"disc_pct":16.63673621925469,"orders":1004,"avg_check":22288.72374501992,"bot_per_order":37.96912350597609},{"year":"2026","rev":796299.48,"bot":1368.0,"avg_price":582.0902631578947,"disc_pct":15.200234283067193,"orders":74,"avg_check":10760.803783783784,"bot_per_order":18.486486486486488}],"lines":{"2024":[{"name":"АРТ","rev":4024259.72,"bot":3499.0,"avg":1150.1170963132324,"disc":7.058357764352709},{"name":"Аппелласьон","rev":4368722.5,"bot":9078.0,"avg":481.24283983256225,"disc":10.566797682654713},{"name":"Быки","rev":7887361.0,"bot":11155.0,"avg":707.0695652173913,"disc":10.275412413323952},{"name":"РГВ","rev":935577.46,"bot":1593.0,"avg":587.3053735091023,"disc":1.8734833864742446},{"name":"Резерв","rev":2844166.0,"bot":3248.0,"avg":875.6668719211823,"disc":24.842016251569003},{"name":"Три стихии","rev":2814259.5,"bot":8962.0,"avg":314.02136799821466,"disc":6.462452990416111},{"name":"Экспериментальное","rev":946085.0,"bot":1370.0,"avg":690.57299270073,"disc":3.401572391259955}],"2025":[{"name":"АРТ","rev":4648034.97,"bot":4920.0,"avg":944.7225548780488,"disc":11.295857578250097},{"name":"Алеф","rev":853833.47,"bot":1683.0,"avg":507.32826500297085,"disc":4.939493431307062},{"name":"Аппелласьон","rev":2493184.23,"bot":5726.0,"avg":435.4146402375131,"disc":11.792838871965781},{"name":"Бриз","rev":312848.0,"bot":595.0,"avg":525.7949579831933,"disc":12.392047045645477},{"name":"Быки","rev":5026506.96,"bot":7591.0,"avg":662.1666394414439,"disc":11.805455368516355},{"name":"Корабли","rev":400.0,"bot":1.0,"avg":400.0,"disc":0.0},{"name":"РГВ","rev":1077492.27,"bot":2095.0,"avg":514.3161193317422,"disc":2.9957407847543305},{"name":"Резерв","rev":4324296.06,"bot":5996.0,"avg":721.1968078719145,"disc":35.16068433482026},{"name":"Три стихии","rev":2414814.17,"bot":7397.0,"avg":326.45858726510744,"disc":6.710983840249102},{"name":"Экспериментальное","rev":1226468.51,"bot":2117.0,"avg":579.3427066603684,"disc":15.636183479675466}],"2026":[{"name":"АРТ","rev":241648.79,"bot":278.0,"avg":869.2402517985612,"disc":9.42699025487256},{"name":"Алеф","rev":52124.54,"bot":120.0,"avg":434.3711666666667,"disc":13.125766666666665},{"name":"Аппелласьон","rev":61188.2,"bot":153.0,"avg":399.92287581699344,"disc":12.525804145818444},{"name":"Бриз","rev":61528.81,"bot":118.0,"avg":521.430593220339,"disc":13.094901129943507},{"name":"Быки","rev":133907.62,"bot":219.0,"avg":611.4503196347032,"disc":12.649954337899546},{"name":"РГВ","rev":22389.72,"bot":49.0,"avg":456.93306122448985,"disc":8.613387755102037},{"name":"Резерв","rev":129859.09,"bot":178.0,"avg":729.5454494382022,"disc":33.43972834443875},{"name":"Три стихии","rev":63615.94,"bot":187.0,"avg":340.192192513369,"disc":2.802230710466001},{"name":"Экспериментальное","rev":30036.77,"bot":66.0,"avg":455.1025757575758,"disc":9.350324430360644}]},"top":[{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":4482672.91,"bot":6477.0,"avg":692.0909232669446},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":4296563.21,"bot":3759.0,"avg":1143.0069725990954},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":2790105.81,"bot":3646.0,"avg":765.2511821173889},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":2689317.79,"bot":3113.0,"avg":863.899065210408},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":2586139.93,"bot":8133.0,"avg":317.98105619082753},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":2349159.13,"bot":3554.0,"avg":660.9901885199774},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":2083330.36,"bot":3357.0,"avg":620.5928984212095},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":1809141.82,"bot":1936.0,"avg":934.4740805785125},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":1715404.78,"bot":2842.0,"avg":603.5907037297678},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":1510896.64,"bot":3440.0,"avg":439.2141395348837},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":1484851.14,"bot":1922.0,"avg":772.555223725286},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":1415151.26,"bot":1396.0,"avg":1013.7186676217765},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":1393087.19,"bot":1606.0,"avg":867.4266438356165},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","rev":1384202.58,"bot":4266.0,"avg":324.47317862165966},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира\"","rev":1363516.46,"bot":3071.0,"avg":443.99754477368936},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":1346386.02,"bot":2592.0,"avg":519.4390509259259},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","rev":1326959.56,"bot":1954.0,"avg":679.0990583418629},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория.Три стихии.Красное\"","rev":1322347.1,"bot":4147.0,"avg":318.868362671811},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Фран Мерло\"","rev":1211205.35,"bot":2757.0,"avg":439.32003989844037},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое красное\"Тристория.Быки.Каберне Фран\"0,75л.","rev":1098599.58,"bot":1633.0,"avg":672.7492835272506}],"attached":{"2024":[{"cat":"Мед","rev":163660.0},{"cat":"Товары для перепродажи","rev":1643095.75},{"cat":"Экскурсии","rev":607400.0}],"2025":[{"cat":"Мед","rev":121640.78},{"cat":"Товары для перепродажи","rev":1585373.23},{"cat":"Экскурсии","rev":339500.0}],"2026":[{"cat":"Мед","rev":5080.0},{"cat":"Товары для перепродажи","rev":58591.52},{"cat":"Экскурсии","rev":26049.0}]}},"zavod":{"monthly":[{"YM":"2024-01","rev":929583.43,"bot":1590.0,"avg_price":584.6436666666667,"disc_pct":6.279049626813375,"orders":44.0,"avg_check":21126.896136363637,"bot_per_order":36.13636363636363},{"YM":"2024-02","rev":1318699.34,"bot":2272.0,"avg_price":580.4134419014085,"disc_pct":22.81799388724292,"orders":31.0,"avg_check":42538.68838709678,"bot_per_order":73.29032258064517},{"YM":"2024-03","rev":1293108.36,"bot":2111.0,"avg_price":612.5572524869731,"disc_pct":8.425600441899737,"orders":35.0,"avg_check":36945.95314285714,"bot_per_order":60.31428571428572},{"YM":"2024-04","rev":1533943.42,"bot":2576.0,"avg_price":595.4749301242235,"disc_pct":7.8378884364727925,"orders":34.0,"avg_check":45115.982941176466,"bot_per_order":75.76470588235294},{"YM":"2024-05","rev":1744888.32,"bot":2792.0,"avg_price":624.96,"disc_pct":9.045220189813138,"orders":37.0,"avg_check":47159.14378378379,"bot_per_order":75.45945945945945},{"YM":"2024-06","rev":2450986.26,"bot":3943.0,"avg_price":621.604428100431,"disc_pct":11.167955481522403,"orders":34.0,"avg_check":72087.83117647059,"bot_per_order":115.97058823529412},{"YM":"2024-07","rev":3258986.56,"bot":5131.0,"avg_price":635.156219060612,"disc_pct":10.904045804093618,"orders":36.0,"avg_check":90527.40444444444,"bot_per_order":142.52777777777777},{"YM":"2024-08","rev":2957930.82,"bot":4676.0,"avg_price":632.5771642429427,"disc_pct":9.010037430417817,"orders":34.0,"avg_check":86997.96529411765,"bot_per_order":137.52941176470588},{"YM":"2024-09","rev":2228519.59,"bot":3509.0,"avg_price":635.086802507837,"disc_pct":7.244728999658706,"orders":32.0,"avg_check":69641.2371875,"bot_per_order":109.65625},{"YM":"2024-10","rev":1337873.07,"bot":2112.0,"avg_price":633.4626278409091,"disc_pct":11.740191379668627,"orders":33.0,"avg_check":40541.608181818185,"bot_per_order":64.0},{"YM":"2024-11","rev":1347867.13,"bot":2104.0,"avg_price":640.6212595057034,"disc_pct":9.612035793943416,"orders":34.0,"avg_check":39643.15088235294,"bot_per_order":61.88235294117647},{"YM":"2024-12","rev":1535388.02,"bot":2531.0,"avg_price":606.6329593046227,"disc_pct":16.921987005229074,"orders":37.0,"avg_check":41496.97351351351,"bot_per_order":68.4054054054054},{"YM":"2025-01","rev":1266869.61,"bot":2112.0,"avg_price":599.8435653409091,"disc_pct":31.45924543307661,"orders":28.0,"avg_check":45245.34321428572,"bot_per_order":75.42857142857143},{"YM":"2025-02","rev":769167.95,"bot":1272.0,"avg_price":604.691784591195,"disc_pct":14.190318675985791,"orders":26.0,"avg_check":29583.382692307692,"bot_per_order":48.92307692307692},{"YM":"2025-03","rev":1020596.01,"bot":1617.0,"avg_price":631.1663636363636,"disc_pct":14.437886743353737,"orders":29.0,"avg_check":35192.965862068966,"bot_per_order":55.758620689655174},{"YM":"2025-04","rev":1205157.6,"bot":1964.0,"avg_price":613.6240325865581,"disc_pct":19.267351565137698,"orders":29.0,"avg_check":41557.15862068966,"bot_per_order":67.72413793103448},{"YM":"2025-05","rev":971291.21,"bot":1558.0,"avg_price":623.4218292682926,"disc_pct":14.847867100803578,"orders":29.0,"avg_check":33492.800344827585,"bot_per_order":53.724137931034484},{"YM":"2025-06","rev":1364725.87,"bot":2283.0,"avg_price":597.7774288217258,"disc_pct":13.129508226983122,"orders":28.0,"avg_check":48740.209642857146,"bot_per_order":81.53571428571429},{"YM":"2025-07","rev":1702989.48,"bot":2821.0,"avg_price":603.6829067706487,"disc_pct":15.905948394672661,"orders":29.0,"avg_check":58723.77517241379,"bot_per_order":97.27586206896552},{"YM":"2025-08","rev":2240756.1,"bot":3780.0,"avg_price":592.792619047619,"disc_pct":12.879522709776747,"orders":29.0,"avg_check":77267.45172413794,"bot_per_order":130.3448275862069},{"YM":"2025-09","rev":1747101.39,"bot":2915.0,"avg_price":599.3486758147512,"disc_pct":8.53695949893518,"orders":30.0,"avg_check":58236.712999999996,"bot_per_order":97.16666666666667},{"YM":"2025-10","rev":1593969.72,"bot":2754.0,"avg_price":578.7834858387799,"disc_pct":20.957252632163573,"orders":29.0,"avg_check":54964.473103448276,"bot_per_order":94.96551724137932},{"YM":"2025-11","rev":1451170.33,"bot":2441.0,"avg_price":594.4982916837362,"disc_pct":12.025810210234237,"orders":41.0,"avg_check":35394.39829268293,"bot_per_order":59.53658536585366},{"YM":"2025-12","rev":1421687.62,"bot":2669.0,"avg_price":532.6667740726864,"disc_pct":21.869454851010993,"orders":41.0,"avg_check":34675.30780487805,"bot_per_order":65.09756097560975},{"YM":"2026-01","rev":508041.03,"bot":836.0,"avg_price":607.704581339713,"disc_pct":12.348687751890902,"orders":25.0,"avg_check":20321.641200000002,"bot_per_order":33.44}],"yearly":[{"year":"2024","rev":21937774.32,"bot":35347.0,"avg_price":620.6403462811554,"disc_pct":10.89759706161313,"orders":421,"avg_check":52108.72760095012,"bot_per_order":83.95961995249407},{"year":"2025","rev":16755482.89,"bot":28186.0,"avg_price":594.4611825019514,"disc_pct":16.784287448934066,"orders":368,"avg_check":45531.20350543479,"bot_per_order":76.59239130434783},{"year":"2026","rev":508041.03,"bot":836.0,"avg_price":607.704581339713,"disc_pct":12.348687751890902,"orders":25,"avg_check":20321.641200000002,"bot_per_order":33.44}],"lines":{"2024":[{"name":"АРТ","rev":3788860.46,"bot":3305.0,"avg":1146.4025597579425,"disc":7.181909090285515},{"name":"Аппелласьон","rev":4072806.5,"bot":8485.0,"avg":480.000766057749,"disc":10.802411274515173},{"name":"Быки","rev":7467304.5,"bot":10587.0,"avg":705.3277132332105,"disc":10.476694858104693},{"name":"РГВ","rev":901194.86,"bot":1535.0,"avg":587.0976286644951,"disc":1.9052115058484957},{"name":"Резерв","rev":2589823.0,"bot":2925.0,"avg":885.4095726495726,"disc":23.858967762800066},{"name":"Три стихии","rev":2298489.0,"bot":7324.0,"avg":313.8297378481704,"disc":6.601366548216234},{"name":"Экспериментальное","rev":819296.0,"bot":1186.0,"avg":690.806070826307,"disc":3.6802257230190456}],"2025":[{"name":"АРТ","rev":3415607.07,"bot":3588.0,"avg":951.9529180602007,"disc":11.463685307398407},{"name":"Алеф","rev":681308.1,"bot":1338.0,"avg":509.1988789237668,"disc":4.471662927650032},{"name":"Аппелласьон","rev":1970260.06,"bot":4531.0,"avg":434.8400044140366,"disc":12.351470477020875},{"name":"Бриз","rev":222838.54,"bot":426.0,"avg":523.0951643192489,"disc":12.817472613458525},{"name":"Быки","rev":3907587.17,"bot":5921.0,"avg":659.953921634859,"disc":12.26594288151957},{"name":"Корабли","rev":400.0,"bot":1.0,"avg":400.0,"disc":0.0},{"name":"РГВ","rev":914117.71,"bot":1775.0,"avg":514.9958929577465,"disc":2.9046559401103003},{"name":"Резерв","rev":3317066.93,"bot":4548.0,"avg":729.3462906772208,"disc":34.51649531142039},{"name":"Три стихии","rev":1508694.21,"bot":4641.0,"avg":325.07955397543634,"disc":7.120127435589622},{"name":"Экспериментальное","rev":817603.1,"bot":1417.0,"avg":576.9958362738179,"disc":16.1273574986023}],"2026":[{"name":"АРТ","rev":171899.41,"bot":196.0,"avg":877.037806122449,"disc":7.081399999999998},{"name":"Алеф","rev":35149.61,"bot":81.0,"avg":433.9458024691358,"disc":13.210839506172839},{"name":"Аппелласьон","rev":45218.4,"bot":116.0,"avg":389.8137931034483,"disc":14.277914691943124},{"name":"Бриз","rev":36269.34,"bot":71.0,"avg":510.83577464788726,"disc":14.86070422535212},{"name":"Быки","rev":102873.11,"bot":170.0,"avg":605.1359411764706,"disc":13.552008403361343},{"name":"РГВ","rev":8299.72,"bot":19.0,"avg":436.8273684210526,"disc":12.63452631578948},{"name":"Резерв","rev":70859.65,"bot":86.0,"avg":823.9494186046511,"disc":22.3455890410959},{"name":"Три стихии","rev":21980.0,"bot":63.0,"avg":348.8888888888889,"disc":0.31746031746031744},{"name":"Экспериментальное","rev":15491.79,"bot":34.0,"avg":455.6408823529412,"disc":8.689201933278316}]},"top":[{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":3886032.08,"bot":5588.0,"avg":695.4244953471725},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":3393869.18,"bot":2890.0,"avg":1174.349197231834},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":2524402.48,"bot":3291.0,"avg":767.0624369492556},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":2261762.79,"bot":2615.0,"avg":864.9188489483748},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":1860757.49,"bot":3013.0,"avg":617.5763325589114},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":1741855.11,"bot":5515.0,"avg":315.8395485040798},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":1738177.89,"bot":2546.0,"avg":682.7093047918303},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":1616371.55,"bot":1718.0,"avg":940.8449068684517},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":1365803.79,"bot":3128.0,"avg":436.63804028132995},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":1277913.55,"bot":2094.0,"avg":610.2739016236867},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":1236166.81,"bot":1600.0,"avg":772.60425625},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира\"","rev":1228898.23,"bot":2736.0,"avg":449.1587097953216},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":1193426.46,"bot":1173.0,"avg":1017.4138618925831},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":1172699.75,"bot":1308.0,"avg":896.5594418960245},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":1159922.69,"bot":2213.0,"avg":524.1403931314957},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория.Три стихии.Красное\"","rev":1106912.73,"bot":3498.0,"avg":316.4416037735849},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","rev":1099478.6,"bot":1623.0,"avg":677.4359827479976},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Фран Мерло\"","rev":1054984.7,"bot":2415.0,"avg":436.84666666666664},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","rev":980395.37,"bot":3015.0,"avg":325.1725936981758},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое красное\"Тристория.Быки.Каберне Фран\"0,75л.","rev":968617.2,"bot":1451.0,"avg":667.5514817367333}],"attached":{"2024":[{"cat":"Мед","rev":158397.0},{"cat":"Товары для перепродажи","rev":1619640.75},{"cat":"Экскурсии","rev":607400.0}],"2025":[{"cat":"Мед","rev":112941.92},{"cat":"Товары для перепродажи","rev":1392578.58},{"cat":"Экскурсии","rev":339500.0}],"2026":[{"cat":"Мед","rev":5080.0},{"cat":"Товары для перепродажи","rev":46474.97},{"cat":"Экскурсии","rev":26049.0}]}},"novorossiysk":{"monthly":[{"YM":"2024-01","rev":59432.3,"bot":141.0,"avg_price":421.50567375886527,"disc_pct":3.8607871366408335,"orders":22.0,"avg_check":2701.468181818182,"bot_per_order":6.409090909090909},{"YM":"2024-02","rev":108818.0,"bot":222.0,"avg_price":490.1711711711712,"disc_pct":7.557299896358972,"orders":23.0,"avg_check":4731.217391304348,"bot_per_order":9.652173913043478},{"YM":"2024-03","rev":83671.3,"bot":162.0,"avg_price":516.4895061728395,"disc_pct":2.8230470836914323,"orders":23.0,"avg_check":3637.8826086956524,"bot_per_order":7.043478260869565},{"YM":"2024-04","rev":89782.19,"bot":197.0,"avg_price":455.7471573604061,"disc_pct":16.73959734033181,"orders":24.0,"avg_check":3740.9245833333334,"bot_per_order":8.208333333333334},{"YM":"2024-05","rev":94179.53,"bot":218.0,"avg_price":432.0161926605505,"disc_pct":5.212884590223333,"orders":29.0,"avg_check":3247.57,"bot_per_order":7.517241379310345},{"YM":"2024-06","rev":96838.0,"bot":231.0,"avg_price":419.2121212121212,"disc_pct":5.605864176471162,"orders":25.0,"avg_check":3873.52,"bot_per_order":9.24},{"YM":"2024-07","rev":200281.63,"bot":392.0,"avg_price":510.9225255102041,"disc_pct":23.42422967956046,"orders":29.0,"avg_check":6906.263103448276,"bot_per_order":13.517241379310345},{"YM":"2024-08","rev":230718.24,"bot":451.0,"avg_price":511.57037694013303,"disc_pct":10.2665188728779,"orders":25.0,"avg_check":9228.729599999999,"bot_per_order":18.04},{"YM":"2024-09","rev":142164.69,"bot":286.0,"avg_price":497.07933566433564,"disc_pct":16.597426901957103,"orders":22.0,"avg_check":6462.0313636363635,"bot_per_order":13.0},{"YM":"2024-10","rev":90042.68,"bot":188.0,"avg_price":478.95042553191485,"disc_pct":7.306279596458727,"orders":24.0,"avg_check":3751.778333333333,"bot_per_order":7.833333333333333},{"YM":"2024-11","rev":109446.5,"bot":213.0,"avg_price":513.8333333333334,"disc_pct":23.07451713570806,"orders":19.0,"avg_check":5760.3421052631575,"bot_per_order":11.210526315789474},{"YM":"2024-12","rev":161961.8,"bot":385.0,"avg_price":420.67999999999995,"disc_pct":15.235199296600241,"orders":27.0,"avg_check":5998.585185185185,"bot_per_order":14.25925925925926},{"YM":"2025-01","rev":125140.03,"bot":238.0,"avg_price":525.7984453781512,"disc_pct":8.226851376523564,"orders":24.0,"avg_check":5214.167916666666,"bot_per_order":9.916666666666666},{"YM":"2025-02","rev":113628.0,"bot":243.0,"avg_price":467.60493827160496,"disc_pct":17.317557685171035,"orders":22.0,"avg_check":5164.909090909091,"bot_per_order":11.045454545454545},{"YM":"2025-03","rev":121899.0,"bot":259.0,"avg_price":470.65250965250965,"disc_pct":12.450892376198514,"orders":27.0,"avg_check":4514.777777777777,"bot_per_order":9.592592592592593},{"YM":"2025-04","rev":269557.18,"bot":511.0,"avg_price":527.5091585127201,"disc_pct":14.716796436266307,"orders":27.0,"avg_check":9983.59925925926,"bot_per_order":18.925925925925927},{"YM":"2025-05","rev":179846.31,"bot":336.0,"avg_price":535.256875,"disc_pct":19.071992980245692,"orders":30.0,"avg_check":5994.8769999999995,"bot_per_order":11.2},{"YM":"2025-06","rev":149851.0,"bot":290.0,"avg_price":516.7275862068966,"disc_pct":12.775902211874273,"orders":28.0,"avg_check":5351.821428571428,"bot_per_order":10.357142857142858},{"YM":"2025-07","rev":159575.0,"bot":314.0,"avg_price":508.20063694267515,"disc_pct":18.877631425100024,"orders":25.0,"avg_check":6383.0,"bot_per_order":12.56},{"YM":"2025-08","rev":291188.9,"bot":531.0,"avg_price":548.3783427495292,"disc_pct":18.947586706006785,"orders":27.0,"avg_check":10784.774074074076,"bot_per_order":19.666666666666668},{"YM":"2025-09","rev":212005.0,"bot":406.0,"avg_price":522.179802955665,"disc_pct":18.172905835446507,"orders":24.0,"avg_check":8833.541666666666,"bot_per_order":16.916666666666668},{"YM":"2025-10","rev":183905.0,"bot":403.0,"avg_price":456.3399503722084,"disc_pct":11.468362474004469,"orders":28.0,"avg_check":6568.035714285715,"bot_per_order":14.392857142857142},{"YM":"2025-11","rev":230577.0,"bot":469.0,"avg_price":491.63539445629,"disc_pct":16.27164680976226,"orders":37.0,"avg_check":6231.810810810811,"bot_per_order":12.675675675675675},{"YM":"2025-12","rev":256903.0,"bot":543.0,"avg_price":473.1178637200737,"disc_pct":17.44072448212254,"orders":41.0,"avg_check":6265.926829268293,"bot_per_order":13.24390243902439},{"YM":"2026-01","rev":184055.45,"bot":356.0,"avg_price":517.009691011236,"disc_pct":24.608533053704328,"orders":24.0,"avg_check":7668.977083333334,"bot_per_order":14.833333333333334}],"yearly":[{"year":"2024","rev":1467336.86,"bot":3086.0,"avg_price":475.4818081659106,"disc_pct":13.432577276283133,"orders":292,"avg_check":5025.1262328767125,"bot_per_order":10.568493150684931},{"year":"2025","rev":2294075.42,"bot":4543.0,"avg_price":504.9692758089368,"disc_pct":16.043893620058043,"orders":340,"avg_check":6747.280647058823,"bot_per_order":13.361764705882353},{"year":"2026","rev":184055.45,"bot":356.0,"avg_price":517.009691011236,"disc_pct":24.608533053704328,"orders":24,"avg_check":7668.977083333334,"bot_per_order":14.833333333333334}],"lines":{"2024":[{"name":"АРТ","rev":103179.26,"bot":94.0,"avg":1097.6517021276595,"disc":10.767741935483874},{"name":"Аппелласьон","rev":257966.0,"bot":524.0,"avg":492.30152671755724,"disc":8.164471342114632},{"name":"Быки","rev":276856.5,"bot":389.0,"avg":711.7133676092545,"disc":9.597877551020408},{"name":"РГВ","rev":34382.6,"bot":58.0,"avg":592.803448275862,"disc":1.0344827586206937},{"name":"Резерв","rev":200343.0,"bot":278.0,"avg":720.658273381295,"disc":39.08695652173913},{"name":"Три стихии","rev":508420.5,"bot":1617.0,"avg":314.4220779220779,"disc":5.9177461139896375},{"name":"Экспериментальное","rev":86189.0,"bot":126.0,"avg":684.0396825396825,"disc":2.2800453514739227}],"2025":[{"name":"АРТ","rev":329498.69,"bot":360.0,"avg":915.2741388888888,"disc":11.901101574824203},{"name":"Алеф","rev":72555.0,"bot":140.0,"avg":518.25,"disc":5.032722513089006},{"name":"Аппелласьон","rev":207840.19,"bot":471.0,"avg":441.2742887473461,"disc":11.236305786888746},{"name":"Бриз","rev":35309.84,"bot":66.0,"avg":534.9975757575758,"disc":10.833737373737383},{"name":"Быки","rev":468009.17,"bot":693.0,"avg":675.3379076479076,"disc":12.08453807716873},{"name":"РГВ","rev":76869.27,"bot":151.0,"avg":509.0680132450331,"disc":3.7377338643023466},{"name":"Резерв","rev":310607.36,"bot":475.0,"avg":653.9102315789473,"disc":41.08916832622096},{"name":"Три стихии","rev":607688.75,"bot":1868.0,"avg":325.3151766595289,"disc":6.993059169243013},{"name":"Экспериментальное","rev":185697.15,"bot":319.0,"avg":582.1227272727273,"disc":13.824030331436848}],"2026":[{"name":"АРТ","rev":38749.63,"bot":45.0,"avg":861.1028888888889,"disc":13.697928730512254},{"name":"Алеф","rev":12000.0,"bot":28.0,"avg":428.57142857142856,"disc":14.285714285714285},{"name":"Аппелласьон","rev":6522.43,"bot":14.0,"avg":465.8878571428572,"disc":4.081911764705878},{"name":"Бриз","rev":11399.630000000001,"bot":21.0,"avg":542.8395238095238,"disc":9.526746031746024},{"name":"Быки","rev":16049.51,"bot":26.0,"avg":617.2888461538462,"disc":11.815879120879119},{"name":"РГВ","rev":7665.0,"bot":17.0,"avg":450.88235294117646,"disc":9.823529411764707},{"name":"Резерв","rev":47999.44,"bot":81.0,"avg":592.5856790123457,"disc":48.30431879375337},{"name":"Три стихии","rev":35336.0,"bot":106.0,"avg":333.35849056603774,"disc":4.754716981132075},{"name":"Экспериментальное","rev":8333.81,"bot":18.0,"avg":462.9894444444444,"disc":9.247413699226838}]},"top":[{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":700550.14,"bot":2192.0,"avg":319.59404197080295},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","rev":322463.41,"bot":1005.0,"avg":320.8591144278607},{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":287012.5,"bot":430.0,"avg":667.4709302325581},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":241516.3,"bot":219.0,"avg":1102.8141552511415},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":235048.95,"bot":378.0,"avg":621.8226190476191},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":227627.96,"bot":387.0,"avg":588.1859431524548},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":183809.35,"bot":244.0,"avg":753.3170081967213},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":142111.59,"bot":198.0,"avg":717.735303030303},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория.Три стихии.Красное\"","rev":128431.7,"bot":394.0,"avg":325.96878172588833},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":121781.92,"bot":192.0,"avg":634.2808333333334},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":106740.5,"bot":177.0,"avg":603.0536723163842},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":98395.82,"bot":191.0,"avg":515.1613612565445},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппелласьон Шардоне Грюнер Вельтлинер\"","rev":96156.39,"bot":199.0,"avg":483.19793969849246},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":92824.83,"bot":199.0,"avg":466.456432160804},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":89663.79000000001,"bot":97.0,"avg":924.368969072165},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Фран Мерло\"","rev":89620.15,"bot":192.0,"avg":466.7716145833333},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":83477.54,"bot":128.0,"avg":652.16828125},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","rev":83380.23,"bot":117.0,"avg":712.6515384615384},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое красное\"Тристория.Быки.Каберне Фран\"0,75л.","rev":77497.5,"bot":106.0,"avg":731.1084905660377},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира\"","rev":74156.55,"bot":184.0,"avg":403.0247282608696}],"attached":{"2024":[{"cat":"Мед","rev":5263.0},{"cat":"Товары для перепродажи","rev":23105.0}],"2025":[{"cat":"Мед","rev":4396.86},{"cat":"Товары для перепродажи","rev":70994.02}],"2026":[{"cat":"Товары для перепродажи","rev":6725.55}]}},"anapa":{"monthly":[{"YM":"2025-01","rev":54518.0,"bot":101.0,"avg_price":539.7821782178218,"disc_pct":16.189334194222816,"orders":7.0,"avg_check":7788.285714285715,"bot_per_order":14.428571428571429},{"YM":"2025-02","rev":77506.09,"bot":126.0,"avg_price":615.1276984126984,"disc_pct":21.914515706542552,"orders":7.0,"avg_check":11072.298571428571,"bot_per_order":18.0},{"YM":"2025-03","rev":210436.0,"bot":321.0,"avg_price":655.563862928349,"disc_pct":15.169350092314144,"orders":25.0,"avg_check":8417.44,"bot_per_order":12.84},{"YM":"2025-04","rev":141335.22,"bot":231.0,"avg_price":611.8407792207793,"disc_pct":15.301184169523216,"orders":23.0,"avg_check":6145.009565217391,"bot_per_order":10.043478260869565},{"YM":"2025-05","rev":213285.0,"bot":312.0,"avg_price":683.6057692307693,"disc_pct":13.765707631847071,"orders":23.0,"avg_check":9273.260869565218,"bot_per_order":13.565217391304348},{"YM":"2025-06","rev":214031.01,"bot":360.0,"avg_price":594.5305833333333,"disc_pct":25.613164562241288,"orders":26.0,"avg_check":8231.961923076924,"bot_per_order":13.846153846153847},{"YM":"2025-07","rev":176971.0,"bot":315.0,"avg_price":561.8126984126984,"disc_pct":24.93181249390236,"orders":26.0,"avg_check":6806.576923076923,"bot_per_order":12.115384615384615},{"YM":"2025-08","rev":257228.05,"bot":464.0,"avg_price":554.3707974137931,"disc_pct":10.653681833970133,"orders":26.0,"avg_check":9893.386538461538,"bot_per_order":17.846153846153847},{"YM":"2025-09","rev":331888.98,"bot":545.0,"avg_price":608.9706055045871,"disc_pct":20.42157584418512,"orders":25.0,"avg_check":13275.5592,"bot_per_order":21.8},{"YM":"2025-10","rev":201860.98,"bot":355.0,"avg_price":568.6224788732395,"disc_pct":15.304032961868955,"orders":27.0,"avg_check":7476.332592592593,"bot_per_order":13.148148148148149},{"YM":"2025-11","rev":282401.0,"bot":494.0,"avg_price":571.6619433198381,"disc_pct":22.479920064563238,"orders":36.0,"avg_check":7844.472222222223,"bot_per_order":13.722222222222221},{"YM":"2025-12","rev":405279.0,"bot":753.0,"avg_price":538.2191235059761,"disc_pct":18.75864474459666,"orders":37.0,"avg_check":10953.486486486487,"bot_per_order":20.35135135135135},{"YM":"2026-01","rev":104203.0,"bot":176.0,"avg_price":592.0625,"disc_pct":9.613482990128897,"orders":25.0,"avg_check":4168.12,"bot_per_order":7.04}],"yearly":[{"year":"2025","rev":2566740.33,"bot":4377.0,"avg_price":586.4154283755997,"disc_pct":18.683820403270207,"orders":288,"avg_check":8912.2928125,"bot_per_order":15.197916666666666},{"year":"2026","rev":104203.0,"bot":176.0,"avg_price":592.0625,"disc_pct":9.613482990128897,"orders":25,"avg_check":4168.12,"bot_per_order":7.04}],"lines":{"2025":[{"name":"АРТ","rev":555269.21,"bot":598.0,"avg":928.5438294314381,"disc":12.961751520471509},{"name":"Алеф","rev":99970.37,"bot":205.0,"avg":487.6603414634146,"disc":7.946252302025787},{"name":"Аппелласьон","rev":230123.98,"bot":523.0,"avg":440.0076099426386,"disc":9.400007874015744},{"name":"Бриз","rev":54699.62,"bot":103.0,"avg":531.0642718446602,"disc":11.632277867528268},{"name":"Быки","rev":478150.62,"bot":708.0,"avg":675.3539830508474,"disc":8.888982469512197},{"name":"РГВ","rev":86505.29,"bot":169.0,"avg":511.8656213017751,"disc":3.2920178870877654},{"name":"Резерв","rev":540421.77,"bot":802.0,"avg":673.8426059850374,"disc":40.31786085035892},{"name":"Три стихии","rev":298431.21,"bot":888.0,"avg":336.07118243243247,"disc":3.9796621621621555},{"name":"Экспериментальное","rev":223168.26,"bot":381.0,"avg":585.7434645669291,"disc":15.301020175798147}],"2026":[{"name":"АРТ","rev":30999.75,"bot":37.0,"avg":837.831081081081,"disc":15.989837398373986},{"name":"Алеф","rev":4974.93,"bot":11.0,"avg":452.2663636363637,"disc":9.546727272727267},{"name":"Аппелласьон","rev":9447.369999999999,"bot":23.0,"avg":410.7552173913043,"disc":9.159903846153856},{"name":"Бриз","rev":13859.84,"bot":26.0,"avg":533.0707692307692,"disc":11.154871794871795},{"name":"Быки","rev":14985.0,"bot":23.0,"avg":651.5217391304348,"disc":6.925465838509316},{"name":"РГВ","rev":6425.0,"bot":13.0,"avg":494.2307692307692,"disc":1.153846153846154},{"name":"Резерв","rev":11000.0,"bot":11.0,"avg":1000.0,"disc":0.0},{"name":"Три стихии","rev":6299.9400000000005,"bot":18.0,"avg":349.99666666666667,"disc":0.000952380952372868},{"name":"Экспериментальное","rev":6211.17,"bot":14.0,"avg":443.65500000000003,"disc":11.091182364729459}]},"top":[{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":394607.73,"bot":399.0,"avg":988.9918045112781},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\" 2020 0,75л.","rev":375932.29,"bot":630.0,"avg":596.7179206349206},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":182563.27,"bot":322.0,"avg":566.9666770186335},{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":177428.33,"bot":269.0,"avg":659.5848698884757},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":146945.65,"bot":154.0,"avg":954.1925324675324},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии. Белое»","rev":141284.68,"bot":419.0,"avg":337.1949403341289},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","rev":92800.73,"bot":140.0,"avg":662.8623571428571},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория.Три стихии.Красное\"","rev":83852.67,"bot":246.0,"avg":340.86451219512196},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория.Три стихии.Розовое\"","rev":79593.8,"bot":241.0,"avg":330.26473029045644},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":69991.74,"bot":90.0,"avg":777.686},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":64904.85,"bot":67.0,"avg":968.7291044776119},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":63909.9,"bot":95.0,"avg":672.7357894736842},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":63770.95,"bot":97.0,"avg":657.4324742268041},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":62846.48,"bot":74.0,"avg":849.2767567567568},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":61667.51,"bot":132.0,"avg":467.17810606060607},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Быки.Мерло\"0,75л.","rev":53198.99,"bot":82.0,"avg":648.7681707317073},{"name":"Российское вино с зГУ «Кубань. Новороссийск» сухое розовое \"Тристория ла Роза\"","rev":46816.16,"bot":73.0,"avg":641.3172602739727},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Фран Мерло\"","rev":40670.5,"bot":91.0,"avg":446.92857142857144},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":40328.02,"bot":87.0,"avg":463.5404597701149},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира\"","rev":39131.68,"bot":106.0,"avg":369.1667924528302}],"attached":{"2025":[{"cat":"Мед","rev":4302.0},{"cat":"Товары для перепродажи","rev":115050.63}],"2026":[{"cat":"Товары для перепродажи","rev":5391.0}]}},"yarmarka":{"monthly":[{"YM":"2024-01","rev":55150.0,"bot":56.0,"avg_price":984.8214285714286,"disc_pct":0.0,"orders":1.0,"avg_check":55150.0,"bot_per_order":56.0},{"YM":"2024-02","rev":57750.0,"bot":64.0,"avg_price":902.34375,"disc_pct":0.0,"orders":1.0,"avg_check":57750.0,"bot_per_order":64.0},{"YM":"2024-03","rev":67830.0,"bot":73.0,"avg_price":929.1780821917808,"disc_pct":0.0,"orders":1.0,"avg_check":67830.0,"bot_per_order":73.0},{"YM":"2024-04","rev":33020.0,"bot":40.0,"avg_price":825.5,"disc_pct":0.0,"orders":2.0,"avg_check":16510.0,"bot_per_order":20.0},{"YM":"2024-05","rev":64420.0,"bot":72.0,"avg_price":894.7222222222222,"disc_pct":0.0,"orders":1.0,"avg_check":64420.0,"bot_per_order":72.0},{"YM":"2024-06","rev":26920.0,"bot":32.0,"avg_price":841.25,"disc_pct":0.0,"orders":1.0,"avg_check":26920.0,"bot_per_order":32.0},{"YM":"2024-09","rev":110230.0,"bot":135.0,"avg_price":816.5185185185185,"disc_pct":0.0,"orders":4.0,"avg_check":27557.5,"bot_per_order":33.75},{"YM":"2025-03","rev":80420.0,"bot":122.0,"avg_price":659.1803278688525,"disc_pct":11.820175438596491,"orders":1.0,"avg_check":80420.0,"bot_per_order":122.0},{"YM":"2025-04","rev":71010.0,"bot":118.0,"avg_price":601.7796610169491,"disc_pct":8.610038610038611,"orders":1.0,"avg_check":71010.0,"bot_per_order":118.0},{"YM":"2025-09","rev":610150.0,"bot":775.0,"avg_price":787.2903225806451,"disc_pct":6.267762500960135,"orders":6.0,"avg_check":101691.66666666667,"bot_per_order":129.16666666666666}],"yearly":[{"year":"2024","rev":415320.0,"bot":472.0,"avg_price":879.9152542372881,"disc_pct":0.0,"orders":11,"avg_check":37756.36363636364,"bot_per_order":42.90909090909091},{"year":"2025","rev":761580.0,"bot":1015.0,"avg_price":750.3251231527094,"disc_pct":7.10739769470025,"orders":8,"avg_check":95197.5,"bot_per_order":126.875}],"lines":{"2024":[{"name":"АРТ","rev":132220.0,"bot":100.0,"avg":1322.2,"disc":0.0},{"name":"Аппелласьон","rev":37950.0,"bot":69.0,"avg":550.0,"disc":0.0},{"name":"Быки","rev":143200.0,"bot":179.0,"avg":800.0,"disc":0.0},{"name":"Резерв","rev":54000.0,"bot":45.0,"avg":1200.0,"disc":0.0},{"name":"Три стихии","rev":7350.0,"bot":21.0,"avg":350.0,"disc":0.0},{"name":"Экспериментальное","rev":40600.0,"bot":58.0,"avg":700.0,"disc":0.0}],"2025":[{"name":"АРТ","rev":347660.0,"bot":374.0,"avg":929.572192513369,"disc":6.0632261550932185},{"name":"Аппелласьон","rev":84960.0,"bot":201.0,"avg":422.6865671641791,"disc":6.069651741293533},{"name":"Быки","rev":172760.0,"bot":269.0,"avg":642.2304832713754,"disc":8.25278810408922},{"name":"Резерв","rev":156200.0,"bot":171.0,"avg":913.4502923976609,"disc":8.654970760233919}]},"top":[{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ»","rev":266570.0,"bot":251.0,"avg":1062.03187250996},{"name":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":132200.0,"bot":190.0,"avg":695.7894736842105},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Резерв.Белое\" 0,75л.","rev":113400.0,"bot":116.0,"avg":977.5862068965517},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. Оранж»","rev":100050.0,"bot":101.0,"avg":990.5940594059406},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Красное\"0,75л.","rev":96800.0,"bot":100.0,"avg":968.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое розовое «Тристория. Арт. Ла Роза»","rev":73000.0,"bot":75.0,"avg":973.3333333333334},{"name":"Российское вино с ЗГУ Полусладкое белое \"Тристория.Быки.Мускат\"","rev":53600.0,"bot":67.0,"avg":800.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Совиньон Блан\"0.75л","rev":51300.0,"bot":74.0,"avg":693.2432432432432},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Арт. О, майн Гот!»","rev":40260.0,"bot":47.0,"avg":856.5957446808511},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое \"Тристория.Быки.Шардоне\"0,75л.","rev":37020.0,"bot":55.0,"avg":673.0909090909091},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппелласьон Шардоне Грюнер\"","rev":29610.0,"bot":70.0,"avg":423.0},{"name":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое Тристория Оранж","rev":27300.0,"bot":39.0,"avg":700.0},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое розовое Аппелласьон Сира Пино Нуар\"","rev":26400.0,"bot":56.0,"avg":471.42857142857144},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Фран Мерло\"","rev":25930.0,"bot":59.0,"avg":439.49152542372883},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Быки.Мерло\"0,75л.","rev":25300.0,"bot":39.0,"avg":648.7179487179487},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое красное Аппелласьон Каберне Совиньон Сира\"","rev":21330.0,"bot":45.0,"avg":474.0},{"name":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое красное\"Тристория.Быки.Каберне Фран\"0,75л.","rev":16540.0,"bot":23.0,"avg":719.1304347826087},{"name":"Российское вино с зГУ «Кубань. Новороссийск» сухое розовое \"Тристория ла Роза\"","rev":13300.0,"bot":19.0,"avg":700.0},{"name":"Российское вино с ЗГУ \"Кубань. Новороссийск\" сухое белое «Аппелласьон. Совиньон Блан Шардоне\"","rev":11940.0,"bot":26.0,"avg":459.2307692307692},{"name":"Российское вино с ЗГУ \"Кубань Новороссийск сухое белое Аппелласьон Шардоне Грюнер Вельтлинер\"","rev":7700.0,"bot":14.0,"avg":550.0}],"attached":{"2024":[{"cat":"Товары для перепродажи","rev":350.0}],"2025":[{"cat":"Товары для перепродажи","rev":6750.0}]}}},"disc_monthly":[{"ym":"2024-01","rev":1044165.73,"disc_pct":5.831926748145799,"disc_amt":64666.27000000002},{"ym":"2024-02","rev":1485267.34,"disc_pct":21.1650745054994,"disc_amt":398754.6599999999},{"ym":"2024-03","rev":1444609.66,"disc_pct":7.752619543721434,"disc_amt":121407.34000000008},{"ym":"2024-04","rev":1656745.61,"disc_pct":8.226250657803623,"disc_amt":148504.3899999999},{"ym":"2024-05","rev":1903487.85,"disc_pct":8.582501037368308,"disc_amt":178704.1499999999},{"ym":"2024-06","rev":2574744.26,"disc_pct":10.866341968675156,"disc_amt":313888.7400000002},{"ym":"2024-07","rev":3459268.19,"disc_pct":11.73953802968118,"disc_amt":460117.81000000006},{"ym":"2024-08","rev":3188649.06,"disc_pct":9.102131246566723,"disc_amt":319297.93999999994},{"ym":"2024-09","rev":2480914.28,"disc_pct":7.541247121977479,"disc_amt":202351.7200000002},{"ym":"2024-10","rev":1427915.75,"disc_pct":11.473162944248982,"disc_amt":185059.25},{"ym":"2024-11","rev":1457313.63,"disc_pct":10.784618464405405,"disc_amt":176164.3700000001},{"ym":"2024-12","rev":1697349.82,"disc_pct":16.7639358571989,"disc_amt":341850.17999999993},{"ym":"2025-01","rev":1446527.64,"disc_pct":29.429138744589594,"disc_amt":603224.3600000001},{"ym":"2025-02","rev":960302.04,"disc_pct":15.246278628480647,"disc_amt":172747.95999999996},{"ym":"2025-03","rev":1433351.01,"disc_pct":14.238077943462448,"disc_amt":237962.99},{"ym":"2025-04","rev":1687060.0,"disc_pct":17.841334711848592,"disc_amt":366357.0},{"ym":"2025-05","rev":1364422.52,"disc_pct":15.264627851170276,"disc_amt":245793.47999999998},{"ym":"2025-06","rev":1728607.88,"disc_pct":14.868541789377682,"disc_amt":301908.1200000001},{"ym":"2025-07","rev":2039535.48,"disc_pct":17.009636805982527,"disc_amt":418021.52},{"ym":"2025-08","rev":2789173.05,"disc_pct":13.357654744375902,"disc_amt":430006.9500000002},{"ym":"2025-09","rev":2901145.37,"disc_pct":10.382965585199871,"disc_amt":336124.6299999999},{"ym":"2025-10","rev":1979735.7,"disc_pct":19.609734368096888,"disc_amt":482920.30000000005},{"ym":"2025-11","rev":1964148.33,"disc_pct":14.20018110956473,"disc_amt":325073.6699999999},{"ym":"2025-12","rev":2083869.62,"disc_pct":20.755259514241935,"disc_amt":545793.3799999999},{"ym":"2026-01","rev":796299.48,"disc_pct":15.200234283067193,"disc_amt":142735.52000000002}],"disc_by_line":{"2024":[{"line":"АРТ","disc_pct":7.058357764352709,"disc_amt":305618.2799999998},{"line":"Аппелласьон","disc_pct":10.566797682654713,"disc_amt":516177.5},{"line":"Быки","disc_pct":10.275412413323952,"disc_amt":903274.0},{"line":"РГВ","disc_pct":1.8734833864742446,"disc_amt":17862.540000000037},{"line":"Резерв","disc_pct":24.842016251569003,"disc_amt":940084.0},{"line":"Три стихии","disc_pct":6.462452990416111,"disc_amt":194435.5},{"line":"Экспериментальное","disc_pct":3.401572391259955,"disc_amt":33315.0}],"2025":[{"line":"АРТ","disc_pct":11.295857578250097,"disc_amt":591895.0300000003},{"line":"Алеф","disc_pct":4.939493431307062,"disc_amt":44366.53000000003},{"line":"Аппелласьон","disc_pct":11.792838871965781,"disc_amt":333325.77},{"line":"Бриз","disc_pct":12.392047045645477,"disc_amt":44252.0},{"line":"Быки","disc_pct":11.805455368516355,"disc_amt":672833.04},{"line":"Корабли","disc_pct":0.0,"disc_amt":0.0},{"line":"РГВ","disc_pct":2.9957407847543305,"disc_amt":33275.72999999998},{"line":"Резерв","disc_pct":35.16068433482026,"disc_amt":2344953.9400000004},{"line":"Три стихии","disc_pct":6.710983840249102,"disc_amt":173715.83000000007},{"line":"Экспериментальное","disc_pct":15.636183479675466,"disc_amt":227316.49}],"2026":[{"line":"АРТ","disc_pct":9.42699025487256,"disc_amt":25151.209999999992},{"line":"Алеф","disc_pct":13.125766666666665,"disc_amt":7875.459999999999},{"line":"Аппелласьон","disc_pct":12.525804145818444,"disc_amt":8761.800000000003},{"line":"Бриз","disc_pct":13.094901129943507,"disc_amt":9271.190000000002},{"line":"Быки","disc_pct":12.649954337899546,"disc_amt":19392.380000000005},{"line":"РГВ","disc_pct":8.613387755102037,"disc_amt":2110.279999999999},{"line":"Резерв","disc_pct":33.43972834443875,"disc_amt":65240.91},{"line":"Три стихии","disc_pct":2.802230710466001,"disc_amt":1834.0599999999977},{"line":"Экспериментальное","disc_pct":9.350324430360644,"disc_amt":3098.2299999999996}]},"concentration":{"total_sku":48,"top10_share":60.64942029732985,"top20_share":83.1263127272014,"top5_names":[{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое красное «Тристория. Арт. Борщ","rev":2439368.0,"share":10.900800917025618},{"sku":"Российское вино с ЗГУ Полусладкое Красное \"Тристория.Быки.Мерло\"","rev":2163511.82,"share":9.668082729400304},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\" сухое красное \"Тристория.Резерв.Крас","rev":1731465.91,"share":7.7373996787391635},{"sku":"Российское вино с ЗГУ \"Кубань.Новороссийск\"сухое белое\"Тристория Шардоне Резерв\"","rev":1448403.82,"share":6.472480449558823},{"sku":"Российское вино с ЗГУ «Кубань. Новороссийск» сухое белое «Тристория. Три стихии.","rev":1175206.93,"share":5.25164582803368}]},"line_compare":[{"line":"Быки","2024_rev":7887361.0,"2024_bot":11155.0,"2025_rev":5026506.96,"2025_bot":7591.0,"2026_rev":133907.62,"2026_bot":219.0},{"line":"АРТ","2024_rev":4024259.72,"2024_bot":3499.0,"2025_rev":4648034.97,"2025_bot":4920.0,"2026_rev":241648.79,"2026_bot":278.0},{"line":"Резерв","2024_rev":2844166.0,"2024_bot":3248.0,"2025_rev":4324296.06,"2025_bot":5996.0,"2026_rev":129859.09,"2026_bot":178.0},{"line":"Аппелласьон","2024_rev":4368722.5,"2024_bot":9078.0,"2025_rev":2493184.23,"2025_bot":5726.0,"2026_rev":61188.2,"2026_bot":153.0},{"line":"Три стихии","2024_rev":2814259.5,"2024_bot":8962.0,"2025_rev":2414814.17,"2025_bot":7397.0,"2026_rev":63615.94,"2026_bot":187.0},{"line":"Экспериментальное","2024_rev":946085.0,"2024_bot":1370.0,"2025_rev":1226468.51,"2025_bot":2117.0,"2026_rev":30036.77,"2026_bot":66.0},{"line":"РГВ","2024_rev":935577.46,"2024_bot":1593.0,"2025_rev":1077492.27,"2025_bot":2095.0,"2026_rev":22389.72,"2026_bot":49.0},{"line":"Алеф","2024_rev":0,"2024_bot":0,"2025_rev":853833.47,"2025_bot":1683.0,"2026_rev":52124.54,"2026_bot":120.0},{"line":"Бриз","2024_rev":0,"2024_bot":0,"2025_rev":312848.0,"2025_bot":595.0,"2026_rev":61528.81,"2026_bot":118.0},{"line":"Корабли","2024_rev":0,"2024_bot":0,"2025_rev":400.0,"2025_bot":1.0,"2026_rev":0,"2026_bot":0}]};
 const fmt = v => Math.round(v).toLocaleString('ru-RU');
-const fmtK = v => (v>=1000000 ? (v/1000000).toFixed(1)+' млн' : (v/1000).toFixed(0)+' тыс');
+const fmtK = v => v>=1e6 ? (v/1e6).toFixed(2)+' млн' : (v/1e3).toFixed(0)+' тыс';
 const pct = (a,b) => b===0?null:((a/b-1)*100);
-const signed = p => (p>=0?'+':'')+p.toFixed(1)+'%';
-
-const STORE_LABELS = {all:'Все магазины',zavod:'Завод',novorossiysk:'Новороссийск',anapa:'Анапа',yarmarka:'Ярмарка'};
-const STORE_NOTES = {
-  all:'Сводка по всей сети: Завод, Новороссийск, Анапа, Ярмарка',
-  zavod:'Флагманская точка при производстве. Основной объём выручки',
-  novorossiysk:'Городская точка в Новороссийске. Активный рост в 2025',
-  anapa:'Курортная точка в Анапе. Открыта в январе 2025',
-  yarmarka:'Фестивальная/выставочная продажа. Сезонная, не постоянная'
-};
+const signed = p => p===null ? '-' : (p>=0?'+':'')+p.toFixed(1)+'%';
+const badgeDelta = p => p===null ? '-' : `<span class="badge ${p>=0?'badge-up':'badge-down'}">${signed(p)}</span>`;
 
 let charts = [];
+function clearCharts(){charts.forEach(c=>c.destroy());charts=[]}
 
-function render(storeKey) {
-  const d = DATA[storeKey];
-  charts.forEach(c => c.destroy());
-  charts = [];
-  const container = document.getElementById('dashboard');
+const MONTH_LABELS = {'01':'Янв','02':'Фев','03':'Мар','04':'Апр','05':'Май','06':'Июн','07':'Июл','08':'Авг','09':'Сен','10':'Окт','11':'Ноя','12':'Дек'};
 
-  const yearly = d.yearly;
-  const y2024 = yearly.find(y=>y.year===2024);
-  const y2025 = yearly.find(y=>y.year===2025);
-  const y2026 = yearly.find(y=>y.year===2026);
+function heatColor(v, max){
+  if(!v || !max) return '#f0ece6';
+  const t = v/max;
+  const r = Math.round(247 - t*(247-114));
+  const g = Math.round(245 - t*(245-47));
+  const b = Math.round(238 - t*(238-55));
+  return `rgb(${r},${g},${b})`;
+}
 
-  const last = y2026 || y2025 || y2024;
-  const prev = y2026 ? y2025 : (y2025 ? y2024 : null);
+// ========== VIEWS ==========
+const VIEWS = {};
 
-  // KPI: take 2025 full vs 2024 full + note partial 2026
-  const mainYear = y2025 || y2024;
-  const prevYear = y2025 ? y2024 : null;
+VIEWS.overview = () => {
+  const all = DATA.stores.all;
+  const y24 = all.yearly.find(y=>y.year==='2024');
+  const y25 = all.yearly.find(y=>y.year==='2025');
+  const y26 = all.yearly.find(y=>y.year==='2026');
+  let html = `<section><h2>Ключевые метрики сети · вино</h2>
+    <div class="kpi-grid-6">
+      <div class="kpi"><div class="kpi-label">Выручка 2025</div><div class="kpi-value">${fmtK(y25.rev)}<span class="kpi-unit">₽</span></div><div class="kpi-delta ${y25.rev>=y24.rev?'pos':'neg'}">${signed(pct(y25.rev,y24.rev))} к 2024</div></div>
+      <div class="kpi"><div class="kpi-label">Бутылок 2025</div><div class="kpi-value">${fmt(y25.bot)}</div><div class="kpi-delta ${y25.bot>=y24.bot?'pos':'neg'}">${signed(pct(y25.bot,y24.bot))} к 2024</div></div>
+      <div class="kpi"><div class="kpi-label">Ср. цена 2025</div><div class="kpi-value">${fmt(y25.avg_price)}<span class="kpi-unit">₽</span></div><div class="kpi-delta ${y25.avg_price>=y24.avg_price?'pos':'neg'}">${signed(pct(y25.avg_price,y24.avg_price))}</div></div>
+      <div class="kpi"><div class="kpi-label">Скидки 2025</div><div class="kpi-value">${y25.disc_pct.toFixed(1)}<span class="kpi-unit">%</span></div><div class="kpi-sub">было ${y24.disc_pct.toFixed(1)}%</div></div>
+      <div class="kpi"><div class="kpi-label">Дней работы касс</div><div class="kpi-value">${y25.orders}</div><div class="kpi-sub">было ${y24.orders}</div></div>
+      <div class="kpi"><div class="kpi-label">Выручка/день</div><div class="kpi-value">${fmtK(y25.avg_check)}</div><div class="kpi-delta neg">${signed(pct(y25.avg_check,y24.avg_check))}</div></div>
+    </div>
+    <div class="callout"><strong>Диагноз:</strong> выручка вина просела на ${signed(pct(y25.rev,y24.rev))}, бутылок ${signed(pct(y25.bot,y24.bot))}, а средняя цена выросла на ${signed(pct(y25.avg_price,y24.avg_price))} - падение не ценовое, а объёмное. Скидки при этом выросли с ${y24.disc_pct.toFixed(1)}% до ${y25.disc_pct.toFixed(1)}%: дисконтировали, чтобы удержать продажи, но объём всё равно упал.</div>
+  </section>`;
 
-  let kpiHtml = '<section><h2>Ключевые метрики · вино</h2><div class="kpi-grid">';
-  if(mainYear){
-    const revDelta = prevYear ? pct(mainYear.rev, prevYear.rev) : null;
-    const botDelta = prevYear ? pct(mainYear.bot, prevYear.bot) : null;
-    kpiHtml += `
-      <div class="kpi"><div class="kpi-label">Выручка ${mainYear.year}</div><div class="kpi-value">${fmtK(mainYear.rev)}<span class="kpi-unit">₽</span></div>${revDelta!==null?`<div class="kpi-delta ${revDelta>=0?'pos':'neg'}">${signed(revDelta)} к ${prevYear.year}</div>`:'<div class="kpi-sub">нет данных за ' + (mainYear.year-1) + '</div>'}</div>
-      <div class="kpi"><div class="kpi-label">Бутылок ${mainYear.year}</div><div class="kpi-value">${fmt(mainYear.bot)}<span class="kpi-unit">шт</span></div>${botDelta!==null?`<div class="kpi-delta ${botDelta>=0?'pos':'neg'}">${signed(botDelta)} к ${prevYear.year}</div>`:'<div class="kpi-sub">-</div>'}</div>
-      <div class="kpi"><div class="kpi-label">Средняя цена ${mainYear.year}</div><div class="kpi-value">${fmt(mainYear.avg_price)}<span class="kpi-unit">₽/бут</span></div>${prevYear?`<div class="kpi-sub">было ${fmt(prevYear.avg_price)} ₽</div>`:''}</div>
-      <div class="kpi"><div class="kpi-label">Скидки ${mainYear.year}</div><div class="kpi-value">${mainYear.disc_pct.toFixed(1)}<span class="kpi-unit">%</span></div><div class="kpi-sub">${fmtK(mainYear.disc_amt)} ₽ от прайса</div></div>`;
+  // Stores comparison
+  html += `<section><h2>Магазины: выручка по годам (вино)</h2><div class="card"><table><thead><tr><th>Магазин</th><th class="num">2024</th><th class="num">2025</th><th class="num">YoY</th><th class="num">янв 2026*</th><th class="num">Бут 2025</th><th class="num">Ср.цена 2025</th><th class="num">Скидки 2025</th></tr></thead><tbody>`;
+  for(const [k,name] of [['zavod','Завод'],['novorossiysk','Новороссийск'],['anapa','Анапа'],['yarmarka','Ярмарка']]){
+    const s = DATA.stores[k];
+    const r24 = s.yearly.find(y=>y.year==='2024');
+    const r25 = s.yearly.find(y=>y.year==='2025');
+    const r26 = s.yearly.find(y=>y.year==='2026');
+    const yoy = r24 && r25 ? pct(r25.rev,r24.rev) : null;
+    html += `<tr><td><strong>${name}</strong></td>
+      <td class="num">${r24?fmt(r24.rev)+' ₽':'-'}</td>
+      <td class="num">${r25?fmt(r25.rev)+' ₽':'-'}</td>
+      <td class="num">${badgeDelta(yoy)}</td>
+      <td class="num">${r26?fmt(r26.rev)+' ₽':'-'}</td>
+      <td class="num">${r25?fmt(r25.bot):'-'}</td>
+      <td class="num">${r25?fmt(r25.avg_price)+' ₽':'-'}</td>
+      <td class="num">${r25?r25.disc_pct.toFixed(1)+'%':'-'}</td>
+    </tr>`;
   }
-  kpiHtml += '</div>';
-
-  if(y2026){
-    kpiHtml += `<div class="callout"><strong>Январь 2026 (01.01-25.01):</strong> ${fmtK(y2026.rev)} ₽ выручки, ${fmt(y2026.bot)} бут, средняя цена ${fmt(y2026.avg_price)} ₽, скидки ${y2026.disc_pct.toFixed(1)}%. Период неполный (25 дней из 31), прямое сравнение с январём 2025 некорректно.</div>`;
-  }
-  kpiHtml += `<div class="note">${STORE_NOTES[storeKey]}</div></section>`;
-
-  // Yearly summary table
-  let yearlyTable = '<section><h2>Годовые итоги · вино</h2><div class="card"><table><thead><tr><th>Год</th><th class="num">Выручка</th><th class="num">Бутылок</th><th class="num">Ср. цена</th><th class="num">Скидки %</th><th class="num">Скидки ₽</th><th class="num">YoY выручка</th></tr></thead><tbody>';
-  yearly.forEach((y,i) => {
-    const prev = yearly[i-1];
-    let yoy = '-';
-    if(prev && !(y.year===2026 && prev.year===2025)){
-      const p = pct(y.rev, prev.rev);
-      yoy = `<span class="badge ${p>=0?'badge-up':'badge-down'}">${signed(p)}</span>`;
-    } else if(y.year===2026){
-      yoy = '<span class="badge badge-new">25 дней</span>';
-    }
-    yearlyTable += `<tr><td><strong>${y.year}</strong>${y.year===2026?' (частично)':''}</td><td class="num">${fmt(y.rev)} ₽</td><td class="num">${fmt(y.bot)}</td><td class="num">${fmt(y.avg_price)} ₽</td><td class="num">${y.disc_pct.toFixed(1)}%</td><td class="num">${fmt(y.disc_amt)} ₽</td><td class="num">${yoy}</td></tr>`;
-  });
-  yearlyTable += '</tbody></table></div></section>';
+  html += `</tbody></table><div class="note">*Январь 2026 - данные за 25 дней (частичный период), для справки</div></div></section>`;
 
   // Monthly chart
-  let monthlyBlock = '<section><h2>Динамика по месяцам · вино</h2><div class="card"><div class="chart-wrap"><canvas id="chartMonthly"></canvas></div><div class="note">Тёмно-бордовый = 2024, красный = 2025, золотой = янв 2026 (частичный). Пустые месяцы = магазин не работал или не было продаж.</div></div></section>';
-
-  // Lines by year
-  const yearsWithLines = Object.keys(d.lines_by_year).sort();
-  const lineNames = new Set();
-  yearsWithLines.forEach(y => d.lines_by_year[y].forEach(l => lineNames.add(l.name)));
-  const allLines = [...lineNames];
-  // Sort by most recent year revenue
-  const recentYear = yearsWithLines[yearsWithLines.length - 1];
-  const recentMap = {};
-  d.lines_by_year[recentYear].forEach(l => recentMap[l.name] = l.rev);
-  allLines.sort((a,b) => (recentMap[b]||0) - (recentMap[a]||0));
-
-  let linesTable = '<section><h2>Линейки вина по годам</h2><div class="row row-2"><div class="card"><table><thead><tr><th>Линейка</th>';
-  yearsWithLines.forEach(y => linesTable += `<th class="num">${y}${y==='2026'?'*':''}</th>`);
-  linesTable += '</tr></thead><tbody>';
-  allLines.forEach(name => {
-    linesTable += `<tr><td><strong>${name}</strong></td>`;
-    yearsWithLines.forEach(y => {
-      const item = d.lines_by_year[y].find(l => l.name === name);
-      linesTable += `<td class="num">${item ? fmt(item.rev) + ' ₽' : '-'}</td>`;
-    });
-    linesTable += '</tr>';
-  });
-  linesTable += '</tbody></table></div><div class="card"><div class="chart-wrap-sm"><canvas id="chartLines"></canvas></div><div class="note">Сравнение ' + yearsWithLines.filter(y=>y!=='2026').join(' и ') + '</div></div></div></section>';
-
-  // Top products
-  let topTable = '<section><h2>Топ-15 позиций по выручке · весь период</h2><div class="card"><table><thead><tr><th>#</th><th>Позиция</th><th class="num">Бутылок</th><th class="num">Выручка</th><th class="num">Ср. цена</th></tr></thead><tbody>';
-  d.top.forEach((p,i) => {
-    topTable += `<tr><td style="color:var(--muted);font-weight:600">${i+1}</td><td>${p.name}</td><td class="num"><strong>${fmt(p.bot)}</strong></td><td class="num">${fmt(p.rev)} ₽</td><td class="num" style="color:var(--muted)">${fmt(p.rev/p.bot)} ₽</td></tr>`;
-  });
-  topTable += '</tbody></table></div></section>';
+  html += `<section><h2>Динамика выручки сети по месяцам · вино</h2><div class="card"><div class="chart-wrap-lg"><canvas id="c_overview_monthly"></canvas></div></div></section>`;
 
   // Attached
-  const attYears = Object.keys(d.attached).sort();
-  let attTable = '<section><h2>Привлечённая выручка (не вино)</h2><div class="card"><table><thead><tr><th>Категория</th>';
-  attYears.forEach(y => attTable += `<th class="num">${y}${y==='2026'?'*':''}</th>`);
-  attTable += '</tr></thead><tbody>';
-  const attCats = new Set();
-  attYears.forEach(y => d.attached[y].forEach(c => attCats.add(c.cat)));
-  const attCatsSorted = [...attCats].sort((a,b) => {
-    const av = d.attached[recentYear]?.find(c => c.cat===a)?.rev || 0;
-    const bv = d.attached[recentYear]?.find(c => c.cat===b)?.rev || 0;
-    return bv - av;
+  html += `<section><h2>Привлечённая выручка (не вино) по годам</h2><div class="card"><table><thead><tr><th>Категория</th><th class="num">2024</th><th class="num">2025</th><th class="num">YoY</th><th class="num">янв 2026</th></tr></thead><tbody>`;
+  const cats = new Set();
+  ['2024','2025','2026'].forEach(y => (DATA.stores.all.attached[y]||[]).forEach(c=>cats.add(c.cat)));
+  for(const c of cats){
+    const r24 = (DATA.stores.all.attached['2024']||[]).find(x=>x.cat===c)?.rev || 0;
+    const r25 = (DATA.stores.all.attached['2025']||[]).find(x=>x.cat===c)?.rev || 0;
+    const r26 = (DATA.stores.all.attached['2026']||[]).find(x=>x.cat===c)?.rev || 0;
+    const yoy = r24 ? pct(r25,r24) : null;
+    html += `<tr><td><strong>${c}</strong></td><td class="num">${fmt(r24)} ₽</td><td class="num">${fmt(r25)} ₽</td><td class="num">${badgeDelta(yoy)}</td><td class="num">${fmt(r26)} ₽</td></tr>`;
+  }
+  html += `</tbody></table></div></section>`;
+
+  return html;
+};
+
+VIEWS.abc = () => {
+  const s = DATA.abc_summary;
+  let html = `<section><h2>ABC-анализ ассортимента (по выручке 2025)</h2>
+    <div class="row row-3">
+      <div class="kpi"><div class="kpi-label">Категория A</div><div class="kpi-value" style="color:var(--A)">${s[0].count}<span class="kpi-unit">SKU / ${s[0].share_sku.toFixed(0)}%</span></div><div class="kpi-sub"><strong>${s[0].share_rev.toFixed(1)}% выручки</strong> (${fmtK(s[0].rev)} ₽)</div></div>
+      <div class="kpi"><div class="kpi-label">Категория B</div><div class="kpi-value" style="color:#7a5c17">${s[1].count}<span class="kpi-unit">SKU / ${s[1].share_sku.toFixed(0)}%</span></div><div class="kpi-sub"><strong>${s[1].share_rev.toFixed(1)}% выручки</strong> (${fmtK(s[1].rev)} ₽)</div></div>
+      <div class="kpi"><div class="kpi-label">Категория C</div><div class="kpi-value" style="color:var(--C)">${s[2].count}<span class="kpi-unit">SKU / ${s[2].share_sku.toFixed(0)}%</span></div><div class="kpi-sub"><strong>${s[2].share_rev.toFixed(1)}% выручки</strong> (${fmtK(s[2].rev)} ₽)</div></div>
+    </div>
+    <div class="callout"><strong>Методика:</strong> A = топ SKU до 80% накопленной выручки; B = от 80% до 95%; C = остальные. Классика Парето: ${s[0].share_sku.toFixed(0)}% ассортимента даёт ${s[0].share_rev.toFixed(0)}% выручки.</div>
+  </section>`;
+
+  html += `<section><h2>Кривая Лоренца: накопленная доля выручки</h2><div class="card"><div class="chart-wrap"><canvas id="c_abc_lorenz"></canvas></div></div></section>`;
+
+  html += `<section><h2>Весь ассортимент по ABC-классам</h2>
+    <div class="filter-row">
+      <button class="filter-btn active" data-abc="all">Все</button>
+      <button class="filter-btn" data-abc="A">Только A</button>
+      <button class="filter-btn" data-abc="B">Только B</button>
+      <button class="filter-btn" data-abc="C">Только C</button>
+      <input class="filter-input" id="abc_search" placeholder="Поиск по SKU или линейке...">
+    </div>
+    <div class="card"><table id="tbl_abc"><thead><tr><th>#</th><th>SKU</th><th>Линейка</th><th class="num">Выручка 2025</th><th class="num">Бут</th><th class="num">Доля %</th><th class="num">Накопл %</th><th class="num">ABC</th><th class="num">XYZ</th></tr></thead><tbody></tbody></table></div>
+  </section>`;
+  return html;
+};
+
+VIEWS.xyz = () => {
+  const s = DATA.xyz_summary;
+  let html = `<section><h2>XYZ-анализ: стабильность спроса (2025)</h2>
+    <div class="row row-3">
+      <div class="kpi"><div class="kpi-label">Класс X</div><div class="kpi-value" style="color:#2d5f2d">${s[0].count}<span class="kpi-unit">SKU</span></div><div class="kpi-sub">${s[0].label}</div></div>
+      <div class="kpi"><div class="kpi-label">Класс Y</div><div class="kpi-value" style="color:#7a5a17">${s[1].count}<span class="kpi-unit">SKU</span></div><div class="kpi-sub">${s[1].label}</div></div>
+      <div class="kpi"><div class="kpi-label">Класс Z</div><div class="kpi-value" style="color:#8a3020">${s[2].count}<span class="kpi-unit">SKU</span></div><div class="kpi-sub">${s[2].label}</div></div>
+    </div>
+    <div class="callout"><strong>Методика:</strong> XYZ классифицирует SKU по коэффициенту вариации (CV) продаж по месяцам 2025. X = стабильные (прогнозируемые), Y = умеренно нестабильные, Z = нерегулярные. Рассмотрены только SKU, которые продавались минимум в 3 месяцах.</div>
+    <div class="callout"><strong>Вывод:</strong> ${s[0].count===1?'Только 1 SKU имеет стабильный спрос (X) - это означает, что планирование закупок и производства сильно завязано на реактивный подход. Высокая доля Z-позиций (' + s[2].count + ') создаёт операционный шум.':'В ассортименте доминируют колеблющиеся (Y) и нерегулярные (Z) SKU - высокая сезонность и проектные продажи.'}</div>
+  </section>`;
+
+  html += `<section><h2>Распределение SKU по XYZ</h2>
+    <div class="card"><table><thead><tr><th>SKU</th><th>Линейка</th><th class="num">Средние продажи/мес (бут)</th><th class="num">CV</th><th class="num">XYZ</th><th class="num">ABC</th></tr></thead><tbody>`;
+  const items = DATA.abc_items.filter(i => i.xyz !== '-').sort((a,b) => (a.cv||999) - (b.cv||999));
+  items.forEach(i => {
+    html += `<tr><td>${i.sku}</td><td>${i.line||'-'}</td><td class="num">-</td><td class="num">${i.cv?i.cv.toFixed(0)+'%':'-'}</td><td class="num"><span class="badge badge-${i.xyz}">${i.xyz}</span></td><td class="num"><span class="badge badge-${i.abc}">${i.abc}</span></td></tr>`;
   });
-  attCatsSorted.forEach(cat => {
-    attTable += `<tr><td><strong>${cat}</strong></td>`;
-    attYears.forEach(y => {
-      const item = d.attached[y].find(c => c.cat===cat);
-      attTable += `<td class="num">${item ? fmt(item.rev) + ' ₽' : '-'}</td>`;
+  html += `</tbody></table></div></section>`;
+  return html;
+};
+
+VIEWS.matrix = () => {
+  const m = DATA.abc_xyz_matrix;
+  const cellTip = {
+    'AX':'Флагманы стабильного спроса. Никогда не должны быть out-of-stock. Фокус маркетинга.',
+    'AY':'Высокая выручка, но сезонность. Страховой запас с учётом сезона.',
+    'AZ':'Выручка большая, но нерегулярная - это крупные разовые продажи/корпоративные заказы. Работать проактивно.',
+    'BX':'Стабильные середняки. Автозаказ, без активного маркетинга.',
+    'BY':'Середняки с колебаниями. Умеренное внимание.',
+    'BZ':'Проектные/сезонные середняки. Держать по запросу.',
+    'CX':'Стабильные, но мало выручки. Кандидаты на сокращение либо нишевая роль.',
+    'CY':'Низкая выручка, колеблющийся спрос. Рассмотреть убрать.',
+    'CZ':'Низкая выручка + нерегулярный спрос. Кандидаты #1 на вывод.'
+  };
+  let html = `<section><h2>Матрица ABC × XYZ</h2>
+    <div class="matrix">
+      <div class="mcell mhead"></div><div class="mcell mhead">X (стабильный)</div><div class="mcell mhead">Y (колеблющийся)</div><div class="mcell mhead">Z (нерегулярный)</div>`;
+  for(const abc of ['A','B','C']){
+    html += `<div class="mcell mhead">${abc}</div>`;
+    for(const xyz of ['X','Y','Z']){
+      const k = abc+xyz;
+      const c = m[k]||{count:0,rev:0,skus:[]};
+      html += `<div class="mcell m-${k}"><h4>${k}</h4><div class="m-count">${c.count} SKU</div><div class="m-rev">${fmtK(c.rev)} ₽</div><div class="m-label">${cellTip[k]||''}</div>${c.skus&&c.skus.length?'<div style="margin-top:6px;font-size:11px;color:var(--muted)">'+c.skus.map(s=>'· '+s.sku.slice(0,50)).join('<br>')+'</div>':''}</div>`;
+    }
+  }
+  html += `</div>
+    <div class="callout" style="margin-top:16px"><strong>Как читать:</strong> строки - ABC (A - топ выручки), столбцы - XYZ (X - стабильные). AX-клетка - идеальные товары; CZ - первые кандидаты на ротацию. Распределение по матрице показывает здоровье ассортимента.</div>
+  </section>`;
+  return html;
+};
+
+VIEWS.concentration = () => {
+  const c = DATA.concentration;
+  let html = `<section><h2>Концентрация продаж</h2>
+    <div class="row row-3">
+      <div class="kpi"><div class="kpi-label">Всего SKU (2025)</div><div class="kpi-value">${c.total_sku}</div></div>
+      <div class="kpi"><div class="kpi-label">Топ-10 SKU - доля выручки</div><div class="kpi-value">${c.top10_share.toFixed(1)}<span class="kpi-unit">%</span></div><div class="kpi-sub">20.8% ассортимента</div></div>
+      <div class="kpi"><div class="kpi-label">Топ-20 SKU - доля выручки</div><div class="kpi-value">${c.top20_share.toFixed(1)}<span class="kpi-unit">%</span></div><div class="kpi-sub">41.7% ассортимента</div></div>
+    </div>
+    <div class="callout"><strong>Интерпретация:</strong> 10 позиций приносят ${c.top10_share.toFixed(0)}% всей выручки вина. Это высокая концентрация - риск потери любой из топ-10 существенен. Рекомендуется особое внимание к поставкам, промо и доступности именно этих SKU.</div>
+  </section>`;
+
+  html += `<section><h2>Топ-5 ключевых позиций</h2><div class="card"><table><thead><tr><th>#</th><th>Позиция</th><th class="num">Выручка 2025</th><th class="num">Доля %</th></tr></thead><tbody>`;
+  c.top5_names.forEach((p,i) => {
+    html += `<tr><td style="color:var(--muted);font-weight:700">${i+1}</td><td>${p.sku}</td><td class="num">${fmt(p.rev)} ₽</td><td class="num"><strong>${p.share.toFixed(1)}%</strong></td></tr>`;
+  });
+  html += `</tbody></table></div></section>`;
+  return html;
+};
+
+VIEWS.season = () => {
+  const data = DATA.season;
+  const years = [...new Set(data.map(d=>d.y))].sort();
+  const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+  const max = Math.max(...data.map(d=>d.rev));
+
+  let html = `<section><h2>Сезонность: тепловая карта выручки по месяцам (вино)</h2>
+    <div class="card">
+      <div class="heatmap">
+        <div class="hcell hhead"></div>`;
+  months.forEach(m => html += `<div class="hcell hhead">${MONTH_LABELS[m]}</div>`);
+  years.forEach(y => {
+    html += `<div class="hcell hyear">${y}</div>`;
+    months.forEach(m => {
+      const d = data.find(x => x.y===y && x.m===m);
+      if(d){
+        const color = heatColor(d.rev, max);
+        html += `<div class="hcell" style="background:${color};color:${d.rev/max>0.5?'#fff':'#1a1a1a'}" title="${y}-${m}: ${fmt(d.rev)} ₽">${(d.rev/1000).toFixed(0)}К</div>`;
+      } else {
+        html += `<div class="hcell" style="background:#f5f1ea;color:#b8b3aa">-</div>`;
+      }
     });
-    attTable += '</tr>';
   });
-  // Total
-  attTable += '<tr style="background:#faf8f5;font-weight:700"><td>Итого</td>';
-  attYears.forEach(y => {
-    const total = d.attached[y].reduce((s,c) => s+c.rev, 0);
-    attTable += `<td class="num">${fmt(total)} ₽</td>`;
+  html += `</div>
+      <div class="note">Цифры - выручка в тыс ₽ за месяц. Чем темнее, тем выше выручка. 2026 - только январь.</div>
+    </div>
+  </section>`;
+
+  // Month averages
+  html += `<section><h2>Средний месячный профиль (2024-2025)</h2><div class="card"><div class="chart-wrap"><canvas id="c_season_profile"></canvas></div><div class="note">Среднее по двум годам - видно лето как пиковый сезон (июль-август), а также провальный январь-февраль.</div></div></section>`;
+  return html;
+};
+
+VIEWS.discounts = () => {
+  let html = `<section><h2>Динамика скидок по месяцам</h2><div class="card"><div class="chart-wrap"><canvas id="c_disc_monthly"></canvas></div><div class="note">Серые столбцы - %% скидки к месяцу. Линия - сумма скидок в ₽.</div></div></section>`;
+
+  html += `<section><h2>Скидки по линейкам и годам</h2><div class="card"><table><thead><tr><th>Линейка</th><th class="num">2024 %</th><th class="num">2024 ₽</th><th class="num">2025 %</th><th class="num">2025 ₽</th><th class="num">Δ п.п.</th></tr></thead><tbody>`;
+  const lines = new Set();
+  ['2024','2025'].forEach(y => (DATA.disc_by_line[y]||[]).forEach(l => lines.add(l.line)));
+  const arr = [];
+  for(const l of lines){
+    const r24 = (DATA.disc_by_line['2024']||[]).find(x=>x.line===l);
+    const r25 = (DATA.disc_by_line['2025']||[]).find(x=>x.line===l);
+    arr.push({line:l,pct24:r24?.disc_pct||0,amt24:r24?.disc_amt||0,pct25:r25?.disc_pct||0,amt25:r25?.disc_amt||0,delta:(r25?.disc_pct||0)-(r24?.disc_pct||0)});
+  }
+  arr.sort((a,b) => b.amt25 - a.amt25);
+  for(const r of arr){
+    html += `<tr><td><strong>${r.line}</strong></td><td class="num">${r.pct24.toFixed(1)}%</td><td class="num">${fmt(r.amt24)} ₽</td><td class="num"><strong>${r.pct25.toFixed(1)}%</strong></td><td class="num">${fmt(r.amt25)} ₽</td><td class="num"><span class="badge ${r.delta>0?'badge-down':'badge-up'}">${r.delta>0?'+':''}${r.delta.toFixed(1)}</span></td></tr>`;
+  }
+  html += `</tbody></table></div>
+    <div class="callout"><strong>Вывод:</strong> скидка выросла почти по всем линейкам. Самые большие приросты - там, где пытались "раскачать" продажи. Но, как видно из ABC-анализа, падение объёма не связано напрямую со скидками - а значит дисконт съел маржу впустую.</div>
+  </section>`;
+  return html;
+};
+
+VIEWS.lines = () => {
+  const lc = DATA.line_compare;
+  let html = `<section><h2>Линейки: выручка и бутылки по годам</h2><div class="card"><table><thead><tr><th>Линейка</th><th class="num">2024 ₽</th><th class="num">2025 ₽</th><th class="num">YoY выр</th><th class="num">янв 2026 ₽</th><th class="num">2024 бут</th><th class="num">2025 бут</th><th class="num">YoY бут</th></tr></thead><tbody>`;
+  lc.forEach(r => {
+    const yoyRev = r['2024_rev'] ? pct(r['2025_rev'], r['2024_rev']) : null;
+    const yoyBot = r['2024_bot'] ? pct(r['2025_bot'], r['2024_bot']) : null;
+    const isNew = r['2024_rev']===0 && r['2025_rev']>0;
+    html += `<tr>
+      <td><strong>${r.line}</strong>${isNew?' <span class="badge badge-new">NEW</span>':''}</td>
+      <td class="num">${r['2024_rev']?fmt(r['2024_rev'])+' ₽':'-'}</td>
+      <td class="num">${r['2025_rev']?fmt(r['2025_rev'])+' ₽':'-'}</td>
+      <td class="num">${badgeDelta(yoyRev)}</td>
+      <td class="num">${r['2026_rev']?fmt(r['2026_rev'])+' ₽':'-'}</td>
+      <td class="num">${r['2024_bot']?fmt(r['2024_bot']):'-'}</td>
+      <td class="num">${r['2025_bot']?fmt(r['2025_bot']):'-'}</td>
+      <td class="num">${badgeDelta(yoyBot)}</td>
+    </tr>`;
   });
-  attTable += '</tr></tbody></table></div></section>';
+  html += `</tbody></table></div></section>`;
 
-  container.innerHTML = kpiHtml + yearlyTable + monthlyBlock + linesTable + topTable + attTable;
+  html += `<section><h2>Визуальное сравнение линеек · 2024 vs 2025</h2><div class="card"><div class="chart-wrap-lg"><canvas id="c_lines_compare"></canvas></div></div></section>`;
+  return html;
+};
 
-  // Monthly chart
-  const monthly = d.monthly;
-  const colors = monthly.map(m => {
-    if(m.ym.startsWith('2024')) return '#722F37';
-    if(m.ym.startsWith('2025')) return '#a8545e';
-    return '#c9a961';
+VIEWS.catalog = () => {
+  let html = `<section><h2>Полный ассортимент (2025)</h2>
+    <div class="filter-row">
+      <input class="filter-input" id="cat_search" placeholder="Поиск по SKU или линейке...">
+    </div>
+    <div class="card"><table id="tbl_catalog">
+      <thead><tr>
+        <th class="sortable" data-sort="sku">SKU</th>
+        <th class="sortable" data-sort="line">Линейка</th>
+        <th class="sortable num" data-sort="rev">Выручка ▾</th>
+        <th class="sortable num" data-sort="bot">Бут</th>
+        <th class="sortable num" data-sort="share">Доля %</th>
+        <th class="num">ABC</th>
+        <th class="num">XYZ</th>
+        <th class="num">CV</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>`;
+  return html;
+};
+
+function renderStore(storeKey){
+  const s = DATA.stores[storeKey];
+  const name = {all:'Все магазины',zavod:'Завод',novorossiysk:'Новороссийск',anapa:'Анапа',yarmarka:'Ярмарка'}[storeKey];
+  const y24 = s.yearly.find(y=>y.year==='2024');
+  const y25 = s.yearly.find(y=>y.year==='2025');
+  const y26 = s.yearly.find(y=>y.year==='2026');
+
+  let html = `<section><h2>${name} · детализация</h2>
+    <div class="kpi-grid-6">`;
+  const main = y25 || y24;
+  const prev = y25 ? y24 : null;
+  if(main){
+    html += `<div class="kpi"><div class="kpi-label">Выручка ${main.year}</div><div class="kpi-value">${fmtK(main.rev)}<span class="kpi-unit">₽</span></div>${prev?`<div class="kpi-delta ${main.rev>=prev.rev?'pos':'neg'}">${signed(pct(main.rev,prev.rev))}</div>`:'<div class="kpi-sub">-</div>'}</div>
+    <div class="kpi"><div class="kpi-label">Бутылок ${main.year}</div><div class="kpi-value">${fmt(main.bot)}</div>${prev?`<div class="kpi-delta ${main.bot>=prev.bot?'pos':'neg'}">${signed(pct(main.bot,prev.bot))}</div>`:'<div class="kpi-sub">-</div>'}</div>
+    <div class="kpi"><div class="kpi-label">Ср. цена</div><div class="kpi-value">${fmt(main.avg_price)}<span class="kpi-unit">₽</span></div>${prev?`<div class="kpi-sub">было ${fmt(prev.avg_price)} ₽</div>`:''}</div>
+    <div class="kpi"><div class="kpi-label">Скидки</div><div class="kpi-value">${main.disc_pct.toFixed(1)}<span class="kpi-unit">%</span></div>${prev?`<div class="kpi-sub">было ${prev.disc_pct.toFixed(1)}%</div>`:''}</div>
+    <div class="kpi"><div class="kpi-label">Дней работы</div><div class="kpi-value">${main.orders}</div>${prev?`<div class="kpi-sub">было ${prev.orders}</div>`:''}</div>
+    <div class="kpi"><div class="kpi-label">Бут/день</div><div class="kpi-value">${main.bot_per_order.toFixed(1)}</div>${prev?`<div class="kpi-delta ${main.bot_per_order>=prev.bot_per_order?'pos':'neg'}">${signed(pct(main.bot_per_order,prev.bot_per_order))}</div>`:''}</div>`;
+  }
+  html += `</div>`;
+  if(y26) html += `<div class="callout"><strong>Январь 2026 (25 дней):</strong> ${fmtK(y26.rev)} ₽ · ${fmt(y26.bot)} бут · ${fmt(y26.avg_price)} ₽/бут · ${y26.disc_pct.toFixed(1)}% скидки · ${y26.bot_per_order.toFixed(1)} бут/день. Частичный период.</div>`;
+  html += `</section>`;
+
+  // Yearly table
+  html += `<section><h2>Годовые итоги</h2><div class="card"><table><thead><tr><th>Год</th><th class="num">Выручка</th><th class="num">Бут</th><th class="num">Ср.цена</th><th class="num">Скидки</th><th class="num">Дней</th><th class="num">Бут/день</th><th class="num">₽/день</th></tr></thead><tbody>`;
+  s.yearly.forEach(y => {
+    html += `<tr><td><strong>${y.year}</strong>${y.year==='2026'?' (25 дн)':''}</td><td class="num">${fmt(y.rev)} ₽</td><td class="num">${fmt(y.bot)}</td><td class="num">${fmt(y.avg_price)} ₽</td><td class="num">${y.disc_pct.toFixed(1)}%</td><td class="num">${y.orders}</td><td class="num">${y.bot_per_order.toFixed(1)}</td><td class="num">${fmt(y.avg_check)} ₽</td></tr>`;
   });
-  charts.push(new Chart(document.getElementById('chartMonthly'), {
-    type:'bar',
-    data:{labels:monthly.map(m=>m.ym),datasets:[{label:'Выручка, ₽',data:monthly.map(m=>m.rev),backgroundColor:colors,borderRadius:3}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const m=monthly[c.dataIndex];return [fmt(c.parsed.y)+' ₽',fmt(m.bot)+' бут','скидки '+m.disc_pct.toFixed(1)+'%']}}}},scales:{y:{ticks:{callback:v=>(v>=1e6?(v/1e6).toFixed(1)+'М':(v/1000).toFixed(0)+'К')},grid:{color:'#f0ece6'}},x:{grid:{display:false},ticks:{maxRotation:60,minRotation:45,font:{size:10}}}}}
-  }));
+  html += `</tbody></table></div></section>`;
 
-  // Lines chart - exclude 2026 for YoY comparison
-  const yearsNoPartial = yearsWithLines.filter(y => y !== '2026');
-  if(yearsNoPartial.length >= 1){
-    const datasets = yearsNoPartial.map((y,i) => ({
-      label: y,
-      data: allLines.map(n => d.lines_by_year[y].find(l => l.name===n)?.rev || 0),
-      backgroundColor: i===0 ? '#d4b5bb' : (i===1 ? '#722F37' : '#c9a961'),
-      borderRadius:3
-    }));
-    charts.push(new Chart(document.getElementById('chartLines'),{
+  // Monthly detailed table
+  html += `<section><h2>Ежемесячная детализация</h2><div class="card" style="overflow-x:auto"><table><thead><tr><th>Месяц</th><th class="num">Выручка</th><th class="num">Бут</th><th class="num">Ср.цена</th><th class="num">Скидки</th><th class="num">Дней</th><th class="num">Бут/день</th></tr></thead><tbody>`;
+  s.monthly.forEach(m => {
+    html += `<tr><td>${m.YM}</td><td class="num">${fmt(m.rev)} ₽</td><td class="num">${fmt(m.bot)}</td><td class="num">${fmt(m.avg_price)} ₽</td><td class="num">${m.disc_pct.toFixed(1)}%</td><td class="num">${m.orders}</td><td class="num">${m.bot_per_order.toFixed(1)}</td></tr>`;
+  });
+  html += `</tbody></table></div></section>`;
+
+  // Lines by year
+  const years = Object.keys(s.lines).sort();
+  const lineSet = new Set();
+  years.forEach(y => s.lines[y].forEach(l => lineSet.add(l.name)));
+  html += `<section><h2>Линейки по годам</h2><div class="card"><table><thead><tr><th>Линейка</th>`;
+  years.forEach(y => html += `<th class="num">${y} ₽</th><th class="num">${y} бут</th><th class="num">${y} ср.цена</th>`);
+  html += `</tr></thead><tbody>`;
+  const linesArr = [...lineSet];
+  linesArr.sort((a,b) => {
+    const ay = s.lines[years[years.length-1]].find(l=>l.name===a)?.rev || 0;
+    const by = s.lines[years[years.length-1]].find(l=>l.name===b)?.rev || 0;
+    return by-ay;
+  });
+  linesArr.forEach(n => {
+    html += `<tr><td><strong>${n}</strong></td>`;
+    years.forEach(y => {
+      const it = s.lines[y].find(l => l.name===n);
+      html += `<td class="num">${it?fmt(it.rev)+' ₽':'-'}</td><td class="num">${it?fmt(it.bot):'-'}</td><td class="num">${it?fmt(it.avg)+' ₽':'-'}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div></section>`;
+
+  // Top SKUs
+  html += `<section><h2>Топ-20 SKU (весь период)</h2><div class="card"><table><thead><tr><th>#</th><th>Позиция</th><th class="num">Бут</th><th class="num">Выручка</th><th class="num">Ср.цена</th></tr></thead><tbody>`;
+  s.top.forEach((p,i) => {
+    html += `<tr><td style="color:var(--muted);font-weight:700">${i+1}</td><td>${p.name}</td><td class="num">${fmt(p.bot)}</td><td class="num">${fmt(p.rev)} ₽</td><td class="num" style="color:var(--muted)">${fmt(p.avg)} ₽</td></tr>`;
+  });
+  html += `</tbody></table></div></section>`;
+
+  // Attached
+  const attYears = Object.keys(s.attached).sort();
+  if(attYears.length){
+    html += `<section><h2>Привлечённая выручка (не вино)</h2><div class="card"><table><thead><tr><th>Категория</th>`;
+    attYears.forEach(y => html += `<th class="num">${y}</th>`);
+    html += `</tr></thead><tbody>`;
+    const cats = new Set();
+    attYears.forEach(y => s.attached[y].forEach(c => cats.add(c.cat)));
+    [...cats].forEach(c => {
+      html += `<tr><td><strong>${c}</strong></td>`;
+      attYears.forEach(y => {
+        const r = s.attached[y].find(x => x.cat===c);
+        html += `<td class="num">${r?fmt(r.rev)+' ₽':'-'}</td>`;
+      });
+      html += `</tr>`;
+    });
+    html += `<tr class="sep"><td>Итого</td>`;
+    attYears.forEach(y => {
+      const sum = s.attached[y].reduce((a,b)=>a+b.rev,0);
+      html += `<td class="num">${fmt(sum)} ₽</td>`;
+    });
+    html += `</tr>`;
+    html += `</tbody></table></div></section>`;
+  }
+
+  // Chart
+  html += `<section><h2>Графики</h2><div class="row row-2"><div class="card"><h3>Выручка по месяцам</h3><div class="chart-wrap"><canvas id="c_store_monthly"></canvas></div></div><div class="card"><h3>Линейки ${years[years.length-1]}</h3><div class="chart-wrap"><canvas id="c_store_lines"></canvas></div></div></div></section>`;
+
+  return html;
+}
+
+// ========== CHART RENDERERS (after DOM) ==========
+function renderCharts(view){
+  clearCharts();
+  if(view === 'overview'){
+    const m = DATA.stores.all.monthly;
+    const colors = m.map(r => r.YM.startsWith('2024') ? '#722F37' : r.YM.startsWith('2025') ? '#a8545e' : '#c9a961');
+    charts.push(new Chart(document.getElementById('c_overview_monthly'), {
       type:'bar',
-      data:{labels:allLines,datasets:datasets},
-      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.x)+' ₽'}}},scales:{x:{ticks:{callback:v=>(v>=1e6?(v/1e6).toFixed(1)+'М':(v/1000).toFixed(0)+'К')},grid:{color:'#f0ece6'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}
+      data:{labels:m.map(r=>r.YM),datasets:[{data:m.map(r=>r.rev),backgroundColor:colors,borderRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const r=m[c.dataIndex];return [fmt(c.parsed.y)+' ₽',fmt(r.bot)+' бут','скидки '+r.disc_pct.toFixed(1)+'%']}}}},scales:{y:{ticks:{callback:v=>v>=1e6?(v/1e6).toFixed(1)+'М':(v/1000).toFixed(0)+'К'},grid:{color:'#f0ece6'}},x:{grid:{display:false},ticks:{maxRotation:60,minRotation:45,font:{size:10}}}}}
+    }));
+  }
+  if(view === 'abc'){
+    // Lorenz curve
+    const items = DATA.abc_items;
+    const labels = items.map((_,i)=>((i+1)/items.length*100).toFixed(0));
+    const cum = items.map(x=>x.cum);
+    charts.push(new Chart(document.getElementById('c_abc_lorenz'),{
+      type:'line',
+      data:{labels:labels,datasets:[{label:'Накопл. выручка %',data:cum,borderColor:'#722F37',backgroundColor:'rgba(114,47,55,0.1)',fill:true,tension:0.1,pointRadius:0},{label:'Идеальное распределение',data:labels.map(l=>+l),borderColor:'#c9a961',borderDash:[5,5],pointRadius:0}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Накопл. выручка, %'}},x:{title:{display:true,text:'SKU (накопленный %)'}}}}
+    }));
+    renderAbcTable();
+    document.querySelectorAll('[data-abc]').forEach(b => b.addEventListener('click', e => {
+      document.querySelectorAll('[data-abc]').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      renderAbcTable(b.dataset.abc);
+    }));
+    document.getElementById('abc_search').addEventListener('input', () => renderAbcTable(document.querySelector('[data-abc].active').dataset.abc));
+  }
+  if(view === 'season'){
+    const byM = {};
+    DATA.season.filter(d=>d.y<'2026').forEach(d => {
+      if(!byM[d.m]) byM[d.m] = [];
+      byM[d.m].push(d.rev);
+    });
+    const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+    const avg = months.map(m => byM[m]? byM[m].reduce((a,b)=>a+b,0)/byM[m].length : 0);
+    charts.push(new Chart(document.getElementById('c_season_profile'), {
+      type:'line',
+      data:{labels:months.map(m=>MONTH_LABELS[m]),datasets:[{label:'Средняя выручка',data:avg,borderColor:'#722F37',backgroundColor:'rgba(114,47,55,0.15)',fill:true,tension:0.3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>(v/1e6).toFixed(1)+'М'}}}}
+    }));
+  }
+  if(view === 'discounts'){
+    const dm = DATA.disc_monthly;
+    charts.push(new Chart(document.getElementById('c_disc_monthly'), {
+      data:{labels:dm.map(r=>r.ym),datasets:[{type:'bar',label:'Скидки %',data:dm.map(r=>r.disc_pct),backgroundColor:'#d4b5bb',yAxisID:'y'},{type:'line',label:'Сумма скидок ₽',data:dm.map(r=>r.disc_amt),borderColor:'#722F37',tension:0.2,yAxisID:'y1'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:v=>v+'%'},position:'left'},y1:{ticks:{callback:v=>(v/1000).toFixed(0)+'К'},position:'right',grid:{display:false}},x:{ticks:{maxRotation:60,minRotation:45,font:{size:10}}}}}
+    }));
+  }
+  if(view === 'lines'){
+    const lc = DATA.line_compare;
+    charts.push(new Chart(document.getElementById('c_lines_compare'),{
+      type:'bar',
+      data:{labels:lc.map(r=>r.line),datasets:[{label:'2024',data:lc.map(r=>r['2024_rev']),backgroundColor:'#d4b5bb'},{label:'2025',data:lc.map(r=>r['2025_rev']),backgroundColor:'#722F37'}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{x:{ticks:{callback:v=>(v/1e6).toFixed(1)+'М'}}}}
+    }));
+  }
+  if(view === 'catalog'){
+    renderCatalogTable();
+    document.getElementById('cat_search').addEventListener('input', renderCatalogTable);
+    document.querySelectorAll('#tbl_catalog .sortable').forEach(th => th.addEventListener('click', () => {
+      catalogSort = th.dataset.sort;
+      catalogDesc = catalogSort===catalogLast ? !catalogDesc : true;
+      catalogLast = catalogSort;
+      renderCatalogTable();
+    }));
+  }
+  if(view.startsWith('store_')){
+    const k = view.replace('store_','');
+    const s = DATA.stores[k];
+    const m = s.monthly;
+    charts.push(new Chart(document.getElementById('c_store_monthly'),{
+      type:'bar',
+      data:{labels:m.map(r=>r.YM),datasets:[{data:m.map(r=>r.rev),backgroundColor:m.map(r=>r.YM.startsWith('2024')?'#722F37':r.YM.startsWith('2025')?'#a8545e':'#c9a961'),borderRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v>=1e6?(v/1e6).toFixed(1)+'М':(v/1000).toFixed(0)+'К'}},x:{ticks:{maxRotation:60,minRotation:45,font:{size:9}}}}}
+    }));
+    const years = Object.keys(s.lines).sort();
+    const lastY = years[years.length-1];
+    const ld = s.lines[lastY];
+    if(ld.length) charts.push(new Chart(document.getElementById('c_store_lines'),{
+      type:'bar',
+      data:{labels:ld.map(l=>l.name),datasets:[{data:ld.map(l=>l.rev),backgroundColor:'#722F37',borderRadius:3}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v>=1e6?(v/1e6).toFixed(1)+'М':(v/1000).toFixed(0)+'К'}}}}
     }));
   }
 }
 
-document.querySelectorAll('.tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    render(btn.dataset.store);
-  });
-});
+function renderAbcTable(cls = 'all'){
+  const q = (document.getElementById('abc_search')?.value||'').toLowerCase();
+  const tbody = document.querySelector('#tbl_abc tbody');
+  const items = DATA.abc_items.filter(i => (cls==='all'||i.abc===cls) && (!q||i.sku.toLowerCase().includes(q)||(i.line||'').toLowerCase().includes(q)));
+  tbody.innerHTML = items.map((i,n) => `<tr><td style="color:var(--muted)">${n+1}</td><td>${i.sku}</td><td>${i.line||'-'}</td><td class="num">${fmt(i.rev)} ₽</td><td class="num">${fmt(i.bot)}</td><td class="num">${i.share.toFixed(2)}%</td><td class="num">${i.cum.toFixed(1)}%</td><td class="num"><span class="badge badge-${i.abc}">${i.abc}</span></td><td class="num">${i.xyz!=='-'?`<span class="badge badge-${i.xyz}">${i.xyz}</span>`:'-'}</td></tr>`).join('');
+}
 
-render('all');
+let catalogSort = 'rev', catalogDesc = true, catalogLast = 'rev';
+function renderCatalogTable(){
+  const q = (document.getElementById('cat_search')?.value||'').toLowerCase();
+  let items = DATA.abc_items.filter(i => !q || i.sku.toLowerCase().includes(q) || (i.line||'').toLowerCase().includes(q));
+  items.sort((a,b) => {
+    let av = a[catalogSort], bv = b[catalogSort];
+    if(typeof av==='string') return catalogDesc ? bv.localeCompare(av) : av.localeCompare(bv);
+    return catalogDesc ? (bv||0)-(av||0) : (av||0)-(bv||0);
+  });
+  const tbody = document.querySelector('#tbl_catalog tbody');
+  tbody.innerHTML = items.map(i => `<tr><td>${i.sku}</td><td>${i.line||'-'}</td><td class="num">${fmt(i.rev)} ₽</td><td class="num">${fmt(i.bot)}</td><td class="num">${i.share.toFixed(2)}%</td><td class="num"><span class="badge badge-${i.abc}">${i.abc}</span></td><td class="num">${i.xyz!=='-'?`<span class="badge badge-${i.xyz}">${i.xyz}</span>`:'-'}</td><td class="num">${i.cv?i.cv.toFixed(0)+'%':'-'}</td></tr>`).join('');
+}
+
+function render(view){
+  const content = document.getElementById('content');
+  if(view.startsWith('store_')){
+    content.innerHTML = renderStore(view.replace('store_',''));
+  } else if (VIEWS[view]){
+    content.innerHTML = VIEWS[view]();
+  }
+  renderCharts(view);
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render(btn.dataset.view);
+  window.scrollTo({top:0,behavior:'smooth'});
+}));
+
+render('overview');
 </script>
 </body>
 </html>
