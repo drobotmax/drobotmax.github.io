@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ZenMoney OAuth Callback</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 640px; margin: 60px auto; padding: 0 20px; color: #222; }
+  h1 { font-size: 20px; }
+  .box { background: #f4f4f7; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin: 16px 0; word-break: break-all; font-family: ui-monospace, monospace; font-size: 13px; }
+  .err { background: #fde7e7; border-color: #f0a0a0; }
+  button { padding: 8px 14px; border: 1px solid #888; background: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  button:hover { background: #f0f0f0; }
+  .hint { color: #666; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>ZenMoney OAuth Callback</h1>
+<div id="out">Обработка...</div>
+<script>
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const err = params.get('error');
+  const desc = params.get('error_description');
+  const out = document.getElementById('out');
+  if (err) {
+    out.innerHTML = '<div class="box err"><b>Ошибка:</b> ' + err + (desc ? '<br>' + desc : '') + '</div>';
+    return;
+  }
+  if (!code) {
+    out.innerHTML = '<div class="box err">Не получен параметр <code>code</code>. Этот URL должен вызываться как redirect от ZenMoney OAuth.</div>';
+    return;
+  }
+  out.innerHTML = '<p>Код авторизации получен. Скопируй и вставь в терминал:</p>' +
+    '<div class="box" id="code">' + code + '</div>' +
+    '<button onclick="navigator.clipboard.writeText(document.getElementById(\'code\').textContent).then(()=>this.textContent=\'Скопировано ✓\')">Копировать</button>' +
+    '<p class="hint">Код одноразовый и живёт ~10 минут. Закрой вкладку после того как скопируешь.</p>';
+})();
+</script>
+</body>
+</html>
