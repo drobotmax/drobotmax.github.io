@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деньги в CRM - Максим Дробот</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-alt: #f7f7f7;
+    --text: #111111;
+    --text-muted: #666666;
+    --text-soft: #888888;
+    --accent: #D63A1A;
+    --accent-light: #fdf1ee;
+    --border: #e0e0e0;
+    --border-soft: #efefef;
+    --slide-w: 1920px;
+    --slide-h: 1080px;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  .deck {
+    width: var(--slide-w);
+    height: var(--slide-h);
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    background: var(--bg);
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    padding: 72px 90px;
+  }
+  .slide.active { display: flex; }
+
+  .nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 999;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .nav-dot.active { background: #fff; }
+
+  .counter {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    z-index: 999;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 4px 12px;
+    border-radius: 3px;
+  }
+
+  .label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+
+  .h-xl {
+    font-size: 54px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .accent { color: var(--accent); }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ── SLIDE 1: TITLE ── */
+  #s1 {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .s1-decor {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+  .s1-headline {
+    font-size: 88px;
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -3px;
+    color: var(--text);
+    margin-top: 32px;
+    max-width: 1400px;
+  }
+  .s1-headline span { color: var(--accent); }
+  .s1-sub {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 32px;
+  }
+  .s1-author {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .s1-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .s1-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+  }
+  .s1-role {
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+
+  /* ── SLIDE 2: AGENDA ── */
+  #s2 {
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+  }
+  .agenda-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .agenda-item {
+    border-top: 2px solid var(--border);
+    padding-top: 20px;
+  }
+  .agenda-item.active-item { border-top-color: var(--accent); }
+  .agenda-num {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .1em;
+    margin-bottom: 12px;
+  }
+  .agenda-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .agenda-desc {
+    font-size: 18px;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  /* ── SLIDE 3: CASE ── */
+  #s3 {
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .case-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .case-title {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    color: var(--text);
+  }
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .case-card {
+    background: var(--bg-alt);
+    border-radius: 8px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .case-card-icon {
+    font-size: 26px;
+    line-height: 1;
+  }
+  .case-card-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .case-card-desc {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .case-card-detail {
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  .case-stat-bar {
+    display: flex;
+    gap: 36px;
+    padding: 22px 30px;
+    background: var(--text);
+    border-radius: 8px;
+    align-items: center;
+  }
+  .case-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .case-stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -1px;
+  }
+  .case-stat-label {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
+  }
+  .case-stat-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  /* ── SLIDE 4: WORKFLOW ── */
+  #s4 {
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+  }
+  .flow-row {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr;
+    align-items: stretch;
+    gap: 0;
+  }
+  .flow-node {
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 26px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    position: relative;
+  }
+  .flow-node.accent { border-color: var(--accent); background: var(--accent-light); }
+  .flow-node.dark { background: var(--text); border-color: var(--text); color: #fff; }
+  .flow-icon {
+    font-size: 40px;
+    line-height: 1;
+  }
+  .flow-step {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--accent);
+  }
+  .flow-node.dark .flow-step { color: var(--accent); }
+  .flow-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.3px;
+    line-height: 1.2;
+  }
+  .flow-node.dark .flow-title { color: #fff; }
+  .flow-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .flow-node.dark .flow-desc { color: rgba(255,255,255,0.75); }
+  .flow-meta {
+    font-size: 12px;
+    color: var(--text-soft);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  .flow-node.dark .flow-meta { color: rgba(255,255,255,0.45); }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: var(--accent);
+    font-weight: 300;
+  }
+  .flow-footer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: var(--bg-alt);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .flow-footer-item {
+    padding: 22px 28px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .flow-footer-item:last-child { border-right: none; }
+  .flow-footer-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.5px;
+    line-height: 1;
+  }
+  .flow-footer-label {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ── SLIDE 5: DEMO ── */
+  #s5 {
+    flex-direction: column;
+    gap: 22px;
+    background: var(--text);
+    padding: 48px 60px;
+  }
+  .demo-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .demo-headline {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.0;
+    color: #ffffff;
+  }
+  .demo-eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .demo-subtext {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    max-width: 520px;
+    text-align: right;
+    line-height: 1.5;
+  }
+  .demo-flow {
+    display: grid;
+    grid-template-columns: 1fr 60px 1.3fr;
+    gap: 18px;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+  }
+  .demo-panel {
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .demo-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .demo-panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .demo-panel-badge {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,0.35);
+  }
+  .demo-panel-badge.red {
+    color: var(--accent);
+  }
+  .demo-panel-badge.green {
+    color: #6ee39e;
+  }
+  .raw-csv {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.6);
+    overflow: hidden;
+    flex: 1;
+  }
+  .raw-csv-head {
+    color: rgba(255,255,255,0.85);
+    font-weight: 600;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed rgba(255,255,255,0.12);
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .raw-csv-row {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 2px 0;
+    color: rgba(255,255,255,0.5);
+  }
+  .raw-csv-row .dim {
+    color: rgba(255,255,255,0.3);
+  }
+  .raw-caption {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-style: italic;
+    margin-top: 4px;
+  }
+  .demo-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--accent);
+  }
+  .demo-arrow-icon {
+    font-size: 44px;
+    line-height: 1;
+    font-weight: 300;
+  }
+  .demo-arrow-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    line-height: 1.4;
+  }
+  .demo-arrow-label b {
+    color: var(--accent);
+  }
+  .dashboard-wrap {
+    flex: 1;
+    min-height: 0;
+    background: #ffffff;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .dashboard-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .money-strip {
+    display: grid;
+    grid-template-columns: auto repeat(4, 1fr);
+    gap: 0;
+    background: #0a0a0a;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .money-strip-label {
+    padding: 20px 26px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    letter-spacing: -.3px;
+    line-height: 1.15;
+  }
+  .money-item {
+    padding: 18px 22px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .money-item:last-child { border-right: none; }
+  .money-item-num {
+    font-size: 30px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -.5px;
+    line-height: 1;
+  }
+  .money-item-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.3;
+  }
+
+  /* ── SLIDE 6: 3 STEPS ── */
+  #s6 {
+    flex-direction: column;
+    padding: 60px 70px;
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    flex: 1;
+    margin-top: 26px;
+  }
+  .step-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 26px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .step-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .step-num {
+    font-size: 54px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: var(--bg-alt);
+    line-height: 1;
+  }
+  .step-time {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 8px;
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    align-self: flex-start;
+  }
+  .step-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .step-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: -8px;
+  }
+  .step-prompt {
+    background: #0f0f0f;
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+    white-space: pre-wrap;
+    flex: 1;
+  }
+  .step-prompt .hl { color: #ff9980; }
+  .step-prompt .lbl {
+    display: block;
+    color: rgba(255,255,255,0.4);
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .step-outcome {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* ── SLIDE 7: OFFER ── */
+  #s7 {
+    flex-direction: column;
+    padding: 60px 70px;
+  }
+  .offer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    flex: 1;
+    margin-top: 26px;
+  }
+  .offer-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .offer-card.highlight {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .offer-level {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .offer-level.red { color: var(--accent); }
+  .offer-price {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .offer-price span {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0;
+  }
+  .offer-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .offer-desc {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .offer-badge {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 4px 10px;
+    border-radius: 3px;
+    border: 1px solid var(--accent);
+    align-self: flex-start;
+  }
+  .offer-badge.dark {
+    background: var(--text);
+    color: #fff;
+    border-color: var(--text);
+  }
+  .offer-cta-bar {
+    padding: 20px 28px;
+    background: var(--text);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .offer-cta-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .offer-cta-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* ── SHARED BLOCKS FOR NEW SLIDES ── */
+  .slide-dark { background: var(--text); color: #fff; padding: 64px 80px; flex-direction: column; gap: 32px; }
+  .slide-dark .label { color: var(--accent); }
+  .slide-dark .h-xl { color: #fff; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; flex: 1; }
+  .two-col.uneven { grid-template-columns: 1.2fr 1fr; }
+  .panel-dark { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 28px 32px; display: flex; flex-direction: column; gap: 14px; }
+  .panel-light { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; display: flex; flex-direction: column; gap: 14px; }
+  .panel-title { font-size: 15px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+  .panel-dark .panel-title { color: var(--accent); }
+  .panel-h { font-size: 32px; font-weight: 800; color: var(--text); letter-spacing: -.5px; line-height: 1.15; }
+  .panel-dark .panel-h { color: #fff; }
+  .panel-p { font-size: 20px; line-height: 1.5; color: var(--text-muted); }
+  .panel-dark .panel-p { color: rgba(255,255,255,0.8); }
+  .panel-dark .panel-p b { color: #fff; }
+
+  .big-num { font-size: 168px; font-weight: 800; letter-spacing: -6px; line-height: 0.9; color: var(--accent); }
+  .big-num-cap { font-size: 24px; font-weight: 600; color: #fff; line-height: 1.35; max-width: 560px; }
+  .big-num-meta { font-size: 16px; color: rgba(255,255,255,0.55); font-family: 'JetBrains Mono', monospace; }
+
+  .bullet-list { display: flex; flex-direction: column; gap: 14px; font-size: 20px; line-height: 1.45; color: var(--text); }
+  .slide-dark .bullet-list { color: rgba(255,255,255,0.88); }
+  .bullet-list li { list-style: none; padding-left: 26px; position: relative; }
+  .bullet-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .bullet-list li b { color: var(--text); }
+  .slide-dark .bullet-list li b { color: #fff; }
+
+  .metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+  .metric-row.light { background: var(--bg-alt); border-color: var(--border); }
+  .metric-cell { padding: 26px 30px; border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 8px; }
+  .metric-row.light .metric-cell { border-right: 1px solid var(--border); }
+  .metric-cell:last-child { border-right: none; }
+  .metric-n { font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -.5px; line-height: 1; }
+  .metric-row.light .metric-n { color: var(--text); }
+  .metric-l { font-size: 17px; color: rgba(255,255,255,0.6); line-height: 1.35; }
+  .metric-row.light .metric-l { color: var(--text-muted); }
+
+  .step-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .step-strip-item { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px; }
+  .step-strip-item .n { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent); font-weight: 700; }
+  .step-strip-item .t { font-size: 18px; font-weight: 700; color: #fff; line-height: 1.3; }
+  .step-strip-item .d { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.45; }
+
+  .quote-block { font-size: 30px; font-weight: 500; line-height: 1.4; color: var(--text); font-style: italic; padding-left: 24px; border-left: 4px solid var(--accent); max-width: 1100px; }
+  .slide-dark .quote-block { color: rgba(255,255,255,0.92); }
+  .quote-author { font-size: 16px; font-weight: 600; color: var(--text-muted); margin-top: 16px; text-transform: uppercase; letter-spacing: .08em; }
+  .slide-dark .quote-author { color: rgba(255,255,255,0.55); }
+
+  .comm-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .comm-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 10px; padding: 26px 30px; display: flex; flex-direction: column; gap: 12px; }
+  .comm-card.dark { background: var(--text); border-color: var(--text); color: #fff; }
+  .comm-card .t { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.3; display: flex; align-items: center; gap: 12px; }
+  .comm-card.dark .t { color: #fff; }
+  .comm-card .d { font-size: 17px; line-height: 1.5; color: var(--text-muted); }
+  .comm-card.dark .d { color: rgba(255,255,255,0.78); }
+  .comm-card .ico { font-size: 26px; }
+
+  .qa-center { flex-direction: column; justify-content: center; align-items: center; gap: 32px; text-align: center; padding: 80px; background: var(--text); color: #fff; }
+  .qa-title { font-size: 140px; font-weight: 800; letter-spacing: -4px; line-height: 1; color: #fff; }
+  .qa-title span { color: var(--accent); }
+  .qa-sub { font-size: 22px; color: rgba(255,255,255,0.7); max-width: 720px; line-height: 1.5; }
+  .qa-contacts { display: flex; gap: 40px; margin-top: 20px; }
+  .qa-contact { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+  .qa-contact-l { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+  .qa-contact-v { font-size: 20px; font-weight: 600; color: #fff; font-family: 'JetBrains Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: TITLE -->
+  <div class="slide active" id="s1">
+    <div class="s1-decor"></div>
+    <div>
+      <div class="tag">AI для бизнеса</div>
+      <h1 class="s1-headline">Как найти <span>деньги</span><br>в собственном CRM<br>за 2 минуты</h1>
+      <p class="s1-sub">И что вы можете сделать со своей</p>
+    </div>
+    <div class="s1-author">
+      <span class="s1-name">Максим Дробот</span>
+      <div class="s1-divider"></div>
+      <span class="s1-role">AI-автоматизация продаж</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: AGENDA -->
+  <div class="slide" id="s2">
+    <div>
+      <div class="label">Программа</div>
+      <h2 class="h-xl">Что будет сегодня</h2>
+    </div>
+    <div class="agenda-grid">
+      <div class="agenda-item">
+        <div class="agenda-num">01</div>
+        <div class="agenda-title">Кейс</div>
+        <div class="agenda-desc">2 недели с клиентом - сеть локальных услуг, 10 городов</div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-num">02</div>
+        <div class="agenda-title">Стек</div>
+        <div class="agenda-desc">Что нужно (и что не нужно) для работы с AI в продажах</div>
+      </div>
+      <div class="agenda-item active-item">
+        <div class="agenda-num">03</div>
+        <div class="agenda-title">Live демо CRM</div>
+        <div class="agenda-desc">Сырой CSV → дашборд → деньги на столе. На глазах, за 2 минуты</div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-num">04</div>
+        <div class="agenda-title">Спящая база</div>
+        <div class="agenda-desc">Клиенты, которые уже платили, но забыты - возвращаются одним вечером обзвона</div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-num">05</div>
+        <div class="agenda-title">3 инструмента</div>
+        <div class="agenda-desc">Daily Report, база знаний, дебиторка - разбираем подробно</div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-num">06</div>
+        <div class="agenda-title">Что сделать завтра</div>
+        <div class="agenda-desc">3 шага с готовыми промптами - скопировал и запустил</div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-num">07</div>
+        <div class="agenda-title">Комьюнити + оффер</div>
+        <div class="agenda-desc">Зачем AI-комьюнити и 4 уровня работы со мной</div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-num">08</div>
+        <div class="agenda-title">Q&amp;A</div>
+        <div class="agenda-desc">Разберём ваши задачи и инструменты под них</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: CASE -->
+  <div class="slide" id="s3">
+    <div class="case-header">
+      <div class="label">Кейс - 2 недели</div>
+      <h2 class="case-title">Что появилось у клиента за 2 недели</h2>
+    </div>
+    <div class="case-grid">
+      <div class="case-card">
+        <div class="case-card-icon">&#9202;</div>
+        <div class="case-card-title">Daily Report в 8:05</div>
+        <div class="case-card-desc">Скрипт берёт данные из amoCRM через API, Claude формирует сводку в Obsidian: лиды по городам, провалы по менеджерам, деньги на столе</div>
+        <div class="case-card-detail">amoCRM API + Python + Claude</div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#128279;</div>
+        <div class="case-card-title">Лендинг + QR за 1 час</div>
+        <div class="case-card-desc">Промоутеры в ТЦ теперь показывают QR - открывает WhatsApp с предзаполненным "Здравствуйте, я из ТЦ..." - в CRM сразу видно источник</div>
+        <div class="case-card-detail">HTML + GitHub Pages + WA</div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#128218;</div>
+        <div class="case-card-title">База знаний бизнеса</div>
+        <div class="case-card-desc">70+ документов перенесены в Obsidian (скрипты, регламенты, цены, частые вопросы). Новый менеджер: 30 минут и готов звонить</div>
+        <div class="case-card-detail">Obsidian + Google Drive MCP</div>
+      </div>
+      <div class="case-card">
+        <div class="case-card-icon">&#128172;</div>
+        <div class="case-card-title">TG-ассистент</div>
+        <div class="case-card-desc">Голосовое: "созвон с Ксенией в 15, обсудили недозвоны, надо добавить скрипт" - уже в Todoist задача, событие в Google Calendar, заметка в Obsidian</div>
+        <div class="case-card-detail">Telegram bot + Claude + Todoist</div>
+      </div>
+    </div>
+    <div class="case-stat-bar">
+      <div class="case-stat">
+        <div class="case-stat-num">930</div>
+        <div class="case-stat-label">сделок в CRM</div>
+      </div>
+      <div class="case-stat-divider"></div>
+      <div class="case-stat">
+        <div class="case-stat-num">150+</div>
+        <div class="case-stat-label">зависших квалов</div>
+      </div>
+      <div class="case-stat-divider"></div>
+      <div class="case-stat">
+        <div class="case-stat-num">28%</div>
+        <div class="case-stat-label">конверсия / бенч 33%</div>
+      </div>
+      <div class="case-stat-divider"></div>
+      <div class="case-stat">
+        <div class="case-stat-num" style="color:#fff">7-значная</div>
+        <div class="case-stat-label">сумма зависла в воронке</div>
+      </div>
+      <div style="flex:1"></div>
+      <div style="font-size:15px;color:rgba(255,255,255,0.45);max-width:320px;line-height:1.4;">
+        Клиент - сеть локальных услуг, 10 городов, 5 менеджеров ОП
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: WORKFLOW / TOOLKIT -->
+  <div class="slide" id="s4">
+    <div>
+      <div class="label">Что нужно и что мы делаем</div>
+      <h2 class="h-xl">Процесс - 4 шага, 20 минут</h2>
+    </div>
+    <div class="flow-row">
+      <div class="flow-node">
+        <div class="flow-icon">📥</div>
+        <div class="flow-step">ШАГ 01 · 5 МИН</div>
+        <div class="flow-title">Выгрузка CSV</div>
+        <div class="flow-desc">amoCRM / Bitrix24: Сделки → фильтр за 30 дней → Экспорт в CSV</div>
+        <div class="flow-meta">дата · этап · менеджер · сумма</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-icon">💬</div>
+        <div class="flow-step">ШАГ 02 · 1 МИН</div>
+        <div class="flow-title">Загрузка в Claude</div>
+        <div class="flow-desc">Открываем claude.ai, перетаскиваем CSV. Бесплатного плана хватает на разовый аудит</div>
+        <div class="flow-meta">claude.ai · free / $20</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node accent">
+        <div class="flow-icon">🔎</div>
+        <div class="flow-step">ШАГ 03 · 2 МИН</div>
+        <div class="flow-title">Промпт на аудит</div>
+        <div class="flow-desc">Один промпт из 6 вопросов. Claude считает конверсии, зависшие сделки, менеджеров</div>
+        <div class="flow-meta">prompt · analysis</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node dark">
+        <div class="flow-icon">💰</div>
+        <div class="flow-step">РЕЗУЛЬТАТ</div>
+        <div class="flow-title">Дашборд и действия</div>
+        <div class="flow-desc">Цифры, список зависших, точки вмешательства. Готово к передаче РОПу</div>
+        <div class="flow-meta">money on the table</div>
+      </div>
+    </div>
+    <div class="flow-footer">
+      <div class="flow-footer-item">
+        <div class="flow-footer-num">0 руб</div>
+        <div class="flow-footer-label">Стоимость инструментов для первого аудита</div>
+      </div>
+      <div class="flow-footer-item">
+        <div class="flow-footer-num">~20 мин</div>
+        <div class="flow-footer-label">От выгрузки до готового отчёта с цифрами</div>
+      </div>
+      <div class="flow-footer-item">
+        <div class="flow-footer-num">0 строк кода</div>
+        <div class="flow-footer-label">Никакого программирования - только диалог с Claude</div>
+      </div>
+      <div class="flow-footer-item">
+        <div class="flow-footer-num">Любая ниша</div>
+        <div class="flow-footer-label">Лазер, e-com, B2B, франшиза - одинаково работает</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: RAW → DASHBOARD → MONEY -->
+  <div class="slide" id="s5">
+    <div class="demo-top">
+      <div>
+        <div class="demo-eyebrow">Живое демо - как это работает</div>
+        <h2 class="demo-headline">Сырая выгрузка - дашборд - деньги</h2>
+      </div>
+      <div class="demo-subtext">Реальный CRM клиента: 939 сделок за 4 месяца, анонимизированно. Так это выглядит до и после Claude</div>
+    </div>
+    <div class="demo-flow">
+      <div class="demo-panel">
+        <div class="demo-panel-head">
+          <span class="demo-panel-title">Что вы видите сегодня</span>
+          <span class="demo-panel-badge red">amocrm_export.csv - 939 строк</span>
+        </div>
+        <div class="raw-csv">
+          <div class="raw-csv-head">ID │ Название │ Бюджет │ Этап │ Ответ. │ Создано │ Город │ …<span class="dim">+94 колонки</span></div>
+          <div class="raw-csv-row">29540391 │ Лид_29540391 │ 2490 │ Квалиф. │ ОП Настя │ 31.03 22:21 │ Тверь │ ***</div>
+          <div class="raw-csv-row">29538102 │ Лид_29538102 │ 0 │ Новый │ ОП 3 │ 31.03 18:04 │ <span class="dim">—</span> │ ***</div>
+          <div class="raw-csv-row">29531877 │ Лид_29531877 │ 3200 │ Квалиф. │ ОП Настя │ 30.03 14:55 │ Курск │ ***</div>
+          <div class="raw-csv-row">29528403 │ Лид_29528403 │ 0 │ Новый │ ОП 3 │ 30.03 11:12 │ Тверь │ ***</div>
+          <div class="raw-csv-row">29524119 │ Лид_29524119 │ 4500 │ Перегов. │ ОП Маша │ 29.03 20:38 │ Воронеж │ ***</div>
+          <div class="raw-csv-row">29519200 │ Лид_29519200 │ 0 │ Квалиф. │ ОП Настя │ 29.03 09:14 │ Тверь │ ***</div>
+          <div class="raw-csv-row">29513844 │ Лид_29513844 │ 1890 │ Квалиф. │ ОП 3 │ 28.03 16:47 │ Калуга │ ***</div>
+          <div class="raw-csv-row">29507322 │ Лид_29507322 │ 0 │ Новый │ ОП Маша │ 28.03 13:02 │ <span class="dim">—</span> │ ***</div>
+          <div class="raw-csv-row">29501005 │ Лид_29501005 │ 5100 │ Перегов. │ ОП Настя │ 27.03 19:55 │ Тверь │ ***</div>
+          <div class="raw-csv-row">29494188 │ Лид_29494188 │ 0 │ Квалиф. │ ОП 3 │ 27.03 10:31 │ Курск │ ***</div>
+          <div class="raw-csv-row"><span class="dim">…ещё 929 строк, 100+ колонок, ничего не понятно</span></div>
+        </div>
+        <div class="raw-caption">Каждый месяц кто-то обещает «разобраться с CRM». Никто не разбирается.</div>
+      </div>
+
+      <div class="demo-arrow">
+        <div class="demo-arrow-icon">→</div>
+        <div class="demo-arrow-label">Claude<br><b>2 минуты</b></div>
+      </div>
+
+      <div class="demo-panel">
+        <div class="demo-panel-head">
+          <span class="demo-panel-title">Что получаем через 2 минуты</span>
+          <span class="demo-panel-badge green">дашборд + 4 инсайта</span>
+        </div>
+        <div class="dashboard-wrap"><img class="dashboard-img" src="demo-assets/dashboard.png" alt="CRM dashboard"></div>
+      </div>
+    </div>
+
+    <div class="money-strip">
+      <div class="money-strip-label">Деньги<br>на столе</div>
+      <div class="money-item">
+        <div class="money-item-num">7-значная</div>
+        <div class="money-item-label">сумма в открытых сделках</div>
+      </div>
+      <div class="money-item">
+        <div class="money-item-num">197</div>
+        <div class="money-item-label">зависших квалов - ждут звонка</div>
+      </div>
+      <div class="money-item">
+        <div class="money-item-num">20,4 дня</div>
+        <div class="money-item-label">медиана реакции на лида</div>
+      </div>
+      <div class="money-item">
+        <div class="money-item-num">116</div>
+        <div class="money-item-label">новых лидов без единого дозвона</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE: SLEEPING BASE - ONE EVENING CALLBACK -->
+  <div class="slide slide-dark" id="s-anchor">
+    <div>
+      <div class="label">Реальный кейс</div>
+      <h2 class="h-xl">Один вечер обзвона - шестизначный возврат</h2>
+    </div>
+    <div class="two-col uneven" style="grid-template-columns:1fr 1.5fr;">
+      <div style="display:flex;flex-direction:column;gap:20px;justify-content:center;">
+        <div class="big-num" style="font-size:132px;">150</div>
+        <div class="big-num-cap"><b style="color:#fff">Спящих клиентов</b>, которые уже платили бизнесу - и про которых забыли</div>
+        <div class="panel-title" style="margin-top:8px;">Логика разбора</div>
+        <ul class="bullet-list" style="font-size:18px;">
+          <li><b>4000+ клиентов</b> за 3 года по всем точкам</li>
+          <li><b>Claude отфильтровал:</b> высокий LTV, последний визит &gt; 90 дн</li>
+          <li><b>150 имён</b> с телефонами, историей покупок и рекомендацией</li>
+          <li><b>Один вечер обзвона</b> → <b>шестизначный возврат</b></li>
+        </ul>
+      </div>
+      <div class="dashboard-wrap"><img class="dashboard-img" src="demo-assets/sleeping-clients.png" alt="Список спящих клиентов"></div>
+    </div>
+    <div style="font-size:17px;color:rgba(255,255,255,0.65);font-style:italic;line-height:1.5;">Это не «новые лиды». Это клиенты, которые уже доверяют бренду - просто никто не напомнил о себе.</div>
+  </div>
+
+  <!-- SLIDE: DAILY REPORT DEEP DIVE -->
+  <div class="slide slide-dark" id="s-daily">
+    <div>
+      <div class="label">Инструмент №1</div>
+      <h2 class="h-xl">Daily Report - вы приходите в офис и уже всё знаете</h2>
+    </div>
+    <div class="two-col uneven" style="grid-template-columns:1fr 1.5fr;">
+      <div style="display:flex;flex-direction:column;gap:22px;justify-content:center;">
+        <div class="panel-title">Что приходит в 8:05 утра</div>
+        <ul class="bullet-list" style="font-size:19px;">
+          <li><b>75 лидов за вчера</b> - по городам, источникам, менеджерам</li>
+          <li><b>Топ-3 горячих сделки</b> - сумма + что делать сегодня</li>
+          <li><b>Провалы по менеджерам</b> - кто тормозит, кого слушать</li>
+          <li><b>9 без дозвона &gt; 24 ч</b> - деньги на столе в рублях</li>
+          <li><b>Деньги на столе</b> - зависшие квалы, рассрочки, спящая база</li>
+        </ul>
+        <div class="panel-title" style="margin-top:12px;">Как устроено</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:15px;color:rgba(255,255,255,0.7);line-height:1.7;">
+          cron 8:00 → amoCRM API<br>
+          → Claude (GPT-4 mini)<br>
+          → <b style="color:#fff">файл в Obsidian</b> + TG-уведомление
+        </div>
+      </div>
+      <div class="dashboard-wrap"><img class="dashboard-img" src="demo-assets/daily-report.png" alt="Daily Report в Obsidian"></div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-cell"><div class="metric-n">~30 мин</div><div class="metric-l">экономия времени директора ежедневно</div></div>
+      <div class="metric-cell"><div class="metric-n">&lt; 50 ₽</div><div class="metric-l">стоимость одного отчёта (API Claude)</div></div>
+      <div class="metric-cell"><div class="metric-n">1 вечер</div><div class="metric-l">на первую рабочую версию скрипта</div></div>
+    </div>
+  </div>
+
+  <!-- SLIDE: БАЗА ЗНАНИЙ И ОНБОРДИНГ -->
+  <div class="slide slide-dark" id="s-kb">
+    <div>
+      <div class="label">Инструмент №2</div>
+      <h2 class="h-xl">База знаний бизнеса - онбординг за 30 минут</h2>
+    </div>
+    <div class="two-col uneven" style="grid-template-columns:1fr 1.5fr;">
+      <div style="display:flex;flex-direction:column;gap:22px;justify-content:center;">
+        <div class="panel-title">Что внутри</div>
+        <ul class="bullet-list" style="font-size:19px;">
+          <li><b>70+ документов</b> - скрипты, регламенты, цены, FAQ</li>
+          <li><b>Granola</b> пишет и транскрибирует все встречи ОП</li>
+          <li><b>Claude</b> превращает транскрипты в структурированные заметки</li>
+          <li><b>Ссылки между файлами</b> - возражения, скрипты, отчёты связаны</li>
+          <li><b>Поиск по слову</b> - любая инфа находится за 2 секунды</li>
+        </ul>
+        <div class="panel-title" style="margin-top:12px;">Что это даёт</div>
+        <div style="font-size:18px;color:rgba(255,255,255,0.8);line-height:1.5;">
+          Новый менеджер открывает папку «Онбординг» - <b style="color:#fff">30 минут</b> и готов к первому звонку. Вместо недели с директором.
+        </div>
+      </div>
+      <div class="dashboard-wrap"><img class="dashboard-img" src="demo-assets/obsidian-kb.png" alt="База знаний в Obsidian"></div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-cell"><div class="metric-n">70+</div><div class="metric-l">документов в единой базе Obsidian</div></div>
+      <div class="metric-cell"><div class="metric-n">30 мин</div><div class="metric-l">онбординг нового менеджера</div></div>
+      <div class="metric-cell"><div class="metric-n">0</div><div class="metric-l">повторных вопросов «где у нас …?»</div></div>
+    </div>
+  </div>
+
+  <!-- SLIDE: ДЕБИТОРКА -->
+  <div class="slide slide-dark" id="s-receivables">
+    <div>
+      <div class="label">Инструмент №3</div>
+      <h2 class="h-xl">Дебиторка: ваши деньги, которые уже должны</h2>
+    </div>
+    <div class="two-col uneven">
+      <div style="display:flex;flex-direction:column;gap:18px;justify-content:center;">
+        <div class="big-num">7-значная</div>
+        <div class="big-num-cap"><b style="color:#fff">Сумма</b>, которую должны бизнесу клиенты, купившие в рассрочку и переставшие платить</div>
+        <div class="big-num-meta">~30% с залогом - списываются. Остальные ~70% = живые деньги, о которых забыли</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;justify-content:center;">
+        <div class="panel-title">Что делает AI</div>
+        <ul class="bullet-list">
+          <li><b>Автосбор</b> - каждое утро выгрузка рассрочек из amoCRM</li>
+          <li><b>Статусы</b> - «платит по графику» / «просрочка 1-30 дн» / «&gt; 30 дн»</li>
+          <li><b>Скоринг</b> - Claude смотрит историю и помечает: перезвонить / юрист / списать</li>
+          <li><b>Уведомления</b> - менеджеру в TG: «Иванов, рассрочка 15К, просрочка 14 дн»</li>
+          <li><b>Шаблоны писем</b> - напоминание по рассрочке за 3 дня до платежа</li>
+        </ul>
+        <div style="font-size:17px;color:rgba(255,255,255,0.65);font-style:italic;line-height:1.5;">Раньше - Excel, который никто не ведёт. Сейчас - система, которая ведёт себя сама.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE: NEXT HORIZON - 5 FOLLOW-UP AUTOMATIONS -->
+  <div class="slide slide-dark" id="s-next">
+    <div>
+      <div class="label">Следующий горизонт</div>
+      <h2 class="h-xl">После первых трёх инструментов</h2>
+      <p style="font-size:19px;color:rgba(255,255,255,0.72);margin-top:8px;max-width:980px;line-height:1.45;">
+        Три инструмента выше - это <b style="color:#fff">видимость и реакция</b>. Следующая высота - <b style="color:#fff">подготовка и качество</b>. Там лежит ещё один LTV-кратник.
+      </p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+      <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;color:var(--accent);font-weight:600;letter-spacing:0.05em;">04 · БРИФИНГ ПЕРЕД ЗВОНКОМ</div>
+        <div style="font-size:21px;font-weight:700;color:#fff;line-height:1.25;">30 секунд до встречи - и менеджер готов</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.72);line-height:1.45;">Агент за 30 секунд собирает историю переписки, свежие новости клиента, ожидаемые возражения. Менеджер заходит в звонок подготовленным, а не с нуля.</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;color:var(--accent);font-weight:600;letter-spacing:0.05em;">07 · FU-ПИСЬМО ПОСЛЕ ЗВОНКА</div>
+        <div style="font-size:21px;font-weight:700;color:#fff;line-height:1.25;">Черновик с отсылками к словам клиента</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.72);line-height:1.45;">Агент берёт транскрипт → пишет FU с конкретикой и кейсами → кладёт в отложку. «Забыл вернуться с ответом» исчезает как класс.</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;color:var(--accent);font-weight:600;letter-spacing:0.05em;">08 · BATTLECARD ПО КОНКУРЕНТАМ</div>
+        <div style="font-size:21px;font-weight:700;color:#fff;line-height:1.25;">Клиент упомянул конкурента - агент ответил</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.72);line-height:1.45;">Свежие цены и слабые места подтягиваются в момент упоминания. Менеджер отвечает фактами, а не шаблоном «у нас лучше».</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+      <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;color:var(--accent);font-weight:600;letter-spacing:0.05em;">19 · NPS И ДОБЫЧА ОТЗЫВОВ</div>
+        <div style="font-size:21px;font-weight:700;color:#fff;line-height:1.25;">Позитив - в маркетинг, негатив - в алерт</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.72);line-height:1.45;">Раз в неделю агент перебирает чаты клиентов: вытаскивает готовые testimonials и ловит негативные тренды до того, как они станут оттоком.</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;color:var(--accent);font-weight:600;letter-spacing:0.05em;">27 · QC РАБОТЫ МЕНЕДЖЕРОВ</div>
+        <div style="font-size:21px;font-weight:700;color:#fff;line-height:1.25;">10% звонков в неделю - оценка по чек-листу</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.72);line-height:1.45;">Агент оценивает тон, полноту, наличие следующего шага. Директор видит картинку по качеству, а не только по объёму.</div>
+      </div>
+    </div>
+    <div style="font-size:16px;color:rgba(255,255,255,0.55);font-style:italic;line-height:1.5;margin-top:4px;">
+      Это не входит в сегодняшний вебинар - это маршрутная карта того, что идёт следующей итерацией после первых трёх инструментов.
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 3 STEPS WITH FULL PROMPTS -->
+  <div class="slide" id="s6">
+    <div>
+      <div class="label">Что сделать завтра - промпты готовы</div>
+      <h2 class="h-xl">3 шага без консультанта</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-head">
+          <div>
+            <div class="step-time">30 МИНУТ</div>
+          </div>
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-title">Аудит CRM</div>
+        <div class="step-subtitle">Выгрузка CSV за 30 дней &rarr; Claude &rarr; промпт ниже</div>
+        <div class="step-prompt"><span class="lbl">Промпт (скопировать целиком)</span>Проанализируй прикреплённый CSV сделок.
+
+Покажи: конверсию по этапам,
+зависшие сделки &gt; 7 дней (список),
+разбивку по менеджерам,
+"деньги на столе" в рублях.
+
+3 действия на эту неделю с
+<span class="hl">ожидаемым эффектом в цифрах</span>.</div>
+        <div class="step-outcome">&rarr; Знаете сколько денег зависло и где</div>
+      </div>
+      <div class="step-card">
+        <div class="step-head">
+          <div>
+            <div class="step-time">1-2 ЧАСА</div>
+          </div>
+          <div class="step-num">2</div>
+        </div>
+        <div class="step-title">Оцифровать голову</div>
+        <div class="step-subtitle">Голосовые &rarr; транскрипт &rarr; FAQ для нового сотрудника</div>
+        <div class="step-prompt"><span class="lbl">Промпт (после записи 10 голосовых)</span>Вот транскрипт моих ответов на
+частые вопросы клиентов.
+
+Структурируй в FAQ для нового
+менеджера: вопрос &rarr; короткий
+ответ (2-3 предложения) &rarr;
+<span class="hl">что НЕ говорить</span>.
+
+Сгруппируй по темам.
+Добавь 3 возражения, которые
+я упомянул, со скриптом ответа.</div>
+        <div class="step-outcome">&rarr; Первый документ онбординга</div>
+      </div>
+      <div class="step-card">
+        <div class="step-head">
+          <div>
+            <div class="step-time">30 МИНУТ</div>
+          </div>
+          <div class="step-num">3</div>
+        </div>
+        <div class="step-title">Скрипт входящего звонка</div>
+        <div class="step-subtitle">FAQ + описание продукта + возражения &rarr; готовый скрипт</div>
+        <div class="step-prompt"><span class="lbl">Промпт (приложить FAQ из шага 2)</span>Напиши скрипт обработки
+входящего звонка для
+[<span class="hl">ниша, продукт, средний чек</span>].
+
+Структура: приветствие,
+квалификация за 4 вопроса,
+презентация под боль,
+работа с 3 возражениями,
+закрытие на следующий шаг.
+
+Тон: <span class="hl">без давления, как консультант</span>.
+Примеры фраз, не только шаги.</div>
+        <div class="step-outcome">&rarr; Отдать менеджеру - тестим неделю</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE: ЗАЧЕМ ВАМ КОМЬЮНИТИ -->
+  <div class="slide" id="s-why-comm" style="flex-direction:column;gap:32px;padding:64px 80px;">
+    <div>
+      <div class="label">Комьюнити</div>
+      <h2 class="h-xl">Сообщество вокруг вебинара</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:28px;">
+      <div style="font-size:20px;color:var(--text-muted);line-height:1.5;max-width:980px;">
+        Отдельное пространство для тех, кто хочет остаться в теме AI после вебинара. Еженедельные дайджесты, живые разборы кейсов участников, готовые промпты и шаблоны, чат с коллегами-собственниками, которые решают те же задачи.
+      </div>
+      <div class="comm-grid">
+        <div class="comm-card">
+          <div class="t"><span class="ico">&#128200;</span>AI обновляется каждую неделю</div>
+          <div class="d">Новые модели, инструменты, интеграции. В одиночку - не успеть. В сообществе - узнаёте через дайджест за 10 минут, что реально работает</div>
+        </div>
+        <div class="comm-card">
+          <div class="t"><span class="ico">&#128101;</span>Вы не один такой</div>
+          <div class="d">Собрать ОП, оцифровать бизнес, перестать быть «узким горлом» - запрос у 90% собственников одинаковый. Решения разные, но шаблоны одни</div>
+        </div>
+        <div class="comm-card dark">
+          <div class="t"><span class="ico" style="color:var(--accent)">&#9889;</span>Живой разбор - не теория</div>
+          <div class="d">Еженедельные встречи: кто-то выкладывает кейс, разбираем вместе. Вопросы в чате - не в вакуум, а людям, которые уже это сделали</div>
+        </div>
+        <div class="comm-card">
+          <div class="t"><span class="ico">&#128736;</span>Готовые шаблоны промптов</div>
+          <div class="d">30+ промптов из моей работы с клиентами - аудит CRM, скрипты, онбординг, отчёты. Копируете, адаптируете под свой бизнес за вечер</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE: ЧТО ВНУТРИ КОМЬЮНИТИ -->
+  <div class="slide slide-dark" id="s-what-comm">
+    <div>
+      <div class="label">Комьюнити</div>
+      <h2 class="h-xl">Что конкретно внутри</h2>
+    </div>
+    <div class="two-col">
+      <div class="panel-dark">
+        <div class="panel-title">Регулярное</div>
+        <ul class="bullet-list" style="font-size:19px;">
+          <li><b>Еженедельный дайджест</b> - что нового в AI, что работает на практике, что не работает</li>
+          <li><b>Групповой звонок раз в 2 недели</b> - разбор кейсов участников, ответы на вопросы</li>
+          <li><b>Открытый чат</b> - вопросы по ходу, ответы от меня и участников</li>
+          <li><b>Ежемесячный воркшоп</b> - глубокий разбор одной темы (CRM / онбординг / контент)</li>
+        </ul>
+      </div>
+      <div class="panel-dark">
+        <div class="panel-title">База знаний</div>
+        <ul class="bullet-list" style="font-size:19px;">
+          <li><b>30+ промптов</b> - из клиентской работы, обезличенные</li>
+          <li><b>50+ реальных кейсов для бизнеса</b> - разборы из практики: CRM, продажи, онбординг, отчётность, контент</li>
+          <li><b>Чек-листы</b> - аудит CRM, онбординг менеджера, холодный звонок, лид-магнит</li>
+          <li><b>Видео-разборы</b> - каждый кейс сохраняется, доступ навсегда</li>
+          <li><b>Шаблоны регламентов</b> - Google Docs, можно копировать и править</li>
+        </ul>
+      </div>
+    </div>
+    <div style="font-size:16px;color:rgba(255,255,255,0.55);font-style:italic;line-height:1.5;">
+      Зайти можно на месяц, выйти - в один клик. Условия на слайде с уровнями.
+    </div>
+  </div>
+
+  <!-- SLIDE 7: OFFER -->
+  <div class="slide" id="s7">
+    <div>
+      <div class="label">Следующие шаги</div>
+      <h2 class="h-xl">Выберите свой уровень</h2>
+    </div>
+    <div class="offer-grid">
+      <div class="offer-card">
+        <div class="offer-level">Уровень 1</div>
+        <div class="offer-price">0 <span>руб</span></div>
+        <div class="offer-name">TG-канал</div>
+        <div class="offer-desc">@drobot_dealflow - кейсы из клиентской работы, инструменты, обновления. 2-3 поста/неделя</div>
+        <div class="offer-badge">Бесплатно</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-level">Уровень 2</div>
+        <div class="offer-price">3 000 <span>руб/мес</span></div>
+        <div class="offer-name">AI-комьюнити</div>
+        <div class="offer-desc">Закрытая группа, еженедельный дайджест, ежемесячный групповой созвон, база 30+ шаблонов промптов. Для тех, кому интересно следить</div>
+        <div class="offer-badge">По желанию</div>
+      </div>
+      <div class="offer-card highlight">
+        <div class="offer-level red">Уровень 3 - главный шаг</div>
+        <div class="offer-price">10 000 <span>руб / 1 час</span></div>
+        <div class="offer-name">Диагностика</div>
+        <div class="offer-desc">Смотрим вашу CRM, 3 конкретные точки роста с оценкой в рублях, дорожная карта на месяц. Понимаете, стоит ли идти дальше</div>
+        <div class="offer-badge">3 слота / 2 недели</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-level">Уровень 4</div>
+        <div class="offer-price">от 100K <span>руб</span></div>
+        <div class="offer-name">Интенсив 1-на-1</div>
+        <div class="offer-desc">Настраиваем весь стек под ваш бизнес и нишу. Стоимость и сроки - от задач. Старт: май 2026. 3 слота до сентября</div>
+        <div class="offer-badge dark">Старт в мае</div>
+      </div>
+    </div>
+    <div class="offer-cta-bar">
+      <div class="offer-cta-text">Записаться на диагностику или в комьюнити:</div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfSox3y2OA-yGj1UH0ljRkxSblBWanz6SKW4GUh_AX9PSYm4A/viewform" target="_blank" class="offer-cta-link">forms.gle/drobot-diag &rarr;</a>
+    </div>
+  </div>
+
+  <!-- SLIDE: Q&A + CONTACTS -->
+  <div class="slide qa-center" id="s-qa">
+    <div class="label" style="color:var(--accent);">Финал</div>
+    <div class="qa-title">Вопросы<span>?</span></div>
+    <div class="qa-sub">Разбираем ваши задачи. Говорите про свой бизнес - подскажу с чего начать, какой инструмент вам нужен первым, и стоит ли вам вообще идти в AI сейчас</div>
+    <div class="qa-contacts">
+      <div class="qa-contact">
+        <div class="qa-contact-l">Telegram</div>
+        <div class="qa-contact-v">@drobotmaxim</div>
+      </div>
+      <div class="qa-contact">
+        <div class="qa-contact-l">Канал</div>
+        <div class="qa-contact-v">@drobot_dealflow</div>
+      </div>
+      <div class="qa-contact">
+        <div class="qa-contact-l">Форма</div>
+        <div class="qa-contact-v">forms.gle/drobot-diag</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav" id="nav"></div>
+<div class="counter" id="counter"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const nav = document.getElementById('nav');
+  const counter = document.getElementById('counter');
+  let current = 0;
+
+  function scaleDeck() {
+    const deck = document.getElementById('deck');
+    const sw = 1920, sh = 1080;
+    const ww = window.innerWidth, wh = window.innerHeight;
+    const scale = Math.min(ww / sw, wh / sh);
+    const tx = (ww - sw * scale) / 2;
+    const ty = (wh - sh * scale) / 2;
+    deck.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+  }
+
+  function buildNav() {
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goTo(i);
+      nav.appendChild(dot);
+    });
+  }
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    nav.children[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add('active');
+    nav.children[current].classList.add('active');
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'ArrowDown', ' '].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+    if (['ArrowLeft', 'ArrowUp'].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+  });
+
+  let touchX = null;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+    touchX = null;
+  });
+
+  scaleDeck();
+  buildNav();
+  goTo(0);
+  window.addEventListener('resize', scaleDeck);
+</script>
+</body>
+</html>
