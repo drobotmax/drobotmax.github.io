@@ -167,8 +167,8 @@
   }
   .agenda-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
   }
   .agenda-item {
     border-top: 2px solid var(--border);
@@ -820,9 +820,26 @@
   <div class="slide active" id="s1">
     <div class="s1-decor"></div>
     <div>
-      <div class="tag">AI для собственника</div>
-      <h1 class="s1-headline">Второй мозг<br>для <span>собственника</span></h1>
-      <p class="s1-sub">Делегируем контроль AI-агенту - и освобождаем ресурс внимания для того, что реально двигает бизнес</p>
+      <div class="tag">AI для управленца</div>
+      <h1 class="s1-headline">Второй мозг<br>для <span>управленца</span></h1>
+      <p class="s1-sub">Оцифровываем знания. Делегируем контроль. Освобождаем внимание для того, что двигает бизнес вперёд</p>
+      <div style="display:flex;gap:16px;margin-top:60px;max-width:1400px;">
+        <div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:22px 24px;background:#fff;display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">01 · Оцифровка</div>
+          <div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;">Знания вашего бизнеса в единой базе</div>
+          <div style="font-size:15px;color:var(--text-muted);line-height:1.45;">Скрипты, регламенты, история встреч, возражения. Поиск за 2 секунды</div>
+        </div>
+        <div style="flex:1;border:1px solid var(--accent);border-radius:10px;padding:22px 24px;background:var(--accent-light);display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">02 · Делегирование</div>
+          <div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;">Рутина и контроль - AI-агенту</div>
+          <div style="font-size:15px;color:var(--text-muted);line-height:1.45;">Отчёты, напоминания, черновики, квалификация лидов - за вас и без вас</div>
+        </div>
+        <div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:22px 24px;background:#fff;display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">03 · Фокус</div>
+          <div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;">Голова для стратегии, не для списка дел</div>
+          <div style="font-size:15px;color:var(--text-muted);line-height:1.45;">Перестаёте быть узким горлом. Команда и система работают без вас в моменте</div>
+        </div>
+      </div>
     </div>
     <div class="s1-author">
       <span class="s1-name">Максим Дробот</span>
@@ -835,21 +852,63 @@
   <div class="slide slide-dark" id="s-why-now">
     <div>
       <div class="label">Почему сейчас</div>
-      <h2 class="h-xl">Мы в переломной точке.<br>Окно открыто - <span class="accent">ненадолго</span></h2>
+      <h2 class="h-xl">AI в операционке малого бизнеса:<br>мы на <span class="accent">старте массовой волны</span></h2>
     </div>
-    <div class="two-col uneven" style="grid-template-columns:1.1fr 1fr;align-items:center;">
-      <div style="display:flex;flex-direction:column;gap:22px;">
-        <ul class="bullet-list" style="font-size:22px;">
-          <li><b>Сейчас - самая горячая точка</b>. Те, кто внедряет AI в операционку первыми, получают фору - конкуренты догоняют годами</li>
-          <li><b>Через год это будет затёрто</b>. AI-инструменты станут нормой, преимущество исчезнет - останется только база</li>
-          <li><b>Контроль, а не рутина</b>. AI не «ускоряет менеджера» - он берёт на себя твой контроль, освобождает голову собственника</li>
-          <li><b>Фора = деньги</b>. Те, кто прошёл этот этап сейчас, уже в этом году кратно увеличат выручку на той же команде</li>
-        </ul>
+
+    <!-- Timeline -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:10px;position:relative;">
+      <div style="position:absolute;top:46px;left:6%;right:6%;height:2px;background:rgba(255,255,255,0.1);z-index:0;"></div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-start;padding:0 14px 0 0;position:relative;z-index:1;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:rgba(255,255,255,0.5);font-weight:700;">2023</div>
+        <div style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.25);margin-top:12px;margin-bottom:22px;border:2px solid #1a1a1a;"></div>
+        <div style="font-size:15px;font-weight:700;color:#fff;line-height:1.3;">ChatGPT в массы</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.4;margin-top:4px;">Эксперименты энтузиастов. Бизнес наблюдает</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start;">
-        <div class="big-num" style="font-size:152px;">12<span style="font-size:60px;">мес</span></div>
-        <div class="big-num-cap"><b style="color:#fff">Окно фора-преимущества</b>. Дальше AI в операционке - не отличие, а гигиена</div>
-        <div class="big-num-meta">прогноз на 2026-2027</div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-start;padding:0 14px 0 0;position:relative;z-index:1;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:rgba(255,255,255,0.5);font-weight:700;">2024</div>
+        <div style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.35);margin-top:12px;margin-bottom:22px;border:2px solid #1a1a1a;"></div>
+        <div style="font-size:15px;font-weight:700;color:#fff;line-height:1.3;">AI у корпораций</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.4;margin-top:4px;">Internal tools, копилоты, первые ROI-кейсы. SMB пока выжидает</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-start;padding:0 14px 0 0;position:relative;z-index:1;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:rgba(255,255,255,0.5);font-weight:700;">2025</div>
+        <div style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.55);margin-top:12px;margin-bottom:22px;border:2px solid #1a1a1a;"></div>
+        <div style="font-size:15px;font-weight:700;color:#fff;line-height:1.3;">Early adopters SMB</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.4;margin-top:4px;">Продвинутые собственники пилотируют. AI-инструменты стали доступны любому</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-start;padding:0 14px 0 0;position:relative;z-index:1;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--accent);font-weight:800;">2026 → вы здесь</div>
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--accent);margin-top:6px;margin-bottom:18px;border:3px solid #1a1a1a;box-shadow:0 0 0 4px rgba(214,58,26,0.25);"></div>
+        <div style="font-size:17px;font-weight:800;color:#fff;line-height:1.3;">Массовая волна</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.4;margin-top:4px;">Кто заходит сейчас - получает фору в 1-2 года перед рынком своей ниши</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-start;padding:0 14px 0 0;position:relative;z-index:1;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;color:rgba(255,255,255,0.5);font-weight:700;">2027+</div>
+        <div style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.35);margin-top:12px;margin-bottom:22px;border:2px solid #1a1a1a;"></div>
+        <div style="font-size:15px;font-weight:700;color:#fff;line-height:1.3;">AI = гигиена</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.4;margin-top:4px;">Базовый стандарт операционки. Преимущества больше нет - есть только отставание</div>
+      </div>
+    </div>
+
+    <!-- Payoff -->
+    <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:20px;margin-top:auto;">
+      <div style="background:rgba(214,58,26,0.12);border:1px solid var(--accent);border-radius:10px;padding:22px 26px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">Что это значит для вас</div>
+        <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;">Окно форы 12-18 месяцев</div>
+        <div style="font-size:15px;color:rgba(255,255,255,0.75);line-height:1.45;">Дальше внедрение будет стоить дороже, а отрыв - уже не поймать. Конкуренты в нише двигаются одновременно</div>
+      </div>
+      <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:22px 24px;display:flex;flex-direction:column;gap:6px;justify-content:center;">
+        <div style="font-size:42px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1;">78%</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.4;">компаний в мире внедряют AI в 2025 (McKinsey State of AI)</div>
+      </div>
+      <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:22px 24px;display:flex;flex-direction:column;gap:6px;justify-content:center;">
+        <div style="font-size:42px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1;">&lt; 10%</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.4;">из них получают реальный ROI - те, кто меняет процессы, а не покупает инструмент</div>
       </div>
     </div>
   </div>
@@ -873,8 +932,8 @@
       </div>
       <div class="agenda-item active-item">
         <div class="agenda-num">03</div>
-        <div class="agenda-title">Live демо CRM</div>
-        <div class="agenda-desc">Сырой CSV → дашборд → деньги на столе. На глазах, за 2 минуты</div>
+        <div class="agenda-title">Как это работает</div>
+        <div class="agenda-desc">Разберём по шагам: сырая выгрузка CRM → цифры и решения за 20 минут</div>
       </div>
       <div class="agenda-item">
         <div class="agenda-num">04</div>
@@ -888,16 +947,6 @@
       </div>
       <div class="agenda-item">
         <div class="agenda-num">06</div>
-        <div class="agenda-title">Что сделать завтра</div>
-        <div class="agenda-desc">3 шага с готовыми промптами - скопировал и запустил</div>
-      </div>
-      <div class="agenda-item">
-        <div class="agenda-num">07</div>
-        <div class="agenda-title">Комьюнити + оффер</div>
-        <div class="agenda-desc">Зачем AI-комьюнити и 4 уровня работы со мной</div>
-      </div>
-      <div class="agenda-item">
-        <div class="agenda-num">08</div>
         <div class="agenda-title">Q&amp;A</div>
         <div class="agenda-desc">Разберём ваши задачи и инструменты под них</div>
       </div>
@@ -907,56 +956,50 @@
   <!-- SLIDE 3: CASE -->
   <div class="slide" id="s3">
     <div class="case-header">
-      <div class="label">Что вы получите</div>
-      <h2 class="case-title">4 инструмента за 2 недели запуска</h2>
+      <div class="label">AI-трансформация</div>
+      <h2 class="case-title">Что вы оцифруете и что делегируете</h2>
     </div>
-    <div class="case-grid">
-      <div class="case-card">
-        <div class="case-card-icon">&#9202;</div>
-        <div class="case-card-title">Daily Report в 8:05</div>
-        <div class="case-card-desc">Приходите в офис - сводка уже ждёт. Лиды по городам, провалы по менеджерам, деньги на столе. Вся картина за вчера на одном экране</div>
-        <div class="case-card-detail">amoCRM API + Python + Claude</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;">
+      <!-- ОЦИФРОВКА -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding:6px 12px;border:1px solid var(--accent);border-radius:3px;">01 · Оцифровка знаний</div>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div style="font-size:17px;color:var(--text-muted);line-height:1.5;">Голова собственника, опыт команды, регламенты, договорённости - всё, что раньше жило в чатах и головах, переезжает в единую структуру</div>
+        <div class="case-card" style="background:var(--bg-alt);flex:1;">
+          <div class="case-card-icon">&#128218;</div>
+          <div class="case-card-title">База знаний бизнеса</div>
+          <div class="case-card-desc">Скрипты, регламенты, цены, FAQ, транскрипты встреч - в Obsidian. Новый менеджер: 30 минут и готов к звонку, вместо недели с вами</div>
+          <div class="case-card-detail">Obsidian + Granola + Google Drive</div>
+        </div>
+        <div class="case-card" style="background:var(--bg-alt);flex:1;">
+          <div class="case-card-icon">&#9202;</div>
+          <div class="case-card-title">Daily Report в 8:05</div>
+          <div class="case-card-desc">Каждое утро - сводка по вчерашнему дню: лиды, конверсии, провалы, деньги на столе. Вся картина бизнеса на одном экране до первого кофе</div>
+          <div class="case-card-detail">amoCRM API + Claude</div>
+        </div>
       </div>
-      <div class="case-card">
-        <div class="case-card-icon">&#128279;</div>
-        <div class="case-card-title">Лендинг + QR за 1 час</div>
-        <div class="case-card-desc">Ваши точки продаж показывают QR → открывает WhatsApp с предзаполненным приветствием → в CRM сразу виден источник. Больше не гадаете, откуда пришёл лид</div>
-        <div class="case-card-detail">HTML + GitHub Pages + WA</div>
-      </div>
-      <div class="case-card">
-        <div class="case-card-icon">&#128218;</div>
-        <div class="case-card-title">База знаний бизнеса</div>
-        <div class="case-card-desc">Ваши скрипты, регламенты, цены, FAQ - в единой базе Obsidian. Новый менеджер: 30 минут и готов к первому звонку. Вместо недели с вами</div>
-        <div class="case-card-detail">Obsidian + Google Drive MCP</div>
-      </div>
-      <div class="case-card">
-        <div class="case-card-icon">&#128172;</div>
-        <div class="case-card-title">TG-ассистент</div>
-        <div class="case-card-desc">Ваше голосовое: "созвон с ОП, обсудили недозвоны, добавить скрипт" → уже в Todoist задача, событие в Google Calendar, заметка в Obsidian. Без ноутбука</div>
-        <div class="case-card-detail">Telegram bot + Claude + Todoist</div>
-      </div>
-    </div>
-    <div class="case-stat-bar">
-      <div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-right:20px;max-width:140px;line-height:1.3;">Что обычно находим в вашей воронке</div>
-      <div class="case-stat-divider"></div>
-      <div class="case-stat">
-        <div class="case-stat-num">900+</div>
-        <div class="case-stat-label">сделок в CRM</div>
-      </div>
-      <div class="case-stat-divider"></div>
-      <div class="case-stat">
-        <div class="case-stat-num">150+</div>
-        <div class="case-stat-label">зависших квалов</div>
-      </div>
-      <div class="case-stat-divider"></div>
-      <div class="case-stat">
-        <div class="case-stat-num">28%</div>
-        <div class="case-stat-label">конверсия / бенч 33%</div>
-      </div>
-      <div class="case-stat-divider"></div>
-      <div class="case-stat">
-        <div class="case-stat-num" style="color:#fff">7-значная</div>
-        <div class="case-stat-label">сумма зависла в воронке</div>
+
+      <!-- ДЕЛЕГИРОВАНИЕ -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding:6px 12px;border:1px solid var(--accent);border-radius:3px;">02 · Делегирование контроля</div>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div style="font-size:17px;color:var(--text-muted);line-height:1.5;">Контроль, отчёты, напоминания, черновики, квалификация - работу в моменте берёт на себя AI-агент. Ваш фокус - решения и стратегия</div>
+        <div class="case-card" style="background:var(--accent-light);border:1px solid var(--accent);flex:1;">
+          <div class="case-card-icon">&#128172;</div>
+          <div class="case-card-title">TG-ассистент</div>
+          <div class="case-card-desc">Голосовое на ходу: "созвон с ОП, добавить скрипт, напомни в пятницу" → уже в Todoist, Google Calendar и Obsidian. Без ноутбука</div>
+          <div class="case-card-detail">Telegram bot + Claude + Todoist</div>
+        </div>
+        <div class="case-card" style="background:var(--accent-light);border:1px solid var(--accent);flex:1;">
+          <div class="case-card-icon">&#128279;</div>
+          <div class="case-card-title">Автопоток лидов с точек продаж</div>
+          <div class="case-card-desc">Точки/промоутеры/промо → QR → WhatsApp с предзаполненным обращением → лид в CRM с источником и тегом. Без ручного ввода</div>
+          <div class="case-card-detail">HTML + GitHub Pages + WA Bridge</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1135,9 +1178,8 @@
       </div>
       <div class="dashboard-wrap"><img class="dashboard-img" src="demo-assets/daily-report.png" alt="Daily Report в Obsidian"></div>
     </div>
-    <div class="metric-row">
+    <div class="metric-row" style="grid-template-columns:repeat(2,1fr);">
       <div class="metric-cell"><div class="metric-n">~30 мин</div><div class="metric-l">экономия времени директора ежедневно</div></div>
-      <div class="metric-cell"><div class="metric-n">&lt; 50 ₽</div><div class="metric-l">стоимость одного отчёта (API Claude)</div></div>
       <div class="metric-cell"><div class="metric-n">1 вечер</div><div class="metric-l">на первую рабочую версию скрипта</div></div>
     </div>
   </div>
@@ -1179,10 +1221,19 @@
       <h2 class="h-xl">Дебиторка: ваши деньги, которые уже должны</h2>
     </div>
     <div class="two-col uneven">
-      <div style="display:flex;flex-direction:column;gap:18px;justify-content:center;">
-        <div class="big-num">7-значная</div>
-        <div class="big-num-cap"><b style="color:#fff">Сумма</b>, которую должны бизнесу клиенты, купившие в рассрочку и переставшие платить</div>
-        <div class="big-num-meta">~30% с залогом - списываются. Остальные ~70% = живые деньги, о которых забыли</div>
+      <div style="display:flex;flex-direction:column;gap:20px;justify-content:center;">
+        <div style="font-size:48px;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-1px;">Деньги, которые бизнесу <span style="color:var(--accent);">уже должны</span></div>
+        <div style="font-size:20px;color:rgba(255,255,255,0.8);line-height:1.5;">Клиенты купили в рассрочку и перестали платить. Сумма висит в Excel, который никто не ведёт. Это не новые продажи - это ваши же деньги, о которых забыли</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;">
+          <div style="background:rgba(255,255,255,0.06);border-radius:8px;padding:16px 20px;">
+            <div style="font-size:32px;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1;">~70%</div>
+            <div style="font-size:14px;color:rgba(255,255,255,0.65);line-height:1.4;margin-top:6px;">живых денег - возвращаются звонком или юристом</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:8px;padding:16px 20px;">
+            <div style="font-size:32px;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1;">~30%</div>
+            <div style="font-size:14px;color:rgba(255,255,255,0.65);line-height:1.4;margin-top:6px;">с залогом - списываются, но фиксируются явно</div>
+          </div>
+        </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:18px;justify-content:center;">
         <div class="panel-title">Что делает AI</div>
@@ -1241,81 +1292,6 @@
     </div>
   </div>
 
-  <!-- SLIDE 6: 3 STEPS WITH FULL PROMPTS -->
-  <div class="slide" id="s6">
-    <div>
-      <div class="label">Что сделать завтра - промпты готовы</div>
-      <h2 class="h-xl">3 шага без консультанта</h2>
-    </div>
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-head">
-          <div>
-            <div class="step-time">30 МИНУТ</div>
-          </div>
-          <div class="step-num">1</div>
-        </div>
-        <div class="step-title">Аудит CRM</div>
-        <div class="step-subtitle">Выгрузка CSV за 30 дней &rarr; Claude &rarr; промпт ниже</div>
-        <div class="step-prompt"><span class="lbl">Промпт (скопировать целиком)</span>Проанализируй прикреплённый CSV сделок.
-
-Покажи: конверсию по этапам,
-зависшие сделки &gt; 7 дней (список),
-разбивку по менеджерам,
-"деньги на столе" в рублях.
-
-3 действия на эту неделю с
-<span class="hl">ожидаемым эффектом в цифрах</span>.</div>
-        <div class="step-outcome">&rarr; Знаете сколько денег зависло и где</div>
-      </div>
-      <div class="step-card">
-        <div class="step-head">
-          <div>
-            <div class="step-time">1-2 ЧАСА</div>
-          </div>
-          <div class="step-num">2</div>
-        </div>
-        <div class="step-title">Оцифровать голову</div>
-        <div class="step-subtitle">Голосовые &rarr; транскрипт &rarr; FAQ для нового сотрудника</div>
-        <div class="step-prompt"><span class="lbl">Промпт (после записи 10 голосовых)</span>Вот транскрипт моих ответов на
-частые вопросы клиентов.
-
-Структурируй в FAQ для нового
-менеджера: вопрос &rarr; короткий
-ответ (2-3 предложения) &rarr;
-<span class="hl">что НЕ говорить</span>.
-
-Сгруппируй по темам.
-Добавь 3 возражения, которые
-я упомянул, со скриптом ответа.</div>
-        <div class="step-outcome">&rarr; Первый документ онбординга</div>
-      </div>
-      <div class="step-card">
-        <div class="step-head">
-          <div>
-            <div class="step-time">30 МИНУТ</div>
-          </div>
-          <div class="step-num">3</div>
-        </div>
-        <div class="step-title">Скрипт входящего звонка</div>
-        <div class="step-subtitle">FAQ + описание продукта + возражения &rarr; готовый скрипт</div>
-        <div class="step-prompt"><span class="lbl">Промпт (приложить FAQ из шага 2)</span>Напиши скрипт обработки
-входящего звонка для
-[<span class="hl">ниша, продукт, средний чек</span>].
-
-Структура: приветствие,
-квалификация за 4 вопроса,
-презентация под боль,
-работа с 3 возражениями,
-закрытие на следующий шаг.
-
-Тон: <span class="hl">без давления, как консультант</span>.
-Примеры фраз, не только шаги.</div>
-        <div class="step-outcome">&rarr; Отдать менеджеру - тестим неделю</div>
-      </div>
-    </div>
-  </div>
-
   <!-- SLIDE: ЗАЧЕМ ВАМ КОМЬЮНИТИ -->
   <div class="slide" id="s-why-comm" style="flex-direction:column;gap:32px;padding:64px 80px;">
     <div>
@@ -1344,86 +1320,6 @@
           <div class="d">30+ промптов из моей работы с клиентами - аудит CRM, скрипты, онбординг, отчёты. Копируете, адаптируете под свой бизнес за вечер</div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- SLIDE: ЧТО ВНУТРИ КОМЬЮНИТИ -->
-  <div class="slide slide-dark" id="s-what-comm">
-    <div>
-      <div class="label">Комьюнити</div>
-      <h2 class="h-xl">Что конкретно внутри</h2>
-    </div>
-    <div class="two-col">
-      <div class="panel-dark">
-        <div class="panel-title">Регулярное</div>
-        <ul class="bullet-list" style="font-size:19px;">
-          <li><b>Еженедельный дайджест</b> - что нового в AI, что работает на практике, что не работает</li>
-          <li><b>Групповой звонок раз в 2 недели</b> - разбор кейсов участников, ответы на вопросы</li>
-          <li><b>Открытый чат</b> - вопросы по ходу, ответы от меня и участников</li>
-          <li><b>Ежемесячный воркшоп</b> - глубокий разбор одной темы (CRM / онбординг / контент)</li>
-        </ul>
-      </div>
-      <div class="panel-dark">
-        <div class="panel-title">База знаний</div>
-        <ul class="bullet-list" style="font-size:19px;">
-          <li><b>30+ промптов</b> - из клиентской работы, обезличенные</li>
-          <li><b>50+ реальных кейсов для бизнеса</b> - разборы из практики: CRM, продажи, онбординг, отчётность, контент</li>
-          <li><b>Чек-листы</b> - аудит CRM, онбординг менеджера, холодный звонок, лид-магнит</li>
-          <li><b>Видео-разборы</b> - каждый кейс сохраняется, доступ навсегда</li>
-          <li><b>Шаблоны регламентов</b> - Google Docs, можно копировать и править</li>
-        </ul>
-      </div>
-    </div>
-    <div style="font-size:16px;color:rgba(255,255,255,0.55);font-style:italic;line-height:1.5;">
-      Зайти можно на месяц, выйти - в один клик. Условия на слайде с уровнями.
-    </div>
-  </div>
-
-  <!-- SLIDE 7: OFFER -->
-  <div class="slide" id="s7">
-    <div>
-      <div class="label">Следующие шаги</div>
-      <h2 class="h-xl">Выберите свой уровень</h2>
-    </div>
-    <div class="offer-grid">
-      <div class="offer-card">
-        <div class="offer-level">Уровень 1</div>
-        <div class="offer-price">0 <span>руб</span></div>
-        <div class="offer-name">TG-канал</div>
-        <div class="offer-desc">@drobot_dealflow - кейсы из клиентской работы, инструменты, обновления. 2-3 поста/неделя</div>
-        <div class="offer-badge">Бесплатно</div>
-      </div>
-      <div class="offer-card">
-        <div class="offer-level">Уровень 2</div>
-        <div class="offer-price">3 000 <span>руб/мес</span></div>
-        <div class="offer-name">AI-комьюнити</div>
-        <div class="offer-desc">Закрытая группа, еженедельный дайджест, ежемесячный групповой созвон, база 30+ шаблонов промптов. Для тех, кому интересно следить</div>
-        <div class="offer-badge">По желанию</div>
-      </div>
-      <div class="offer-card highlight">
-        <div class="offer-level red">Уровень 3 - главный шаг</div>
-        <div class="offer-price">10 000 <span>руб / 1 час</span></div>
-        <div class="offer-name">Диагностика</div>
-        <div class="offer-desc">Смотрим вашу CRM, 3 конкретные точки роста с оценкой в рублях, дорожная карта на месяц. Понимаете, стоит ли идти дальше</div>
-        <div class="offer-badge">3 слота / 2 недели</div>
-      </div>
-      <div class="offer-card">
-        <div class="offer-level">Уровень 4</div>
-        <div class="offer-price">от 100K <span>руб</span></div>
-        <div class="offer-name">Интенсив 1-на-1</div>
-        <div class="offer-desc">Настраиваем весь стек под ваш бизнес и нишу. Стоимость и сроки - от задач. Старт: май 2026. 3 слота до сентября</div>
-        <div class="offer-badge dark">Старт в мае</div>
-      </div>
-    </div>
-    <div class="offer-cta-bar">
-      <div style="display:flex;align-items:center;gap:22px;">
-        <img src="demo-assets/tg-qr.png" alt="Telegram QR" style="width:88px;height:88px;background:#fff;padding:6px;border-radius:8px;">
-        <div style="display:flex;flex-direction:column;gap:4px;">
-          <div class="offer-cta-text">Напишите мне в Telegram - разберём вашу задачу</div>
-          <div style="font-size:14px;color:rgba(255,255,255,0.55);">Сканируйте QR или найдите @drobotmaxim</div>
-        </div>
-      </div>
-      <a href="https://t.me/drobotmaxim" target="_blank" class="offer-cta-link">@drobotmaxim &rarr;</a>
     </div>
   </div>
 
