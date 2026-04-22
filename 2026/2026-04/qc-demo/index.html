@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI-QC - демо отдела контроля качества звонков</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-900: #1f4a3c;
+  --green-700: #2a5e45;
+  --green-500: #3d7a5e;
+  --green-100: #e3efe8;
+  --green-50:  #f1f7f3;
+  --cream:     #f7f6f1;
+  --paper:     #ffffff;
+  --ink:       #1c1c1c;
+  --ink-60:    #5a5a5a;
+  --ink-40:    #8a8a8a;
+  --ink-15:    #dcdcd4;
+  --red:       #c0392b;
+  --amber:     #c48a14;
+  --green-pass:#2a5e45;
+  --berry:     #b2423a;
+  --radius:    12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(31,74,60,.06), 0 1px 1px rgba(31,74,60,.04);
+  --shadow-md: 0 4px 16px rgba(31,74,60,.08), 0 1px 4px rgba(31,74,60,.06);
+  --shadow-lg: 0 8px 32px rgba(31,74,60,.12), 0 2px 8px rgba(31,74,60,.06);
+}
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; background: var(--cream); color: var(--ink); font-family: 'Inter', -apple-system, Segoe UI, sans-serif; font-size: 15px; line-height: 1.5; }
+h1,h2,h3 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: var(--green-900); margin: 0; }
+a { color: var(--green-700); }
+
+/* header */
+.topbar { background: var(--paper); border-bottom: 1px solid var(--ink-15); padding: 16px 32px; display:flex; align-items:center; gap: 20px; }
+.logo { display:flex; align-items:center; gap: 12px; }
+.logo-mark { width: 40px; height: 40px; border-radius: 50%; background: var(--green-50); display: inline-flex; align-items: center; justify-content: center; }
+.logo-mark svg { width: 28px; height: 28px; }
+.logo-text { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--green-900); letter-spacing: .5px; line-height: 1.1; }
+.logo-text small { display:block; font-family: 'Inter', sans-serif; font-size: 11px; color: var(--ink-40); letter-spacing: 1px; text-transform: uppercase; }
+.topbar-right { margin-left:auto; display:flex; gap: 8px; align-items:center; color: var(--ink-60); font-size: 13px; }
+.topbar-right .kbd { background: var(--green-50); color: var(--green-900); padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+
+/* hero */
+.hero { padding: 40px 32px 24px; max-width: 1400px; margin: 0 auto; }
+.hero h1 { font-size: 36px; letter-spacing: -.5px; }
+.hero p { color: var(--ink-60); margin: 6px 0 0; font-size: 15px; }
+.hero .tag { display:inline-block; background: var(--green-700); color: #fff; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; font-weight: 600; margin-bottom: 16px; }
+
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; padding: 0 32px; max-width: 1400px; margin: 24px auto; }
+.stat { background: var(--paper); border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-sm); border: 1px solid var(--ink-15); }
+.stat .label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-40); font-weight: 600; }
+.stat .value { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--green-900); margin-top: 6px; line-height: 1; }
+.stat .hint { font-size: 12px; color: var(--ink-60); margin-top: 4px; }
+.stat .bar { display:flex; height:6px; background: var(--ink-15); border-radius: 3px; margin-top: 10px; overflow: hidden; }
+.stat .bar span { display:block; }
+.bar .b-green { background: var(--green-pass); }
+.bar .b-amber { background: var(--amber); }
+.bar .b-red   { background: var(--red); }
+
+/* managers */
+.managers-wrap { padding: 0 32px; max-width: 1400px; margin: 24px auto; }
+.managers-panel { padding: 0; }
+#managers { padding: 8px 22px 0; }
+.mgr-row { display: grid; grid-template-columns: 44px 1.4fr 1fr 1fr 1fr 1fr .8fr; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px dashed var(--ink-15); font-size: 13px; }
+.mgr-row:last-child { border-bottom: none; }
+.mgr-row.head { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-40); font-weight: 700; border-bottom: 1px solid var(--ink-15); padding: 12px 0 10px; }
+.mgr-row.head .h-metric { display:flex; align-items:baseline; gap:4px; }
+.mgr-row .mgr-av { width: 36px; height: 36px; border-radius: 50%; background: var(--green-700); color: #fff; display:inline-flex; align-items:center; justify-content:center; font-weight: 600; font-size: 13px; }
+.mgr-name { font-weight: 600; color: var(--ink); font-size: 14px; }
+.mgr-name small { display:block; color: var(--ink-40); font-size: 11px; font-weight: 500; margin-top: 2px; }
+.metric { display:flex; align-items:center; gap: 8px; }
+.metric-bar { flex:1; height: 6px; border-radius: 3px; background: var(--ink-15); overflow: hidden; min-width: 50px; }
+.metric-bar span { display:block; height: 100%; }
+.metric-val { font-weight: 600; color: var(--ink); min-width: 40px; text-align: right; font-variant-numeric: tabular-nums; }
+.metric-placeholder { color: var(--ink-40); font-size: 12px; font-style: italic; }
+.trend { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.trend.up   { background: var(--green-100); color: var(--green-900); }
+.trend.down { background: #fbe7e4; color: var(--red); }
+.trend.flat { background: var(--ink-15); color: var(--ink-60); }
+
+.formula { padding: 20px 26px 24px; background: var(--green-50); margin-top: 8px; border-top: 1px solid var(--green-100); }
+.formula-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green-700); font-weight: 700; margin-bottom: 14px; }
+.formula-eq { display:flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+.f-box { background: #fff; border: 1px solid var(--green-100); border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 600; color: var(--green-900); flex: 1; min-width: 130px; text-align:center; line-height: 1.3; }
+.f-box small { display:block; font-size: 11px; font-weight: 500; color: var(--ink-60); margin-top: 2px; }
+.f-box-1 { border-color: #9fc9b0; background: #f1f7f3; }
+.f-box-2 { border-color: #7ab897; background: #e9f3ed; }
+.f-box-3 { border-color: var(--amber); background: #fdf6e2; color: var(--amber); }
+.f-box-3 small { color: #a07010; }
+.f-box-4 { border-color: var(--berry); background: #fbeae8; color: var(--berry); }
+.f-box-4 small { color: #8a312a; }
+.f-arr { display:flex; align-items:center; color: var(--green-700); font-size: 18px; font-weight: 700; }
+.formula-note { margin-top: 14px; font-size: 12px; color: var(--ink-60); line-height: 1.55; }
+.formula-note b { color: var(--green-900); }
+
+/* layout */
+.main { display: grid; grid-template-columns: 420px 1fr; gap: 24px; padding: 0 32px 40px; max-width: 1400px; margin: 0 auto; align-items: start; }
+@media (max-width: 1050px) { .main { grid-template-columns: 1fr; } }
+
+/* list */
+.panel { background: var(--paper); border-radius: var(--radius-lg); border: 1px solid var(--ink-15); box-shadow: var(--shadow-sm); overflow: hidden; }
+.panel-head { padding: 16px 22px; border-bottom: 1px solid var(--ink-15); display:flex; align-items:center; gap: 8px; }
+.panel-head h3 { font-size: 17px; }
+.filters { padding: 12px 22px; display:flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--ink-15); background: var(--green-50); }
+.chip { background: #fff; border: 1px solid var(--ink-15); padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; color: var(--ink-60); font-weight: 500; }
+.chip:hover { border-color: var(--green-700); color: var(--green-700); }
+.chip.active { background: var(--green-700); border-color: var(--green-700); color: #fff; }
+
+.calls { max-height: calc(100vh - 60px); overflow-y: auto; }
+.call { padding: 18px 22px; border-bottom: 1px solid var(--ink-15); cursor: pointer; transition: background .15s; position: relative; }
+.call:hover { background: var(--green-50); }
+.call.selected { background: var(--green-100); }
+.call.selected::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--green-700); }
+
+.call-row1 { display:flex; align-items: center; gap: 10px; }
+.mgr { width: 32px; height: 32px; border-radius: 50%; background: var(--green-700); color: #fff; display:inline-flex; align-items:center; justify-content:center; font-weight: 600; font-size: 12px; flex-shrink: 0; }
+.call-meta { flex: 1; min-width: 0; }
+.call-meta .name { font-weight: 600; font-size: 14px; color: var(--ink); }
+.call-meta .sub { font-size: 12px; color: var(--ink-40); }
+.score-pill { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; padding: 4px 12px; border-radius: 20px; min-width: 52px; text-align: center; }
+.score-pill.green { background: var(--green-100); color: var(--green-900); }
+.score-pill.yellow { background: #fff4d6; color: var(--amber); }
+.score-pill.red { background: #fbe7e4; color: var(--red); }
+
+.call-row2 { display:flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.badge { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+.badge.type { background: var(--green-50); color: var(--green-700); border: 1px solid var(--green-100); }
+.badge.warn { background: #fbe7e4; color: var(--red); }
+.badge.ok { background: var(--green-100); color: var(--green-900); }
+
+/* detail */
+.detail { min-height: 400px; }
+.detail.empty { display:flex; align-items:center; justify-content:center; color: var(--ink-40); font-size: 14px; padding: 60px; text-align:center; }
+.detail-head { padding: 24px 28px; border-bottom: 1px solid var(--ink-15); background: linear-gradient(180deg, var(--green-50), #fff); }
+.detail-head h2 { font-size: 24px; margin-bottom: 6px; }
+.detail-head .meta { font-size: 13px; color: var(--ink-60); display:flex; gap: 14px; flex-wrap: wrap; }
+.detail-head .meta span { display:inline-flex; align-items:center; gap: 6px; }
+
+.section { padding: 22px 28px; border-bottom: 1px solid var(--ink-15); }
+.section h4 { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green-700); font-weight: 700; margin: 0 0 12px; }
+.summary-box { background: var(--cream); border-left: 3px solid var(--green-700); padding: 14px 18px; border-radius: 4px; color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+.audio { width: 100%; margin-top: 12px; height: 42px; }
+audio::-webkit-media-controls-panel { background: var(--green-50); }
+
+/* criteria table */
+.crit-group { margin-bottom: 18px; }
+.crit-group .crit-group-head { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-40); font-weight: 600; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--ink-15); }
+.crit { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--ink-15); align-items: start; }
+.crit:last-child { border-bottom: none; }
+.crit-mark { width: 24px; height: 24px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.crit-mark.pass { background: var(--green-pass); color: #fff; }
+.crit-mark.partial { background: var(--amber); color: #fff; }
+.crit-mark.fail { background: var(--red); color: #fff; }
+.crit-mark.na { background: var(--ink-15); color: var(--ink-60); }
+.crit-body .crit-title { font-weight: 600; font-size: 14px; }
+.crit-body .crit-ev { font-size: 13px; color: var(--ink-60); margin-top: 3px; font-style: italic; line-height: 1.45; }
+.crit-body .crit-comment { font-size: 13px; color: var(--ink); margin-top: 5px; padding: 6px 10px; background: var(--green-50); border-radius: 6px; display:inline-block; }
+.crit-weight { font-size: 11px; color: var(--ink-40); font-weight: 500; letter-spacing: .5px; padding-top: 4px; }
+
+/* red flags */
+.redflag { background: #fdf2f0; border: 1px solid #f4d3ce; border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+.redflag-head { display:flex; align-items:center; gap: 8px; font-weight: 600; color: var(--red); font-size: 13px; margin-bottom: 6px; }
+.redflag-body { font-size: 13px; color: var(--ink); }
+.redflag-body em { color: var(--ink-60); font-style: italic; display:block; margin-bottom: 4px; }
+
+/* recommendations */
+.rec-list { list-style: none; padding: 0; margin: 0; }
+.rec-list li { background: var(--green-50); border-left: 3px solid var(--green-700); border-radius: 4px; padding: 12px 14px; margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+.rec-list li::before { content: '→ '; color: var(--green-700); font-weight: 700; }
+
+/* transcript */
+.transcript { max-height: 400px; overflow-y: auto; background: var(--cream); border: 1px solid var(--ink-15); border-radius: 8px; padding: 16px 20px; font-size: 13px; line-height: 1.7; white-space: pre-wrap; color: var(--ink-60); }
+
+/* footer */
+.foot { text-align: center; padding: 24px; color: var(--ink-40); font-size: 12px; }
+.foot strong { color: var(--green-700); }
+
+/* small */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 4 L20 32" stroke="#6b3a16" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M20 14 C12 8, 6 14, 10 22 C12 26, 16 26, 20 22 Z" fill="#2a5e45"/>
+        <path d="M20 10 C28 6, 32 14, 28 22 C26 26, 22 26, 20 22 Z" fill="#3d7a5e"/>
+        <circle cx="13" cy="18" r="1.8" fill="#b2423a"/>
+        <circle cx="26" cy="14" r="1.8" fill="#b2423a"/>
+        <circle cx="23" cy="20" r="1.5" fill="#b2423a"/>
+        <path d="M13 32 L27 32" stroke="#2a5e45" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      AI-QC · Демо
+      <small>Отдел контроля качества звонков</small>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="kbd">AI QC · пилот</span>
+    <span id="date-label"></span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="tag">Демо · пилотный прогон · 5 звонков</div>
+  <h1>AI-QC: автоматический контроль качества звонков</h1>
+  <p>Демо-версия на обезличенных данных реального пилота. Автоматическая оценка входящих звонков отдела продаж по чек-листу из 22 критериев. Каждый звонок получает балл, цитаты-доказательства и персональные рекомендации менеджеру. Имена, телефоны и названия заменены на заглушки.</p>
+</section>
+
+<section class="stats" id="stats"></section>
+
+<section class="managers-wrap">
+  <div class="managers-panel panel">
+    <div class="panel-head" style="display:flex;align-items:baseline;gap:14px">
+      <h3>Воронка менеджеров</h3>
+      <span style="color:var(--ink-40);font-size:12px">балл QC · квалификация · конверсия в встречу · сделки</span>
+    </div>
+    <div id="managers"></div>
+    <div class="formula">
+      <div class="formula-title">Как считаем конверсию менеджера</div>
+      <div class="formula-eq">
+        <span class="f-box">Звонки</span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-1">Квалифицированы<br><small>бюджет + цель + сроки</small></span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-2">Встреча назначена<br><small>офис / онлайн</small></span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-3">Пришли / Show<br><small>из CRM</small></span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-4">Бронь / ДДУ<br><small>из CRM</small></span>
+      </div>
+      <div class="formula-note">
+        AI-QC дооснащает метрики <b>квалификация</b> и <b>встреча назначена</b> из записей звонков в реальном времени.
+        Show-rate и конверсия в ДДУ подтягиваются из CRM/amoCRM через API.
+        При объёме ≥30 звонков/менеджера - конверсионная воронка стабилизируется и становится плановым KPI.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="main">
+  <aside class="panel">
+    <div class="panel-head"><h3>Звонки</h3></div>
+    <div class="filters" id="filters">
+      <button class="chip active" data-filter="all">Все</button>
+      <button class="chip" data-filter="sales_primary">Продажа</button>
+      <button class="chip" data-filter="sales_agent">Агент</button>
+      <button class="chip" data-filter="service_postsale">Сервис</button>
+      <button class="chip" data-filter="red">🔴 Красные</button>
+    </div>
+    <div class="calls" id="calls"></div>
+  </aside>
+
+  <main class="panel detail empty" id="detail">
+    <div>Выберите звонок слева</div>
+  </main>
+</div>
+
+
+<script id="payload" type="application/json"></script>
+<script>
+const CALL_TYPE_LABEL = {
+  sales_primary: 'Продажа',
+  sales_agent:   'Агент',
+  service_postsale: 'Сервис',
+  info_only:     'Справка',
+  non_target:    'Нецелевой'
+};
+
+const CRIT_GROUPS = [
+  { prefix: 'A', label: 'Универсальные критерии' },
+  { prefix: 'B', label: 'Квалификация и закрытие (продажи)' },
+  { prefix: 'C', label: 'Сервисное обслуживание' }
+];
+
+const RESULT_LABEL = { pass: '✓', partial: '½', fail: '✕', 'n/a': '—' };
+
+function loadData() {
+  // Try fetch (works on http) then fallback to inline
+  return fetch('data.json').then(r => r.ok ? r.json() : Promise.reject()).catch(() => {
+    const el = document.getElementById('payload');
+    return JSON.parse(el.textContent || '[]');
+  });
+}
+
+function initials(name) {
+  if (!name) return '?';
+  return name.trim().split(/\s+/).slice(0,2).map(s => s[0].toUpperCase()).join('');
+}
+
+function renderStats(calls) {
+  const total = calls.length;
+  const avg = Math.round(calls.reduce((s,c) => s + (c.score_raw||0), 0) / total);
+  const byColor = {green:0, yellow:0, red:0};
+  calls.forEach(c => byColor[c.score_color] = (byColor[c.score_color]||0)+1);
+  const next = calls.filter(c => c.next_step_assigned).length;
+  const redFlags = calls.reduce((s,c) => s + (c.red_flags||[]).length, 0);
+
+  // Top issue - count fail criteria across all calls
+  const failCounts = {};
+  calls.forEach(c => (c.criteria||[]).forEach(cr => {
+    if (cr.result === 'fail') failCounts[cr.id + ' ' + cr.name] = (failCounts[cr.id + ' ' + cr.name]||0)+1;
+  }));
+  const topIssue = Object.entries(failCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  const greenPct = Math.round(byColor.green/total*100) || 0;
+  const yellowPct = Math.round(byColor.yellow/total*100) || 0;
+  const redPct = 100 - greenPct - yellowPct;
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat">
+      <div class="label">Звонков проанализировано</div>
+      <div class="value">${total}</div>
+      <div class="hint">за тестовый период</div>
+    </div>
+    <div class="stat">
+      <div class="label">Средний балл</div>
+      <div class="value">${avg}<span style="font-size:16px;color:var(--ink-40)">/100</span></div>
+      <div class="bar">
+        <span class="b-green" style="width:${greenPct}%"></span>
+        <span class="b-amber" style="width:${yellowPct}%"></span>
+        <span class="b-red"   style="width:${redPct}%"></span>
+      </div>
+    </div>
+    <div class="stat">
+      <div class="label">Распределение</div>
+      <div class="value" style="font-size:22px;line-height:1.2">
+        <span style="color:var(--green-pass)">●${byColor.green}</span>
+        <span style="color:var(--amber);margin:0 6px">●${byColor.yellow}</span>
+        <span style="color:var(--red)">●${byColor.red}</span>
+      </div>
+      <div class="hint">зелёные / жёлтые / красные</div>
+    </div>
+    <div class="stat">
+      <div class="label">Следующий шаг назначен</div>
+      <div class="value">${next}<span style="font-size:16px;color:var(--ink-40)">/${total}</span></div>
+      <div class="hint">встреча / онлайн / просмотр</div>
+    </div>
+    <div class="stat">
+      <div class="label">Красных флагов</div>
+      <div class="value" style="color:var(--red)">${redFlags}</div>
+      <div class="hint">нарушений по штрафным критериям</div>
+    </div>
+    <div class="stat" style="grid-column: span 1;">
+      <div class="label">Топ провал</div>
+      <div class="value" style="font-size:16px;font-family:Inter,sans-serif;font-weight:600;line-height:1.3">${topIssue ? topIssue[0] : '—'}</div>
+      <div class="hint">${topIssue ? topIssue[1] + ' из ' + total + ' звонков' : ''}</div>
+    </div>
+  `;
+}
+
+function renderManagers(calls) {
+  const by = {};
+  calls.forEach(c => {
+    const k = c.manager || '—';
+    if (!by[k]) by[k] = { name: k, calls: [], sales: [] };
+    by[k].calls.push(c);
+    if (c.call_type === 'sales_primary' || c.call_type === 'sales_agent') by[k].sales.push(c);
+  });
+
+  const rows = Object.values(by).map(m => {
+    const n = m.calls.length;
+    const nSales = m.sales.length;
+    const avgScore = Math.round(m.calls.reduce((s,c) => s + (c.score_raw||0), 0) / n);
+    // Qualification: call has passes on B1 (цель), B3 (финансирование), B4 (бюджет)
+    const qualified = m.sales.filter(c => {
+      const crit = Object.fromEntries((c.criteria||[]).map(cr => [cr.id, cr.result]));
+      const passable = r => r === 'pass' || r === 'partial';
+      return passable(crit.B1) && passable(crit.B3) && passable(crit.B4);
+    }).length;
+    const qualRate = nSales ? Math.round(qualified/nSales*100) : null;
+    const nextStep = m.sales.filter(c => c.next_step_assigned).length;
+    const nextRate = nSales ? Math.round(nextStep/nSales*100) : null;
+    const redFlags = m.calls.reduce((s,c) => s + (c.red_flags||[]).length, 0);
+    return { m, n, nSales, avgScore, qualified, qualRate, nextStep, nextRate, redFlags };
+  }).sort((a,b) => b.avgScore - a.avgScore);
+
+  const barColor = v => v >= 80 ? 'var(--green-pass)' : v >= 60 ? 'var(--amber)' : 'var(--red)';
+  const scoreBar = v => `<span style="width:${v}%;background:${barColor(v)}"></span>`;
+
+  const metric = (val, total, rate) => {
+    if (val == null || rate == null) return '<span class="metric-placeholder">—</span>';
+    return `<div class="metric">
+      <div class="metric-bar">${scoreBar(rate)}</div>
+      <div class="metric-val">${val}/${total}<br><small style="color:var(--ink-40);font-weight:500">${rate}%</small></div>
+    </div>`;
+  };
+
+  document.getElementById('managers').innerHTML = `
+    <div class="mgr-row head">
+      <div></div>
+      <div>Менеджер</div>
+      <div class="h-metric">Средний QC-балл</div>
+      <div class="h-metric">Квалификация</div>
+      <div class="h-metric">Встреча назначена</div>
+      <div class="h-metric">Show / ДДУ · CRM</div>
+      <div style="text-align:right">🚩 / всего</div>
+    </div>
+    ${rows.map(r => `
+      <div class="mgr-row">
+        <div class="mgr-av">${initials(r.m.name)}</div>
+        <div class="mgr-name">${r.m.name}<small>${r.n} звонок${r.n===1?'':r.n<5?'а':'ов'} · ${r.nSales} продающих</small></div>
+        <div class="metric">
+          <div class="metric-bar">${scoreBar(r.avgScore)}</div>
+          <div class="metric-val">${r.avgScore}<br><small style="color:var(--ink-40);font-weight:500">/100</small></div>
+        </div>
+        <div>${metric(r.qualified, r.nSales, r.qualRate)}</div>
+        <div>${metric(r.nextStep, r.nSales, r.nextRate)}</div>
+        <div class="metric-placeholder">подключить CRM</div>
+        <div style="text-align:right">
+          ${r.redFlags ? `<span class="trend down">🚩 ${r.redFlags}</span>` : `<span class="trend flat">—</span>`}
+          <span style="color:var(--ink-40);margin-left:4px">/ ${r.n}</span>
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderCalls(calls, filter='all') {
+  const list = document.getElementById('calls');
+  const filtered = calls.filter(c => {
+    if (filter === 'all') return true;
+    if (filter === 'red') return c.score_color === 'red';
+    return c.call_type === filter;
+  });
+  list.innerHTML = filtered.map((c, i) => `
+    <div class="call" data-id="${c.call_id}">
+      <div class="call-row1">
+        <div class="mgr">${initials(c.manager)}</div>
+        <div class="call-meta">
+          <div class="name">${c.manager || '?'} · ${c.client_name || 'клиент'}</div>
+          <div class="sub">${c.date} · ${c.phone}</div>
+        </div>
+        <div class="score-pill ${c.score_color}">${c.score_raw}</div>
+      </div>
+      <div class="call-row2">
+        <span class="badge type">${CALL_TYPE_LABEL[c.call_type] || c.call_type}</span>
+        ${c.next_step_assigned ? '<span class="badge ok">следующий шаг ✓</span>' : '<span class="badge warn">нет следующего шага</span>'}
+        ${(c.red_flags||[]).length ? `<span class="badge warn">🚩 ${c.red_flags.length}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.call').forEach(el => {
+    el.addEventListener('click', () => selectCall(el.dataset.id));
+  });
+  if (filtered.length && !document.querySelector('.call.selected')) {
+    selectCall(filtered[0].call_id);
+  }
+}
+
+function selectCall(id) {
+  document.querySelectorAll('.call').forEach(el => el.classList.toggle('selected', el.dataset.id === id));
+  const c = window._CALLS.find(x => x.call_id === id);
+  if (!c) return;
+  const d = document.getElementById('detail');
+  d.classList.remove('empty');
+
+  const critByPrefix = {A:[],B:[],C:[]};
+  (c.criteria||[]).forEach(cr => {
+    const prefix = (cr.id||'')[0];
+    if (critByPrefix[prefix]) critByPrefix[prefix].push(cr);
+  });
+
+  const critHtml = CRIT_GROUPS.map(g => {
+    const items = critByPrefix[g.prefix]||[];
+    if (!items.length) return '';
+    const visible = items.filter(cr => cr.result !== 'n/a');
+    if (!visible.length) return '';
+    return `
+      <div class="crit-group">
+        <div class="crit-group-head">${g.label}</div>
+        ${visible.map(cr => `
+          <div class="crit">
+            <div class="crit-mark ${cr.result === 'n/a' ? 'na' : cr.result}">${RESULT_LABEL[cr.result]||'?'}</div>
+            <div class="crit-body">
+              <div class="crit-title">${cr.id}. ${cr.name}</div>
+              ${cr.evidence && cr.evidence !== 'не выполнено' ? `<div class="crit-ev">«${cr.evidence.replace(/^«|»$/g,'')}»</div>` : '<div class="crit-ev" style="color:var(--ink-40)">критерий не выполнен</div>'}
+              ${cr.comment ? `<div class="crit-comment">${cr.comment}</div>` : ''}
+            </div>
+            <div class="crit-weight">${cr.result}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
+
+  const rfHtml = (c.red_flags||[]).length
+    ? c.red_flags.map(rf => `
+        <div class="redflag">
+          <div class="redflag-head">🚩 ${rf.id} · нарушение</div>
+          <div class="redflag-body">
+            <em>«${(rf.evidence||'').replace(/^«|»$/g,'')}»</em>
+            ${rf.comment}
+          </div>
+        </div>
+      `).join('')
+    : '<div style="color:var(--ink-40);font-size:13px">красных флагов не обнаружено</div>';
+
+  const recHtml = (c.top_recommendations||[]).map(r => `<li>${r}</li>`).join('');
+
+  d.innerHTML = `
+    <div class="detail-head">
+      <h2>${c.manager || 'Менеджер'} → ${c.client_name || 'клиент'}</h2>
+      <div class="meta">
+        <span>📞 ${c.phone}</span>
+        <span>🗓 ${c.date}</span>
+        <span class="badge type">${CALL_TYPE_LABEL[c.call_type] || c.call_type}</span>
+        <span class="score-pill ${c.score_color}" style="font-size:15px;padding:2px 10px">${c.score_raw}/100</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>Резюме звонка</h4>
+      <div class="summary-box">${c.summary||''}</div>
+      ${c.audio_file ? `<audio class="audio" controls src="${c.audio_file}"></audio>` : ''}
+    </div>
+
+    <div class="section">
+      <h4>Оценка по критериям</h4>
+      ${critHtml || '<div style="color:var(--ink-40)">нет применимых критериев</div>'}
+    </div>
+
+    <div class="section">
+      <h4>🚩 Красные флаги</h4>
+      ${rfHtml}
+    </div>
+
+    <div class="section">
+      <h4>Рекомендации менеджеру</h4>
+      <ul class="rec-list">${recHtml || '<li style="background:none;border:none;color:var(--ink-40)">нет рекомендаций</li>'}</ul>
+    </div>
+
+    <div class="section">
+      <h4>Транскрипт звонка</h4>
+      <div class="transcript">${(c.transcript||'не доступен').replace(/</g,'&lt;')}</div>
+    </div>
+  `;
+}
+
+document.getElementById('date-label').textContent = new Date().toLocaleDateString('ru-RU', {day:'2-digit',month:'long',year:'numeric'});
+
+loadData().then(calls => {
+  window._CALLS = calls;
+  renderStats(calls);
+  renderManagers(calls);
+  renderCalls(calls);
+  document.querySelectorAll('#filters .chip').forEach(c => {
+    c.addEventListener('click', () => {
+      document.querySelectorAll('#filters .chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      renderCalls(calls, c.dataset.filter);
+    });
+  });
+});
+</script>
+
+</body>
+</html>
