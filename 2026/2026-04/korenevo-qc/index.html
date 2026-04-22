@@ -63,6 +63,42 @@ a { color: var(--green-700); }
 .bar .b-amber { background: var(--amber); }
 .bar .b-red   { background: var(--red); }
 
+/* managers */
+.managers-wrap { padding: 0 32px; max-width: 1400px; margin: 24px auto; }
+.managers-panel { padding: 0; }
+#managers { padding: 8px 22px 0; }
+.mgr-row { display: grid; grid-template-columns: 44px 1.4fr 1fr 1fr 1fr 1fr .8fr; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px dashed var(--ink-15); font-size: 13px; }
+.mgr-row:last-child { border-bottom: none; }
+.mgr-row.head { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-40); font-weight: 700; border-bottom: 1px solid var(--ink-15); padding: 12px 0 10px; }
+.mgr-row.head .h-metric { display:flex; align-items:baseline; gap:4px; }
+.mgr-row .mgr-av { width: 36px; height: 36px; border-radius: 50%; background: var(--green-700); color: #fff; display:inline-flex; align-items:center; justify-content:center; font-weight: 600; font-size: 13px; }
+.mgr-name { font-weight: 600; color: var(--ink); font-size: 14px; }
+.mgr-name small { display:block; color: var(--ink-40); font-size: 11px; font-weight: 500; margin-top: 2px; }
+.metric { display:flex; align-items:center; gap: 8px; }
+.metric-bar { flex:1; height: 6px; border-radius: 3px; background: var(--ink-15); overflow: hidden; min-width: 50px; }
+.metric-bar span { display:block; height: 100%; }
+.metric-val { font-weight: 600; color: var(--ink); min-width: 40px; text-align: right; font-variant-numeric: tabular-nums; }
+.metric-placeholder { color: var(--ink-40); font-size: 12px; font-style: italic; }
+.trend { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+.trend.up   { background: var(--green-100); color: var(--green-900); }
+.trend.down { background: #fbe7e4; color: var(--red); }
+.trend.flat { background: var(--ink-15); color: var(--ink-60); }
+
+.formula { padding: 20px 26px 24px; background: var(--green-50); margin-top: 8px; border-top: 1px solid var(--green-100); }
+.formula-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green-700); font-weight: 700; margin-bottom: 14px; }
+.formula-eq { display:flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+.f-box { background: #fff; border: 1px solid var(--green-100); border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 600; color: var(--green-900); flex: 1; min-width: 130px; text-align:center; line-height: 1.3; }
+.f-box small { display:block; font-size: 11px; font-weight: 500; color: var(--ink-60); margin-top: 2px; }
+.f-box-1 { border-color: #9fc9b0; background: #f1f7f3; }
+.f-box-2 { border-color: #7ab897; background: #e9f3ed; }
+.f-box-3 { border-color: var(--amber); background: #fdf6e2; color: var(--amber); }
+.f-box-3 small { color: #a07010; }
+.f-box-4 { border-color: var(--berry); background: #fbeae8; color: var(--berry); }
+.f-box-4 small { color: #8a312a; }
+.f-arr { display:flex; align-items:center; color: var(--green-700); font-size: 18px; font-weight: 700; }
+.formula-note { margin-top: 14px; font-size: 12px; color: var(--ink-60); line-height: 1.55; }
+.formula-note b { color: var(--green-900); }
+
 /* layout */
 .main { display: grid; grid-template-columns: 420px 1fr; gap: 24px; padding: 0 32px 40px; max-width: 1400px; margin: 0 auto; align-items: start; }
 @media (max-width: 1050px) { .main { grid-template-columns: 1fr; } }
@@ -184,6 +220,35 @@ audio::-webkit-media-controls-panel { background: var(--green-50); }
 
 <section class="stats" id="stats"></section>
 
+<section class="managers-wrap">
+  <div class="managers-panel panel">
+    <div class="panel-head" style="display:flex;align-items:baseline;gap:14px">
+      <h3>Воронка менеджеров</h3>
+      <span style="color:var(--ink-40);font-size:12px">балл QC · квалификация · конверсия в встречу · сделки</span>
+    </div>
+    <div id="managers"></div>
+    <div class="formula">
+      <div class="formula-title">Как считаем конверсию менеджера</div>
+      <div class="formula-eq">
+        <span class="f-box">Звонки</span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-1">Квалифицированы<br><small>бюджет + цель + сроки</small></span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-2">Встреча назначена<br><small>офис / онлайн</small></span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-3">Пришли / Show<br><small>из CRM</small></span>
+        <span class="f-arr">→</span>
+        <span class="f-box f-box-4">Бронь / ДДУ<br><small>из CRM</small></span>
+      </div>
+      <div class="formula-note">
+        AI-QC дооснащает метрики <b>квалификация</b> и <b>встреча назначена</b> из записей звонков в реальном времени.
+        Show-rate и конверсия в ДДУ подтягиваются из CRM/amoCRM через API.
+        При объёме ≥30 звонков/менеджера - конверсионная воронка стабилизируется и становится плановым KPI.
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="main">
   <aside class="panel">
     <div class="panel-head"><h3>Звонки</h3></div>
@@ -202,9 +267,6 @@ audio::-webkit-media-controls-panel { background: var(--green-50); }
   </main>
 </div>
 
-<footer class="foot">
-  AI-анализ выполнен <strong>Claude Opus 4.7</strong> · транскрипция <strong>whisper large-v3</strong> · дашборд <strong>KUBRIK</strong>
-</footer>
 
 <script id="payload" type="application/json"></script>
 <script>
@@ -295,6 +357,73 @@ function renderStats(calls) {
       <div class="value" style="font-size:16px;font-family:Inter,sans-serif;font-weight:600;line-height:1.3">${topIssue ? topIssue[0] : '—'}</div>
       <div class="hint">${topIssue ? topIssue[1] + ' из ' + total + ' звонков' : ''}</div>
     </div>
+  `;
+}
+
+function renderManagers(calls) {
+  const by = {};
+  calls.forEach(c => {
+    const k = c.manager || '—';
+    if (!by[k]) by[k] = { name: k, calls: [], sales: [] };
+    by[k].calls.push(c);
+    if (c.call_type === 'sales_primary' || c.call_type === 'sales_agent') by[k].sales.push(c);
+  });
+
+  const rows = Object.values(by).map(m => {
+    const n = m.calls.length;
+    const nSales = m.sales.length;
+    const avgScore = Math.round(m.calls.reduce((s,c) => s + (c.score_raw||0), 0) / n);
+    // Qualification: call has passes on B1 (цель), B3 (финансирование), B4 (бюджет)
+    const qualified = m.sales.filter(c => {
+      const crit = Object.fromEntries((c.criteria||[]).map(cr => [cr.id, cr.result]));
+      const passable = r => r === 'pass' || r === 'partial';
+      return passable(crit.B1) && passable(crit.B3) && passable(crit.B4);
+    }).length;
+    const qualRate = nSales ? Math.round(qualified/nSales*100) : null;
+    const nextStep = m.sales.filter(c => c.next_step_assigned).length;
+    const nextRate = nSales ? Math.round(nextStep/nSales*100) : null;
+    const redFlags = m.calls.reduce((s,c) => s + (c.red_flags||[]).length, 0);
+    return { m, n, nSales, avgScore, qualified, qualRate, nextStep, nextRate, redFlags };
+  }).sort((a,b) => b.avgScore - a.avgScore);
+
+  const barColor = v => v >= 80 ? 'var(--green-pass)' : v >= 60 ? 'var(--amber)' : 'var(--red)';
+  const scoreBar = v => `<span style="width:${v}%;background:${barColor(v)}"></span>`;
+
+  const metric = (val, total, rate) => {
+    if (val == null || rate == null) return '<span class="metric-placeholder">—</span>';
+    return `<div class="metric">
+      <div class="metric-bar">${scoreBar(rate)}</div>
+      <div class="metric-val">${val}/${total}<br><small style="color:var(--ink-40);font-weight:500">${rate}%</small></div>
+    </div>`;
+  };
+
+  document.getElementById('managers').innerHTML = `
+    <div class="mgr-row head">
+      <div></div>
+      <div>Менеджер</div>
+      <div class="h-metric">Средний QC-балл</div>
+      <div class="h-metric">Квалификация</div>
+      <div class="h-metric">Встреча назначена</div>
+      <div class="h-metric">Show / ДДУ · CRM</div>
+      <div style="text-align:right">🚩 / всего</div>
+    </div>
+    ${rows.map(r => `
+      <div class="mgr-row">
+        <div class="mgr-av">${initials(r.m.name)}</div>
+        <div class="mgr-name">${r.m.name}<small>${r.n} звонок${r.n===1?'':r.n<5?'а':'ов'} · ${r.nSales} продающих</small></div>
+        <div class="metric">
+          <div class="metric-bar">${scoreBar(r.avgScore)}</div>
+          <div class="metric-val">${r.avgScore}<br><small style="color:var(--ink-40);font-weight:500">/100</small></div>
+        </div>
+        <div>${metric(r.qualified, r.nSales, r.qualRate)}</div>
+        <div>${metric(r.nextStep, r.nSales, r.nextRate)}</div>
+        <div class="metric-placeholder">подключить CRM</div>
+        <div style="text-align:right">
+          ${r.redFlags ? `<span class="trend down">🚩 ${r.redFlags}</span>` : `<span class="trend flat">—</span>`}
+          <span style="color:var(--ink-40);margin-left:4px">/ ${r.n}</span>
+        </div>
+      </div>
+    `).join('')}
   `;
 }
 
@@ -424,6 +553,7 @@ document.getElementById('date-label').textContent = new Date().toLocaleDateStrin
 loadData().then(calls => {
   window._CALLS = calls;
   renderStats(calls);
+  renderManagers(calls);
   renderCalls(calls);
   document.querySelectorAll('#filters .chip').forEach(c => {
     c.addEventListener('click', () => {
