@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тактическая программа: AI-трансформация бизнеса - Николай</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0A1628;
+  --navy-elevated: #0E1D33;
+  --navy-card: #12233D;
+  --navy-hover: #172B4A;
+  --emerald: #34D399;
+  --emerald-light: #6EE7B7;
+  --emerald-dim: rgba(52,211,153,0.08);
+  --emerald-border: rgba(52,211,153,0.2);
+  --white: #E8ECF1;
+  --gray: #8B9BB4;
+  --muted: #4A5E7A;
+  --border: #1A2D4A;
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: #F8F9FB;
+  color: #1A1A2E;
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-header { background: var(--navy); padding: 72px 0 56px; position: relative; overflow: hidden; }
+.page-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--emerald), transparent); }
+.header-logo { font-family: var(--font); font-weight: 900; font-size: 22px; color: var(--white); letter-spacing: -0.04em; margin-bottom: 32px; }
+.header-logo .dot { color: var(--emerald); }
+.header-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.header-label::before { content: '//'; opacity: 0.5; }
+.page-header h1 { font-size: 36px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; margin-bottom: 8px; }
+.page-header .subtitle { font-size: 16px; color: var(--gray); font-weight: 500; margin-bottom: 32px; }
+.header-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-item .meta-label { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.meta-item .meta-value { font-size: 14px; font-weight: 600; color: var(--white); }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+.section { padding: 56px 0; border-bottom: 1px solid #E5E7EB; }
+.section:last-child { border-bottom: none; }
+.section-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-label::before { content: '//'; opacity: 0.5; }
+
+h2 { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; margin-bottom: 12px; }
+h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.section-desc { font-size: 16px; color: #6B7280; max-width: 780px; margin-bottom: 32px; line-height: 1.75; }
+
+.value-block { background: var(--navy); border-radius: 16px; padding: 40px 48px; color: var(--white); font-size: 17px; line-height: 1.75; margin-bottom: 48px; position: relative; overflow: hidden; }
+.value-block::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--emerald); }
+
+.lesson-note { background: #FEF3C7; border-left: 3px solid #F59E0B; border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #78350F; margin-bottom: 20px; line-height: 1.6; }
+.lesson-note strong { color: #92400E; }
+
+.verified-badge { display: inline-block; font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #0A1628; background: var(--emerald); padding: 3px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+
+.overview-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.overview-table th { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--navy); }
+.overview-table td { padding: 16px 18px; font-size: 15px; border-bottom: 1px solid #E5E7EB; vertical-align: top; }
+.overview-table tr:last-child td { border-bottom: none; }
+.overview-table .day-num { font-family: var(--mono); font-weight: 700; font-size: 12px; color: var(--emerald); white-space: nowrap; }
+.overview-table .day-topic { font-weight: 600; color: var(--navy); }
+.overview-table .day-result { color: #6B7280; font-size: 13px; }
+.overview-table .weekend { background: var(--emerald-dim); font-style: italic; color: var(--muted); }
+
+.structure-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.structure-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; text-align: center; }
+.structure-card .num { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--emerald); margin-bottom: 4px; }
+.structure-card .label { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.structure-card .desc { font-size: 11px; color: #6B7280; }
+
+.week-divider { background: var(--navy); border-radius: 12px; padding: 24px 32px; margin: 48px 0 40px; display: flex; align-items: center; gap: 16px; }
+.week-divider .week-num { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); }
+.week-divider .week-title { font-size: 18px; font-weight: 700; color: var(--white); }
+.week-divider .week-dates { font-size: 13px; color: var(--gray); margin-left: auto; }
+
+.preflight-block { background: var(--navy-card); border: 1px solid var(--emerald-border); border-radius: 16px; padding: 32px; margin-bottom: 40px; color: var(--white); }
+.preflight-block h3 { color: var(--white); font-size: 20px; margin-bottom: 8px; }
+.preflight-block .preflight-desc { font-size: 14px; color: var(--gray); margin-bottom: 20px; }
+.preflight-block ul { list-style: none; padding: 0; }
+.preflight-block li { padding-left: 28px; position: relative; margin-bottom: 10px; font-size: 14px; color: #CBD5E1; }
+.preflight-block li::before { content: ''; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border: 2px solid var(--emerald); border-radius: 3px; }
+.preflight-block strong { color: var(--white); }
+
+.day-block { background: #fff; border: 1px solid #E5E7EB; border-radius: 16px; margin-bottom: 24px; overflow: hidden; }
+.day-header { background: var(--navy); padding: 20px 28px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; transition: background 0.2s; }
+.day-header:hover { background: var(--navy-elevated); }
+.day-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); background: var(--emerald); padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+.day-title { font-size: 17px; font-weight: 700; color: var(--white); }
+.day-date { font-size: 13px; color: var(--gray); white-space: nowrap; margin-left: auto; }
+.day-toggle { margin-left: auto; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; background: rgba(255,255,255,0.08); transition: transform 0.3s ease; flex-shrink: 0; }
+.day-toggle svg { width: 14px; height: 14px; stroke: var(--gray); stroke-width: 2.5; fill: none; }
+.day-block.open .day-toggle { transform: rotate(180deg); }
+.day-body { padding: 0 28px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+.day-block.open .day-body { padding: 28px; max-height: 4500px; }
+.day-note { background: var(--emerald-dim); border: 1px solid var(--emerald-border); border-radius: 10px; padding: 16px 20px; font-size: 14px; color: var(--navy); margin-bottom: 24px; line-height: 1.65; }
+
+.day-section { margin-bottom: 24px; }
+.day-section:last-child { margin-bottom: 0; }
+.day-section-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--emerald); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #F3F4F6; }
+.day-section ul { list-style: none; padding: 0; }
+.day-section li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 15px; line-height: 1.65; color: #374151; }
+.day-section li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+.day-section li.sub { padding-left: 38px; color: #6B7280; font-size: 14px; }
+.day-section li.sub::before { left: 18px; width: 4px; height: 4px; background: #D1D5DB; }
+.checklist li::before { display: none; }
+.checklist li { padding-left: 24px; position: relative; }
+.checklist li::after { content: ''; position: absolute; left: 0; top: 5px; width: 14px; height: 14px; border: 2px solid #D1D5DB; border-radius: 3px; }
+.link { color: #3B82F6; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+.code-sample { background: var(--navy); color: #E2E8F0; border-radius: 10px; padding: 16px 20px; font-family: var(--mono); font-size: 12px; line-height: 1.7; margin: 12px 0; white-space: pre-wrap; }
+
+.compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+.compare-card { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 14px 16px; }
+.compare-card .compare-name { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--emerald); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.compare-card .compare-desc { font-size: 12px; color: #4B5563; line-height: 1.5; }
+.compare-card.primary { background: var(--emerald-dim); border-color: var(--emerald-border); }
+
+.homework { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 16px 20px; }
+.homework-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #92400E; margin-bottom: 8px; }
+.homework ul { list-style: none; padding: 0; }
+.homework li { padding-left: 18px; margin-bottom: 4px; font-size: 13px; color: #78350F; position: relative; }
+.homework li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: #F59E0B; }
+
+.tasks-table { width: 100%; border-collapse: collapse; }
+.tasks-table th { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 10px 16px; border-bottom: 2px solid var(--navy); }
+.tasks-table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #E5E7EB; }
+.tasks-table tr:last-child td { border-bottom: none; }
+.tasks-table .task-name { color: var(--navy); font-weight: 500; }
+.tasks-table .task-day { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--emerald); white-space: nowrap; }
+
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.tool-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; }
+.tool-day { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--emerald); background: var(--emerald-dim); padding: 2px 6px; border-radius: 4px; white-space: nowrap; margin-top: 2px; }
+.tool-info .tool-name { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+.tool-info .tool-desc { font-size: 12px; color: #6B7280; }
+
+.page-footer { background: var(--navy); padding: 40px 0; text-align: center; margin-top: 40px; }
+.footer-logo { font-family: var(--font); font-weight: 900; font-size: 18px; color: var(--white); letter-spacing: -0.04em; margin-bottom: 8px; }
+.footer-logo .dot { color: var(--emerald); }
+.footer-text { font-size: 12px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .page-header { padding: 48px 0 40px; }
+  .page-header h1 { font-size: 26px; }
+  .header-meta { flex-direction: column; gap: 16px; }
+  .structure-grid { grid-template-columns: repeat(2, 1fr); }
+  .compare-grid { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .day-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .day-date { margin-left: 0; }
+  .week-divider { flex-direction: column; align-items: flex-start; }
+  .week-divider .week-dates { margin-left: 0; }
+}
+@media print {
+  body { background: #fff; }
+  .day-block { break-inside: avoid; }
+  .week-divider { break-before: page; }
+  .day-block .day-body { max-height: none !important; padding: 28px !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+<div class="container">
+  <div class="header-logo">MD<span class="dot">.</span></div>
+  <div class="header-label">Тактическая программа</div>
+  <h1>AI-трансформация бизнеса</h1>
+  <div class="subtitle">Николай - пищевое производство + доставка готовых блюд</div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">Ознакомительная</span><span class="meta-value">28 апреля 2026</span></div>
+    <div class="meta-item"><span class="meta-label">Боевой старт</span><span class="meta-value">29 апреля 2026</span></div>
+    <div class="meta-item"><span class="meta-label">Формат</span><span class="meta-value">Пн-Пт, 14:30-16:30 МСК</span></div>
+    <div class="meta-item"><span class="meta-label">Срок</span><span class="meta-value">10 рабочих дней</span></div>
+    <div class="meta-item"><span class="meta-label">Стоимость</span><span class="meta-value">100 000 руб</span></div>
+  </div>
+</div>
+</div>
+
+<div class="container">
+
+<!-- VALUE -->
+<div class="section">
+  <div class="value-block">
+    Полный стек AI-инструментов, настроенный под пищевое производство и доставку. Не теория про "нейросети", а рабочая система: утром открыл - AI показал заказы, задачи, жалобы и нарушения на производстве. Сотрудник прислал голосовое или фото в Max - бот зафиксировал, структурировал, поставил задачу технологу. По просрочкам - напоминания, по закрытию - обязательный фото-отчёт. Реклама в Яндексе и других кабинетах - в одном дашборде. Сайт перерисован через Claude Design без программистов. Все твои задачи - не отдельный блок, это материал, на котором учимся.
+  </div>
+</div>
+
+<!-- PRE-FLIGHT -->
+<div class="section">
+  <div class="section-label">Pre-flight неделя (21-28.04)</div>
+  <h2>Что должно быть готово ДО старта</h2>
+  <p class="section-desc">Собираем доступы заранее, чтобы не терять сессии на ожидание. Урок Цветкова: в середине программы отрубили API amoCRM, потеряли день на ожидание нового ключа. У Николая собираем всё в pre-flight.</p>
+  <div class="preflight-block">
+    <h3>Чеклист готовности</h3>
+    <div class="preflight-desc">Максим подключается 25-26.04 с поддержкой, если застрянешь на каком-то пункте.</div>
+    <ul>
+      <li><strong>MacBook</strong> настроен, 16 GB RAM, интернет 50+ Мбит</li>
+      <li><strong>Подписки оплачены:</strong> ChatGPT Plus, Claude Pro</li>
+      <li><strong>API-ключ Квант</strong> запрошен у поддержки (может занять 3-5 дней)</li>
+      <li><strong>Доступы к рекламным кабинетам:</strong> Яндекс.Директ, ВК Реклама (логины, API-токены)</li>
+      <li><strong>Экспорт жалоб клиентов за 30 дней</strong> (Excel/CSV) - работаем на реальных данных с Дня 1</li>
+      <li><strong>Экспорт задач из Квант за 30 дней</strong> (API или ручная выгрузка)</li>
+      <li><strong>Список сотрудников цеха</strong> с ролями (технолог, бригадир, операторы)</li>
+      <li><strong>Бэкап сайта</strong> (код + база данных) перед редизайном</li>
+      <li><strong>3-5 референсов сайтов,</strong> которые нравятся (скрины или ссылки)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="section">
+  <div class="section-label">Обзор программы</div>
+  <h2>10 дней, 15+ инструментов, 13 бизнес-задач</h2>
+  <table class="overview-table">
+    <thead><tr><th>День</th><th>Тема</th><th>Результат</th></tr></thead>
+    <tbody>
+      <tr><td class="day-num">00</td><td class="day-topic">Ознакомительная: знакомство со стеком</td><td class="day-result">Понимаешь ландшафт, готов к старту</td></tr>
+      <tr><td class="day-num">01</td><td class="day-topic">Стек в работе на ТВОИХ данных</td><td class="day-result">Первый wow-инсайт из жалоб за 30 дней</td></tr>
+      <tr><td class="day-num">02</td><td class="day-topic">Claude как рабочий партнёр: аудит</td><td class="day-result">Карта проблем производства и маркетинга</td></tr>
+      <tr><td class="day-num">03</td><td class="day-topic">База знаний: готовый шаблон под пищёвку</td><td class="day-result">30+ заметок: SOP, HACCP, карта процессов</td></tr>
+      <tr><td class="day-num">04</td><td class="day-topic">Claude Code (опционально) + мини-инструмент</td><td class="day-result">Мини-инструмент собран, основа - Chat</td></tr>
+      <tr><td class="day-num">05</td><td class="day-topic">Квант: API или Playwright-fallback</td><td class="day-result">Читаем/пишем задачи в Квант через AI</td></tr>
+      <tr class="weekend"><td></td><td colspan="2" style="text-align:center">Выходные: практика + домашнее задание</td></tr>
+      <tr><td class="day-num">06</td><td class="day-topic">Max + Telegram: бот-фиксатор нарушений</td><td class="day-result">Голос и фото превращаются в структуру</td></tr>
+      <tr><td class="day-num">07</td><td class="day-topic">Связка QC + Daily Report</td><td class="day-result">Полный цикл + сводки в 08:00</td></tr>
+      <tr><td class="day-num">08</td><td class="day-topic">Рекламные кабинеты + дашборд</td><td class="day-result">Прозрачность маркетинга, один дашборд</td></tr>
+      <tr><td class="day-num">09</td><td class="day-topic">Редизайн сайта: Claude Design</td><td class="day-result">Новый сайт, корзина жива, правишь сам</td></tr>
+      <tr><td class="day-num">10</td><td class="day-topic">VPS + TG-ассистент + финальная сборка</td><td class="day-result">Стек собран, ассистент 24/7 на VPS</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;color:#6B7280;margin-top:12px;">Даты 01.05 и 09.05 - праздничные, переносятся. Финальные даты подтверждаем на ознакомительной 28.04.</p>
+</div>
+
+<!-- STRUCTURE -->
+<div class="section">
+  <div class="section-label">Как устроен каждый день</div>
+  <h2>4 блока = максимальный результат</h2>
+  <div class="structure-grid">
+    <div class="structure-card"><div class="num">1</div><div class="label">Чеклист</div><div class="desc">Что установить и подготовить</div></div>
+    <div class="structure-card"><div class="num">2</div><div class="label">Самоподготовка</div><div class="desc">Короткие видео (~1ч)</div></div>
+    <div class="structure-card"><div class="num">3</div><div class="label">Практика</div><div class="desc">Руками на твоих задачах (2ч)</div></div>
+    <div class="structure-card"><div class="num">4</div><div class="label">Домашка</div><div class="desc">Практика до след. дня</div></div>
+  </div>
+  <div class="lesson-note">
+    <strong>✓ Проверено у Цветкова:</strong> показ стека вперёд теории сработал отлично. Теоретические блоки "три уровня AI" и прочие схемы - выкинуты. Учимся через работу на реальных данных клиента с первого дня.
+  </div>
+</div>
+
+<!-- DAY 0 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 0</span>
+    <span class="day-title">Ознакомительная: знакомство со стеком</span>
+    <span class="day-date">Пн 28.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">Длительность 1 час, 14:30 МСК. Разбираем программу под тебя, проверяем доступы из pre-flight, фиксируем финальные даты.</div>
+    <div class="day-section">
+      <div class="day-section-label">Что сделаем</div>
+      <ul>
+        <li>Живое знакомство со стеком: реальная работа, не слайды</li>
+        <li>Короткое сравнение <strong>Claude Chat vs Projects vs Cowork</strong> - когда что выбирать</li>
+        <li>Проверка всех доступов из pre-flight чеклиста</li>
+        <li>Финальные корректировки программы под твои задачи</li>
+        <li>Оплата и договор, старт с 29.04</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Claude: Chat vs Projects vs Cowork</div>
+      <div class="compare-grid">
+        <div class="compare-card primary">
+          <div class="compare-name">Chat ← основа</div>
+          <div class="compare-desc">90% работы курса. Думать, анализировать, работать с файлами. Быстро и гибко.</div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-name">Projects</div>
+          <div class="compare-desc">Контейнер с постоянным контекстом. Имеет смысл, если шарить с командой. У нас - через system prompts в Chat.</div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-name">Cowork</div>
+          <div class="compare-desc">Коллаборация в облаке. Хорош для команд в Google Workspace. У твоей команды (цех + Max + Квант) - мимо.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WEEK 1 -->
+<div class="week-divider">
+  <div class="week-num">Неделя 1</div>
+  <div class="week-title">Фундамент на реальных данных</div>
+  <div class="week-dates">29 апреля - 5 мая</div>
+</div>
+
+<!-- DAY 1 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 1</span>
+    <span class="day-title">Стек в работе на ТВОИХ данных<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">Вт 29.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова День 1:</strong> показ стека на РЕАЛЬНЫХ данных клиента (930 сделок amoCRM) вместо абстрактной теории - Дмитрий залип на весь вечер. Повторяем паттерн у Николая: работаем с выгрузкой жалоб за 30 дней.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Claude Desktop и ChatGPT открываются</li>
+        <li>Жалобы за 30 дней и выгрузка Квант - на руках (из pre-flight)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~45 мин, не больше)</div>
+      <ul>
+        <li>Andrej Karpathy <a class="link" href="https://www.youtube.com/watch?v=zjkBMFhNj_g" target="_blank">"Intro to LLMs"</a> на скорости 1.5x (~40 мин) - только для контекста</li>
+        <li>Никаких других лекций. Остальное - на практике.</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li><strong>Первые 30 мин - денежный кейс на твоих данных:</strong></li>
+        <li class="sub">Загружаем жалобы за 30 дней в Claude</li>
+        <li class="sub">Claude разбирает: типы нарушений, цех, процедуры-рекордсмены</li>
+        <li class="sub">Считаем финансовый эффект: сколько бизнесу стоит повторяющаяся проблема</li>
+        <li class="sub">Это - "деньги на столе". Дальше учимся доставать их системно.</li>
+        <li><strong>Короткий обзор стека</strong> (15 мин): Claude, Obsidian, Granola, MCP, Code - что когда</li>
+        <li><strong>Сравнение Chat vs Projects vs Cowork</strong> (10 мин): уточнение после Дня 0</li>
+        <li><strong>Работа в Chat на задачах Николая:</strong> 3-4 реальные ситуации с производства</li>
+        <li>Буфер 15 мин на технические зацепки</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 2)</div>
+      <ul>
+        <li>Решить 3-5 реальных бизнес-задач через Claude Chat</li>
+        <li>Записать: что сработало, где модель не поняла</li>
+        <li>Подготовить выгрузку Квант за 30 дней для завтрашнего аудита</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 2 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 2</span>
+    <span class="day-title">Claude как рабочий партнёр: аудит</span>
+    <span class="day-date">Ср 30.04</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> минимум теории, максимум hands-on. Николай сам водит мышкой - Максим подсказывает. Теоретические блоки про Projects/Extended Thinking - короткие и только там, где упирается в работу.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Выгрузка Квант за 30 дней</li>
+        <li>2-3 бизнес-документа (отчёты, регламенты)</li>
+        <li>Список "знаний из головы" - что нигде не записано</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~30 мин)</div>
+      <ul>
+        <li>Пропускаем теоретические блоки - сразу к работе</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li>Разбор домашки: где модель не справилась - докручиваем промпты</li>
+        <li><a class="link" href="https://www.anthropic.com/news/visible-extended-thinking" target="_blank">Extended Thinking</a> - когда включать, на примере</li>
+        <li><strong>Кейс: аудит производства и маркетинга на данных</strong></li>
+        <li class="sub">Выгрузка Квант: где задачи висят, кто не закрывает, паттерны просрочек</li>
+        <li class="sub">Жалобы: корневые причины, частотность, цеха-рекордсмены</li>
+        <li class="sub">Текущая команда маркетинга: что делают, прозрачность результата</li>
+        <li class="sub">Формулируем требования к системе QC - что автоматизировать, что оставить людям</li>
+        <li><strong>System prompts под роли</strong> в обычных чатах:</li>
+        <li class="sub">"QC-ассистент" - промпт-роль с контекстом производства</li>
+        <li class="sub">"Маркетинг-ассистент" - промпт-роль с данными рекламы</li>
+        <li class="sub">Храним как шаблоны в заметке, без Projects</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 3)</div>
+      <ul>
+        <li>Прогнать 10 реальных вопросов через оба промпт-ассистента</li>
+        <li>Дописать список знаний "в голове" - процедуры, рецептуры, работа с жалобами</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 3 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 3</span>
+    <span class="day-title">База знаний: готовый шаблон под пищёвку<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">Чт 01.05 / перенос</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> готовый шаблон vault зашёл лучше, чем "создай с нуля". У Димы перенесли 70+ документов за 90 минут - wow-момент. У Николая повторяем: приносим готовую структуру под пищёвку + массовый перенос существующей базы.
+    </div>
+    <div class="day-note">01.05 - нерабочий. Переносим на ближайший рабочий день, согласуем 28.04.</div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Obsidian установлен (пустой vault)</li>
+        <li>Существующие документы: регламенты, HACCP, рецептуры - собрать в одну папку</li>
+        <li>Список знаний "из головы" (из домашки Дня 2)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~30 мин)</div>
+      <ul>
+        <li>Nicole van der Hoeven - <a class="link" href="https://www.youtube.com/playlist?list=PL-1Nqb2waX4Vba6QDVS5rhnSb9pZGTO4b" target="_blank">1-2 коротких видео</a> про базу Obsidian</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li><strong>Готовый шаблон vault под пищёвку</strong> - приносит Максим:</li>
+        <li class="sub"><code>Рецептуры/</code> - технологические карты</li>
+        <li class="sub"><code>SOP/</code> - процедуры (приёмка, производство, упаковка, отгрузка, жалобы)</li>
+        <li class="sub"><code>HACCP/</code> - чеклисты, температурные режимы, санитарка</li>
+        <li class="sub"><code>Сотрудники/</code> - должностные инструкции</li>
+        <li class="sub"><code>Нарушения/</code> - типы + корневые причины</li>
+        <li class="sub"><code>Жалобы/</code> - SOP ответов + шаблоны</li>
+        <li class="sub"><code>FAQ/</code> - для сайта и чат-бота</li>
+        <li><strong>Массовый перенос существующей базы</strong> через Claude (аналог "70 документов за 90 минут"): скармливаем папку с регламентами - Claude раскладывает, делает заметки, простановляет ссылки</li>
+        <li>Короткий блок про <a class="link" href="https://productuniversity.ru/zettelkasten-method" target="_blank">Zettelkasten</a> - почему связи важнее папок</li>
+        <li>Итог: 30+ готовых заметок в vault</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 4)</div>
+      <ul>
+        <li>Ещё 10-15 заметок (процедуры, нарушения, SOP)</li>
+        <li>Карта процесса "от заказа до доставки" - точки контроля качества</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 4 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 4</span>
+    <span class="day-title">Claude Code (опционально) + мини-инструмент</span>
+    <span class="day-date">Пт 02.05</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> на Дне 3-4 поняли, что терминал не для всех. Для 90% задач хватает Chat. Code - показываем как возможность, а не как обязательный инструмент.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Claude Desktop установлен</li>
+        <li>(Опционально) Claude Code - иконка терминала в приложении</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~30 мин)</div>
+      <ul>
+        <li>Короткое демо <a class="link" href="https://www.anthropic.com/claude-code" target="_blank">Claude Code</a> на YouTube (15 мин, не больше)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li><strong>Главное сообщение:</strong> основа курса - Claude Chat. Code - опциональный уровень для тех, кто хочет глубже.</li>
+        <li><strong>Когда что:</strong></li>
+        <li class="sub">Chat - 90% работы: думать, анализировать, писать, файлы через drag-and-drop</li>
+        <li class="sub">Code - когда нужно: автоматизация по расписанию, подключение API, большие задачи</li>
+        <li><strong>Кейс в Chat:</strong> генератор ежедневной сводки для технолога. Собираем через веб-интерфейс, без терминала.</li>
+        <li><strong>Опциональный блок</strong> (если Николай хочет): быстрая проба Claude Code на мини-задаче. Не заходит - возвращаемся в Chat.</li>
+        <li>CLAUDE.md - файл-инструкция с контекстом бизнеса (жаргон цеха, названия процедур). Живёт в Obsidian.</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 5)</div>
+      <ul>
+        <li>Дописать CLAUDE.md - контекст бизнеса, терминология</li>
+        <li>Пройтись по своим задачам недели - что можно автоматизировать</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 5 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 5</span>
+    <span class="day-title">Квант: API или Playwright-fallback<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">Пн 05.05</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> API amoCRM отрубили в середине программы - спасла автоматизация через браузер (Playwright). У Николая готовим оба варианта с первой минуты.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>API-ключ Квант (из pre-flight) или подтверждение, что API закрыт</li>
+        <li>5 примеров типовых задач, которые сейчас ставятся в Квант вручную</li>
+        <li>Логин/пароль от Квант (для Playwright-варианта)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~30 мин)</div>
+      <ul>
+        <li>Что такое REST API - короткое объяснение (15 мин)</li>
+        <li>Пробежка документации Квант, если есть</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li><strong>Основной путь - Квант API:</strong></li>
+        <li class="sub">Читаем документацию вместе с Claude</li>
+        <li class="sub">Пробуем: получить список задач, создать задачу, прикрепить файл</li>
+        <li class="sub">Первая автоматизация: "просроченные задачи → сводка в Max/Telegram"</li>
+        <li><strong>Fallback - Playwright, если API не отдаёт нужное:</strong></li>
+        <li class="sub">Claude Code управляет браузером как человек - логинится, создаёт задачи, забирает данные</li>
+        <li class="sub">Работает там, где API закрыт (у Цветкова это был wow-момент)</li>
+        <li>Подключаем Google Calendar, Gmail, Todoist MCP - Claude видит твой день</li>
+        <li>OpenCloud: если используется - подключаем хранилище</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание на выходные (на День 6)</div>
+      <ul>
+        <li>День с автоматической сводкой из Квант</li>
+        <li>5-10 голосовых от сотрудников цеха с типовыми нарушениями</li>
+        <li>5-10 фото с нарушениями (для теста бота)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- WEEK 2 -->
+<div class="week-divider">
+  <div class="week-num">Неделя 2</div>
+  <div class="week-title">Автоматизация QC + маркетинг + сайт</div>
+  <div class="week-dates">6-12 мая</div>
+</div>
+
+<!-- DAY 6 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 6</span>
+    <span class="day-title">Max + Telegram: бот-фиксатор нарушений</span>
+    <span class="day-date">Вт 06.05</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Max установлен, рабочий чат цеха создан</li>
+        <li>Telegram-аккаунт для бота</li>
+        <li>API-доступ к Max (если есть; если нет - Telegram как основной канал)</li>
+        <li>Голосовые и фото от сотрудников (из домашки Дня 5)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~45 мин)</div>
+      <ul>
+        <li>Как работают боты в Telegram - обзор 10-15 мин</li>
+        <li>Подумать: голосовое или фото+текст удобнее сотрудникам</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li><strong>Блок 152-ФЗ (15 мин) - прежде чем пускать сотрудников в бота:</strong></li>
+        <li class="sub">Какие данные нельзя гнать через WhatsApp/иностранные сервисы (ФИО, персональные данные)</li>
+        <li class="sub">Max - российский, предпочтительнее для работы с сотрудниками</li>
+        <li class="sub">Telegram - для технических нужд (бот, внутренние уведомления)</li>
+        <li class="sub">Согласия на обработку - короткий шаблон</li>
+        <li><strong>Кейс: бот-фиксатор нарушений</strong></li>
+        <li class="sub">Сотрудник шлёт голосовое "на упаковке нет перчаток у двоих"</li>
+        <li class="sub">Бот транскрибирует (Whisper), извлекает: тип, цех, время, ответственный</li>
+        <li class="sub">Фото - Claude Vision распознаёт, извлекает детали</li>
+        <li class="sub">Запись в таблицу (Google Sheets или Obsidian)</li>
+        <li class="sub">Подтверждение сотруднику: "зафиксировано, задача на бригадира Петрова"</li>
+        <li>Где живёт бот: локально на MacBook. VPS - в Дне 10.</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 7)</div>
+      <ul>
+        <li>1 день работы бота с реальными сотрудниками цеха</li>
+        <li>Обратная связь: удобно ли, что путает</li>
+        <li>Список 10 типов нарушений + ответственный</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 7 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 7</span>
+    <span class="day-title">Связка QC + Daily Report<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">Ср 07.05</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> Daily Report с конкретным шаблоном зашёл лучше, чем абстрактное "настрой scheduled tasks". Приходим с готовым примером сводки.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Доступы к таблице жалоб</li>
+        <li>Список ответственных: кто за что</li>
+        <li>Правила эскалации (день - сотруднику, 2 - бригадиру, 3 - Николаю)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~30 мин)</div>
+      <ul>
+        <li>Шаблон ежедневной сводки - что хочешь видеть утром</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li>Разбор домашки: как работал бот</li>
+        <li><strong>Кейс: полный цикл QC</strong></li>
+        <li class="sub">Нарушение от бота → задача в Квант → ответственный по правилам → дедлайн по SLA</li>
+        <li class="sub">Жалоба клиента → Claude читает → задача с тегом "жалоба" → ответ клиенту по SOP</li>
+        <li class="sub">Закрытие задачи требует фото-отчёт</li>
+        <li class="sub">Просрочка → напоминание → эскалация через 1 день</li>
+        <li><strong>Daily Report - конкретный пример, утро 08:00:</strong></li>
+      </ul>
+      <div class="code-sample">Технологу Иванову (Max):
+  Вчера: 3 нарушения на твоей линии (2 критичных, 1 средний)
+  Сегодня: 2 задачи, срок до 16:00
+  Жалобы клиентов: 1 новая (температура курицы)
+
+Николаю (личный):
+  Общая картина: 7 нарушений по цехам, 2 на грани срыва
+  Паттерн недели: упаковка - 4 из 7 нарушений
+  Финансовый эффект: ~15К руб возвратов за неделю</div>
+      <ul>
+        <li>Routines / scheduled tasks - запускаем, ноутбук держать открытым не надо (для VPS - День 10)</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 8)</div>
+      <ul>
+        <li>2 дня работы системы, фидбек ответственных</li>
+        <li>Зафиксировать, где путает</li>
+        <li>Доступы к рекламным кабинетам (должны быть с pre-flight)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 8 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 8</span>
+    <span class="day-title">Рекламные кабинеты + дашборд</span>
+    <span class="day-date">Чт 08.05</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Доступы к Яндекс.Директ, ВК Реклама</li>
+        <li>API-токен Яндекс.Директ</li>
+        <li>5-10 метрик, которые хочешь видеть каждый день</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~30 мин)</div>
+      <ul>
+        <li>Обзор Яндекс.Директ API - что отдаёт</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li><strong>Кейс: маркетинговый дашборд</strong></li>
+        <li class="sub">API Яндекс.Директ → Claude тянет расход, клики, конверсии по кампаниям</li>
+        <li class="sub">То же для ВК Рекламы</li>
+        <li class="sub">Дашборд в Google Sheets или простой веб-странице</li>
+        <li class="sub">Claude анализирует на естественном языке: "почему CPA вырос?", "какие кампании сливают бюджет?"</li>
+        <li class="sub">Ежедневная сводка в Max/Telegram - цифры по вчера + красные флаги</li>
+        <li><strong>Опционально:</strong> аудит текущей маркетинг-команды на данных</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 9)</div>
+      <ul>
+        <li>2-3 дня с дашбордом, первый инсайт про рекламу</li>
+        <li>Подтвердить доступы к сайту (из pre-flight)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 9 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 9</span>
+    <span class="day-title">Редизайн сайта: Claude Design</span>
+    <span class="day-date">Пт 09.05 / перенос</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">09.05 - праздник. Переносим на 12.05 или 13.05.</div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Доступы к сайту: админка, хостинг, код</li>
+        <li>Резервная копия сайта (ОБЯЗАТЕЛЬНО)</li>
+        <li>Референсы сайтов из pre-flight</li>
+        <li>Список: что точно должно работать (корзина, оплата, заявки)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Самоподготовка (~45 мин)</div>
+      <ul>
+        <li>Короткие ролики Claude Design</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li>Разбор домашки: инсайты из дашборда</li>
+        <li><strong>Кейс: редизайн сайта</strong></li>
+        <li class="sub">Claude анализирует текущий сайт + референсы</li>
+        <li class="sub">Claude Design собирает первый вариант - дизайн + код + деплой сразу</li>
+        <li class="sub">Корзина: аккуратная миграция, не ломаем платёжку и уведомления</li>
+        <li class="sub">Ты правишь сам: "кнопку больше", "блок отзывов выше"</li>
+        <li>Стратегия: прод или тестовый поддомен</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на Дне 10)</div>
+      <ul>
+        <li>2+ правки самостоятельно</li>
+        <li>Фидбек от 2-3 людей из команды</li>
+        <li>Материал для презентации</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 10 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 10</span>
+    <span class="day-title">VPS + TG-ассистент + финальная сборка</span>
+    <span class="day-date">Пн 12.05</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> VPS + TG-бот зашли как финал программы, не как центральная тема. Держим в конце - это апгрейд стека, а не основной контент.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (14:30-16:30)</div>
+      <ul>
+        <li><strong>VPS + TG-ассистент (апгрейд стека):</strong></li>
+        <li class="sub">Бот-фиксатор нарушений переезжает с MacBook на VPS - работает 24/7</li>
+        <li class="sub">Личный TG-ассистент Николая: голосовые команды с телефона, доступ к календарю/задачам/базе знаний</li>
+        <li class="sub">Стоимость - $6-10/мес</li>
+        <li><strong>Презентации через Claude Design:</strong></li>
+        <li class="sub">Практика на реальной презентации</li>
+        <li class="sub">Генерация под твой брендинг (из базы знаний)</li>
+        <li><strong>Финальное ревью стека:</strong></li>
+        <li class="sub">Claude Chat - самостоятельная работа</li>
+        <li class="sub">Obsidian - живая база знаний</li>
+        <li class="sub">Квант подключён (API или Playwright)</li>
+        <li class="sub">Бот-фиксатор - работает с цехом</li>
+        <li class="sub">Полный цикл QC: жалоба → задача → отчёт → Daily Report</li>
+        <li class="sub">Дашборд рекламы - в доступе</li>
+        <li class="sub">Сайт редизайнен, правишь сам</li>
+        <li class="sub">Презентации через Claude Design</li>
+        <li class="sub">VPS + TG-ассистент 24/7</li>
+        <li><strong>План развития:</strong></li>
+        <li class="sub">Бот-квалификатор заявок с сайта</li>
+        <li class="sub">SOP-генератор из реальных данных Квант</li>
+        <li class="sub">Расширение на новые цеха / города</li>
+        <li class="sub">Онлайн-продукт для пищёвки</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS -->
+<div class="section">
+  <div class="section-label">Инструменты программы</div>
+  <h2>15+ инструментов, которые ты освоишь</h2>
+  <div class="tools-grid">
+    <div class="tool-card"><span class="tool-day">01-10</span><div class="tool-info"><div class="tool-name">Claude (Chat)</div><div class="tool-desc">Основной инструмент, 90% работы</div></div></div>
+    <div class="tool-card"><span class="tool-day">01</span><div class="tool-info"><div class="tool-name">ChatGPT Plus</div><div class="tool-desc">Резервная модель, сравнение</div></div></div>
+    <div class="tool-card"><span class="tool-day">02</span><div class="tool-info"><div class="tool-name">Granola</div><div class="tool-desc">AI-записи встреч</div></div></div>
+    <div class="tool-card"><span class="tool-day">03</span><div class="tool-info"><div class="tool-name">Obsidian</div><div class="tool-desc">База знаний, SOP, HACCP</div></div></div>
+    <div class="tool-card"><span class="tool-day">04</span><div class="tool-info"><div class="tool-name">Claude Code (опц.)</div><div class="tool-desc">Автоматизация по расписанию, API</div></div></div>
+    <div class="tool-card"><span class="tool-day">05</span><div class="tool-info"><div class="tool-name">Квант API</div><div class="tool-desc">Чтение и постановка задач</div></div></div>
+    <div class="tool-card"><span class="tool-day">05</span><div class="tool-info"><div class="tool-name">Playwright</div><div class="tool-desc">Fallback, если API закрыт</div></div></div>
+    <div class="tool-card"><span class="tool-day">05</span><div class="tool-info"><div class="tool-name">OpenCloud</div><div class="tool-desc">Хранение медиа и документов</div></div></div>
+    <div class="tool-card"><span class="tool-day">05</span><div class="tool-info"><div class="tool-name">Google Calendar / Gmail / Todoist</div><div class="tool-desc">MCP-подключение</div></div></div>
+    <div class="tool-card"><span class="tool-day">06</span><div class="tool-info"><div class="tool-name">Telegram MCP</div><div class="tool-desc">Бот и коммуникация</div></div></div>
+    <div class="tool-card"><span class="tool-day">06</span><div class="tool-info"><div class="tool-name">Max</div><div class="tool-desc">Внутренний канал цеха, 152-ФЗ</div></div></div>
+    <div class="tool-card"><span class="tool-day">06</span><div class="tool-info"><div class="tool-name">Whisper + Claude Vision</div><div class="tool-desc">Голос → текст, фото → структура</div></div></div>
+    <div class="tool-card"><span class="tool-day">07</span><div class="tool-info"><div class="tool-name">Scheduled tasks</div><div class="tool-desc">Daily Report, эскалации</div></div></div>
+    <div class="tool-card"><span class="tool-day">08</span><div class="tool-info"><div class="tool-name">Яндекс.Директ API</div><div class="tool-desc">Маркетинговый дашборд</div></div></div>
+    <div class="tool-card"><span class="tool-day">09-10</span><div class="tool-info"><div class="tool-name">Claude Design</div><div class="tool-desc">Сайт и презентации без дизайнера</div></div></div>
+    <div class="tool-card"><span class="tool-day">10</span><div class="tool-info"><div class="tool-name">VPS + TG-бот</div><div class="tool-desc">Ассистент 24/7</div></div></div>
+  </div>
+</div>
+
+<!-- TASKS -->
+<div class="section">
+  <div class="section-label">Бизнес-задачи в программе</div>
+  <h2>Всё, что обсудили 23 апреля - встроено как кейсы</h2>
+  <table class="tasks-table">
+    <thead><tr><th>Задача</th><th>День</th></tr></thead>
+    <tbody>
+      <tr><td class="task-name">Контроль качества через голосовые и фото</td><td class="task-day">06</td></tr>
+      <tr><td class="task-name">Бот фиксирует нарушения в таблицу</td><td class="task-day">06</td></tr>
+      <tr><td class="task-name">Жалоба → задача технологу / бригадиру с дедлайном</td><td class="task-day">07</td></tr>
+      <tr><td class="task-name">Обязательный фото-отчёт по закрытию задачи</td><td class="task-day">07</td></tr>
+      <tr><td class="task-name">Daily Report сотрудникам цеха</td><td class="task-day">07</td></tr>
+      <tr><td class="task-name">Напоминания о просроченных задачах + эскалация</td><td class="task-day">07</td></tr>
+      <tr><td class="task-name">Интеграция с Квант (API или Playwright)</td><td class="task-day">05</td></tr>
+      <tr><td class="task-name">Дашборд рекламных кабинетов</td><td class="task-day">08</td></tr>
+      <tr><td class="task-name">Анализ рекламы на обычном языке</td><td class="task-day">08</td></tr>
+      <tr><td class="task-name">Редизайн сайта с сохранением корзины</td><td class="task-day">09</td></tr>
+      <tr><td class="task-name">Самостоятельные правки сайта</td><td class="task-day">09</td></tr>
+      <tr><td class="task-name">Презентации через Claude Design</td><td class="task-day">10</td></tr>
+      <tr><td class="task-name">База знаний бизнеса как фундамент</td><td class="task-day">03</td></tr>
+      <tr><td class="task-name">Ассистент 24/7 на VPS</td><td class="task-day">10</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div class="footer-logo">MD<span class="dot">.</span></div>
+  <div class="footer-text">ИП Дробот М.В. | AI-трансформация бизнеса</div>
+</div>
+
+<script>
+document.querySelectorAll('.day-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const block = header.closest('.day-block');
+    block.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
