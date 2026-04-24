@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КП · Управление портфелем коммерческой недвижимости</title>
+<style>
+  :root {
+    --ink: #111418;
+    --ink-2: #3a3f47;
+    --muted: #7a828d;
+    --line: #e4e6ea;
+    --line-soft: #eef0f2;
+    --bg: #fafaf7;
+    --card: #ffffff;
+    --accent: #1f5d45;
+    --accent-soft: #e8f0eb;
+    --warn: #a4561a;
+    --bad: #9e3c3c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-size: 15px;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 72px 32px 96px; }
+
+  .cover { border-bottom: 1px solid var(--line); padding-bottom: 40px; margin-bottom: 48px; }
+  .cover .eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .cover h1 { font-size: 40px; font-weight: 600; letter-spacing: -0.025em; margin: 0 0 18px; line-height: 1.15; }
+  .cover .lede { font-size: 18px; color: var(--ink-2); max-width: 680px; margin: 0 0 24px; line-height: 1.5; }
+  .cover .meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line-soft); }
+  .cover .meta b { color: var(--ink); font-weight: 600; }
+
+  h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 72px 0 10px; }
+  h2 .n { color: var(--muted); font-weight: 500; margin-right: 10px; font-variant-numeric: tabular-nums; }
+  h2 + .sub { color: var(--muted); font-size: 14px; margin: 0 0 28px; max-width: 640px; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 8px; letter-spacing: -0.01em; }
+  p { margin: 0 0 14px; color: var(--ink-2); }
+  p strong, li strong { color: var(--ink); font-weight: 600; }
+  ul, ol { color: var(--ink-2); padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+
+  .context { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+  @media (max-width: 720px) { .context { grid-template-columns: 1fr 1fr; } }
+  .context .fact { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .context .fact .k { font-size: 11px; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+  .context .fact .v { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .context .fact .d { font-size: 12px; color: var(--ink-2); margin-top: 4px; line-height: 1.4; }
+
+  .pain {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--bad);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+  .pain .head { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; margin-bottom: 8px; }
+  .pain .head .t { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .pain .head .id { font-size: 12px; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
+  .pain p { margin-bottom: 10px; font-size: 14px; line-height: 1.55; }
+  .pain .solve { background: var(--accent-soft); border-radius: 6px; padding: 10px 14px; font-size: 13px; color: var(--ink); line-height: 1.5; margin-top: 6px; }
+  .pain .solve b { color: var(--accent); margin-right: 6px; }
+
+  .offer {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px 26px;
+    margin-bottom: 14px;
+  }
+  .offer .top { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 6px; }
+  .offer .top .name { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+  .offer .top .price { text-align: right; white-space: nowrap; }
+  .offer .top .price .v { font-size: 18px; font-weight: 600; color: var(--accent); }
+  .offer .top .price .p { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .offer .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .offer .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: var(--line-soft); color: var(--ink-2); letter-spacing: 0.02em; }
+  .offer .tag.hero { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .offer .desc { color: var(--ink-2); font-size: 14px; margin-bottom: 14px; line-height: 1.55; }
+  .offer h4 { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin: 14px 0 6px; }
+  .offer ul { font-size: 14px; margin-bottom: 4px; }
+  .offer .closes { font-size: 13px; color: var(--ink-2); border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 14px; }
+  .offer .closes b { color: var(--accent); }
+
+  .methodology { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 22px 26px; }
+  .methodology .row { display: grid; grid-template-columns: 80px 1fr; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
+  .methodology .row:last-child { border-bottom: none; }
+  .methodology .row .when { font-size: 13px; color: var(--muted); letter-spacing: 0.04em; padding-top: 2px; }
+  .methodology .row .what strong { display: block; margin-bottom: 4px; font-size: 15px; }
+  .methodology .row .what span { color: var(--ink-2); font-size: 14px; }
+
+  .stack-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  @media (max-width: 640px) { .stack-row { grid-template-columns: 1fr; } }
+  .stack-row .box { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; }
+  .stack-row .box h4 { margin: 0 0 6px; font-size: 14px; }
+  .stack-row .box p { font-size: 13px; margin: 0; line-height: 1.5; }
+  .stack-row .box.below { border-color: var(--line); }
+  .stack-row .box.below h4 { color: var(--muted); }
+  .stack-row .box.above { border-color: var(--accent); }
+  .stack-row .box.above h4 { color: var(--accent); }
+
+  .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; }
+  @media (max-width: 780px) { .pricing { grid-template-columns: 1fr; } }
+  .pricing .pack { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 22px 22px; display: flex; flex-direction: column; }
+  .pricing .pack.featured { border-color: var(--accent); border-width: 2px; position: relative; }
+  .pricing .pack.featured::before { content: "рекомендуем"; position: absolute; top: -10px; left: 22px; background: var(--accent); color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.06em; }
+  .pricing .pack .name { font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .pricing .pack .price { font-size: 24px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 4px; }
+  .pricing .pack .per { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  .pricing .pack .what { font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+  .pricing .pack ul { font-size: 13px; padding-left: 18px; margin: 10px 0 0; }
+  .pricing .pack ul li { margin-bottom: 4px; }
+
+  .why-us { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  @media (max-width: 640px) { .why-us { grid-template-columns: 1fr; } }
+  .why-us .box { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; }
+  .why-us .box h4 { margin: 0 0 6px; font-size: 14px; }
+  .why-us .box p { font-size: 13px; margin: 0; line-height: 1.5; }
+
+  .cta { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 10px; padding: 28px 30px; margin-top: 48px; }
+  .cta h3 { margin: 0 0 10px; color: var(--accent); font-size: 20px; }
+  .cta p { color: var(--ink); font-size: 15px; margin-bottom: 6px; }
+  .cta .signer { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(31,93,69,0.2); font-size: 13px; color: var(--ink-2); }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cover">
+    <div class="eyebrow">Коммерческое предложение</div>
+    <h1>Управление портфелем коммерческой недвижимости</h1>
+    <p class="lede">Собираем договоры, начисления и риски портфеля в один слой над 1С - собственник видит деньги и угрозы без таблиц и ручной сверки. Для портфелей 10-40 объектов. Аналитика, сверка платежей с помощью ИИ, наблюдение за рисками - учётную систему не меняем.</p>
+    <div class="meta">
+      <span>Для: <b>Тристория · Дима Колпаков</b></span>
+      <span>От: <b>Максим Дробот</b></span>
+      <span>Дата: <b>24.04.2026</b></span>
+    </div>
+  </div>
+
+  <h2><span class="n">01</span>Боли, которые мы решаем</h2>
+  <p class="sub">Семь проблем, которые повторяются у собственников портфелей 10-40 объектов в регионах. Не поверхностные («нет CRM»), а структурные - про деньги, риски и переговорную силу.</p>
+
+  <div class="pain">
+    <div class="head"><div class="t">Актуальную редакцию договора собрать - отдельный проект</div><div class="id">P-01</div></div>
+    <p>Основной договор плюс 3-12 допсоглашений за срок действия, разные виды платежей в одном договоре (фикс + процент с оборота + коммуналка + реклама + эксплуатация), субаренда с деревом зависимостей. Ни 1С, ни АрендаSoft не собирают «действующую редакцию на конкретную дату» как отдельную версию - собирается руками. На каждом 4-5 договоре находим расхождение между редакцией в файле и фактическими договорённостями.</p>
+    <div class="solve"><b>Решаем:</b> ИИ читает сканы договоров и допсоглашений, собирает «действующую редакцию на сегодня», хранит историю версий, ищет по всему портфелю сразу. На диагностике проходим первые 10-15 договоров, оцениваем качество разбора и планируем охват остального портфеля.</div>
+  </div>
+
+  <div class="pain">
+    <div class="head"><div class="t">Индексация не применяется вовремя - упускается 5-10% годового сбора</div><div class="id">P-02</div></div>
+    <p>Индексация срабатывает по ручному сигналу «бухгалтер вспомнила» - поэтому часть годовщин стабильно проскакивает. В условиях 2025-2026 при фиксированной формуле 7-10% теряется 3-6% от годового сбора, при формуле по индексу потребительских цен без расчёта собственник выбирает ставку «на удачу», не просчитывая сценарии.</p>
+    <div class="solve"><b>Решаем:</b> календарь индексаций с напоминанием за 30 дней, расчёт сценариев (индекс цен, фикс, ключевая ставка), пакетная подготовка допсоглашений.</div>
+  </div>
+
+  <div class="pain">
+    <div class="head"><div class="t">Банковская выписка не связана с начислениями в деталь</div><div class="id">P-03</div></div>
+    <p>Платёж приходит с назначением «оплата по счёту», «оплата аренды», «по договору» - бухгалтер 3-5 дней в месяц вручную связывает поступления с начислениями. Платит третье лицо за арендатора, один платёж за 2 договора, частичная оплата, переплата в счёт следующего месяца - всё разбирается в таблицах с ошибками.</p>
+    <div class="solve"><b>Решаем:</b> выгрузку выписки из 1С:Бухгалтерия или банк-клиента пропускаем через ИИ, который разбирает назначение платежа и сопоставляет его с начислениями. Прямые интеграции с банком не нужны - только та выгрузка, которую клиент уже делает. Основная масса платежей связывается автоматически, остаток - часы вместо дней. Итоговую точность проверяем на первом месяце пилота, до подписки.</div>
+  </div>
+
+  <div class="pain">
+    <div class="head"><div class="t">Нет прогноза риска ухода арендатора - узнаём постфактум</div><div class="id">P-04</div></div>
+    <p>Падение оборотов 3 месяца подряд, новые иски в картотеке арбитражных дел, блокировка счёта ФНС, смена директора в ЕГРЮЛ, рост просрочки по оплатам - каждый из этих сигналов собственник получает отдельно, если вообще получает. На практике узнаёт, когда арендатор уже подал уведомление о расторжении или перестал платить.</p>
+    <div class="solve"><b>Решаем:</b> ежедневная сводная оценка риска по каждому арендатору на публичных данных: картотека арбитражных дел (новые иски), сервисы ФНС (блокировки счёта), ЕГРЮЛ (смена директора, реорганизация), тренд по просрочке оплат. Данные касс ОФД по арендаторам - если арендатор согласен делиться. Сигнал сработал → встреча с арендатором и пересмотр условий за 60-90 дней до ухода.</div>
+  </div>
+
+  <div class="pain">
+    <div class="head"><div class="t">Портфель обсуждается как выручка, а не как инвестиционный актив</div><div class="id">P-05</div></div>
+    <p>Разговор собственника с управляющим идёт в логике «сколько собрали в этом месяце». При этом стоимость портфеля при продаже или залоге оценщик считает по средневзвешенному сроку аренды и чистому операционному доходу - без этих цифр на руках собственник торгуется по выручке последнего месяца, а это на 1-3 пункта доходности хуже реальной стоимости.</p>
+    <div class="solve"><b>Решаем:</b> инвестиционный кабинет портфеля на русском языке: средневзвешенный срок договоров, динамика чистого операционного дохода, рост по сопоставимым объектам год к году, доходность относительно региона, удержание арендаторов, концентрация рисков. Ежемесячный срез, квартальный отчёт в логике «что увеличит стоимость портфеля через 3 года».</div>
+  </div>
+
+  <div class="pain">
+    <div class="head"><div class="t">Слабые формулировки договоров - собственник в невыгодной позиции при споре</div><div class="id">P-06</div></div>
+    <p>Типовые пробелы: нет пункта о внесудебном возврате помещения (выселение 4-9 месяцев вместо 30 дней), нет механики пересмотра при смене налогового режима, обеспечительный платёж не индексируется вместе со ставкой, отделка помещения арендатором не закреплена как актив с возвратом остатка при досрочном уходе, нет таблицы ответственности по ремонту. Каждый пробел - сценарий, где арендатор уходит с долгом, а собственник идёт в суд на 6-9 месяцев без права на внесудебный возврат помещения.</p>
+    <div class="solve"><b>Решаем:</b> собираем техническую оболочку - проверочный список собственника из 36 пунктов, ИИ прогоняет каждый договор и отмечает найденные пробелы. Юридическое содержание пунктов и шаблоны допсоглашений - ваш юрист или наш партнёр по юридической части. Результат - карта дыр по портфелю и план пакетного пересогласования одной подписной сессией, а не 24 разными переговорами.</div>
+  </div>
+
+  <div class="pain">
+    <div class="head"><div class="t">Арендаторы заваливают типовыми вопросами - управляющий и собственник в операционке</div><div class="id">P-07</div></div>
+    <p>«Пришёл счёт?», «дайте акт сверки», «какие показания?», «сломался кран» - 60-75% общения с арендаторами - типовые вопросы. Они съедают 2-4 часа в день управляющего и отдельные куски дня собственника. При этом живой вопрос (пересмотр ставки, расторжение) теряется в потоке.</p>
+    <div class="solve"><b>Решаем:</b> бот-помощник арендатора в Telegram и WhatsApp: статусы счетов, акты, приём показаний счётчиков с распознаванием фото, заявки на эксплуатацию. Собственник получает ежедневную сводку «только то, что требует решения» - 10-15 минут в день вместо операционки.</div>
+  </div>
+
+  <h2><span class="n">02</span>Где мы встаём в архитектуре</h2>
+  <p class="sub">Не заменяем 1С:АиУН, АрендаSoft или учётную систему клиента. Встаём слоем выше.</p>
+
+  <div class="stack-row">
+    <div class="box below">
+      <h4>Уровень ниже (занят)</h4>
+      <p>Учёт договоров, счетов, актов, проводок. 1С:АиУН, АрендаSoft, pro.rent, Битрикс24. Соответствие требованиям законодательства, электронный документооборот, связка с банк-клиентом. Здесь мы не конкурируем.</p>
+    </div>
+    <div class="box above">
+      <h4>Уровень выше (пустой на рынке)</h4>
+      <p>Аналитика портфеля (средневзвешенный срок аренды, чистый операционный доход, доходность), разбор договоров ИИ, автоматическая сверка банк ↔ начисления ↔ касса ОФД, наблюдение за рисками по арендаторам, расчёт индексаций и НДС 2026, бот-помощник. Подписка, а не лицензия.</p>
+    </div>
+  </div>
+
+  <p>Результат: клиент оставляет учёт там, где он уже работает (переход с 1С - дорого и рискованно), а инвесторский слой получает от нас. С 1С связываемся через стандартный обмен, с банком - через файл выписки, с кассой ОФД - по согласованию с арендаторами. Уйти можно в любой момент, данные остаются у клиента.</p>
+
+  <h2><span class="n">03</span>Как мы работаем</h2>
+  <p class="sub">Начинаем с диагностики, без «больших внедрений». Это защищает обе стороны: клиент видит реальные находки до долгого контракта, мы - реальные данные до обещаний.</p>
+
+  <div class="methodology">
+    <div class="row"><div class="when">Нед. 1-3</div><div class="what"><strong>Диагностика</strong><span>Установочные интервью с собственником, управляющим, бухгалтером. Выгрузка всех договоров и допсоглашений за срок их действия. Разбор ИИ, проверочный список, сверка с рынком. Итог - отчёт и дорожная карта.</span></div></div>
+    <div class="row"><div class="when">Нед. 4-6</div><div class="what"><strong>Быстрые выигрыши</strong><span>Индексация просроченных договоров, пакет допсоглашений под НДС 2026, отделку и внесудебный возврат. 2-3 задачи с быстрой окупаемостью - за первые 6 недель отбиваем диагностику.</span></div></div>
+    <div class="row"><div class="when">Нед. 6-12</div><div class="what"><strong>Постоянное сопровождение</strong><span>Подключаем банки, кассы ОФД, картотеку арбитражных дел, ФНС. Запускаем ежедневное наблюдение за рисками. Первый инвестиционный отчёт - в конце 3-го месяца.</span></div></div>
+    <div class="row"><div class="when">Нед. 12+</div><div class="what"><strong>Расширение</strong><span>Если есть интерес - бот-помощник арендатора, разбор новых договоров ИИ, дополнительные модули: окупаемость вложений в отделку, дерево субаренды, цифровая карта ответственности по объекту.</span></div></div>
+  </div>
+
+  <h2><span class="n">04</span>Почему мы</h2>
+
+  <div class="why-us">
+    <div class="box">
+      <h4>Работающий проект в схожей логике</h4>
+      <p>Делаем операционный слой маркетинга и управления через ИИ для Минского часового завода «Луч». Тот же подход: данные + ИИ + веб-интерфейс. Не презентация, а перенос обкатанного стека на вашу задачу.</p>
+    </div>
+    <div class="box">
+      <h4>Не конкурируем с 1С</h4>
+      <p>Никаких «переходов» и больших внедрений. Встаём слоем выше, сохраняя всё, что уже работает. Это снижает риск проекта до минимума.</p>
+    </div>
+    <div class="box">
+      <h4>Цифры под ваш регион</h4>
+      <p>Ставки, свободные площади, индексация - по Краснодарскому краю, не в среднем по России. В переговорах с арендатором у собственника свои рыночные цифры, а не те, что приносит арендатор. Опираемся на NF Group, CORE.XP и разбор 8 российских платформ.</p>
+    </div>
+    <div class="box">
+      <h4>Расширяемся только там, где отбилось</h4>
+      <p>Не «всё или ничего». Начинаем с диагностики, дальше подключаем только те части, которые отбились в отчёте: индексация, наблюдение за рисками, бот-помощник - по отдельности.</p>
+    </div>
+  </div>
+
+  <h2><span class="n">05</span>Ближайшие шаги</h2>
+  <ol>
+    <li><strong>Установочный созвон, 40 минут.</strong> Рассказ о портфеле: сколько объектов, какие сегменты, где больнее всего. Со стороны клиента - собственник или управляющий, с нашей - аналитик и архитектор.</li>
+    <li><strong>Уточнённое предложение</strong> под конкретный портфель в течение 3 рабочих дней после созвона.</li>
+    <li><strong>Пилот - диагностика.</strong> 18 рабочих дней, фиксированная цена, возврат 50% если не окупается за 12 месяцев. После отчёта - встреча 1 час: разбираем находки и решаем, расширяемся до постоянного сопровождения или останавливаемся на диагностике.</li>
+  </ol>
+
+  <div class="cta">
+    <h3>Установочный созвон, 40 минут</h3>
+    <p>Свободные слоты - эта неделя и начало следующей. Напишите удобный день - согласуем время и кто подключится с вашей стороны.</p>
+    <div class="signer">Максим Дробот · +7 918 970-89-17 · @drobotmaxim</div>
+  </div>
+
+  <footer>
+    Предложение · 2026-04-24 · подготовлено для Димы Колпакова (Тристория) · документ рабочий, не для внешней рассылки
+  </footer>
+
+</div>
+</body>
+</html>
