@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Программа работ № 004 - AI-автоматизация операций WB-селлера - Альберт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0A1628;
+  --navy-elevated: #0E1D33;
+  --navy-card: #12233D;
+  --navy-hover: #172B4A;
+  --emerald: #34D399;
+  --emerald-light: #6EE7B7;
+  --emerald-dim: rgba(52,211,153,0.08);
+  --emerald-border: rgba(52,211,153,0.2);
+  --white: #E8ECF1;
+  --gray: #8B9BB4;
+  --muted: #4A5E7A;
+  --border: #1A2D4A;
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: #F8F9FB;
+  color: #1A1A2E;
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-header { background: var(--navy); padding: 72px 0 56px; position: relative; overflow: hidden; }
+.page-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--emerald), transparent); }
+.header-logo { font-family: var(--font); font-weight: 900; font-size: 22px; color: var(--white); letter-spacing: -0.04em; margin-bottom: 32px; }
+.header-logo .dot { color: var(--emerald); }
+.header-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.header-label::before { content: '//'; opacity: 0.5; }
+.page-header h1 { font-size: 36px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; margin-bottom: 8px; }
+.page-header .subtitle { font-size: 16px; color: var(--gray); font-weight: 500; margin-bottom: 32px; }
+.header-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-item .meta-label { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.meta-item .meta-value { font-size: 14px; font-weight: 600; color: var(--white); }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+.section { padding: 56px 0; border-bottom: 1px solid #E5E7EB; }
+.section:last-child { border-bottom: none; }
+.section-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-label::before { content: '//'; opacity: 0.5; }
+
+h2 { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; margin-bottom: 12px; }
+h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.section-desc { font-size: 16px; color: #6B7280; max-width: 780px; margin-bottom: 32px; line-height: 1.75; }
+
+.value-block { background: var(--navy); border-radius: 16px; padding: 40px 48px; color: var(--white); font-size: 17px; line-height: 1.75; margin-bottom: 8px; position: relative; overflow: hidden; }
+.value-block::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--emerald); }
+
+.summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.summary-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; }
+.summary-card .num { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--emerald); margin-bottom: 4px; }
+.summary-card .label { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.summary-card .desc { font-size: 13px; color: #6B7280; line-height: 1.5; }
+
+.module-block { background: #fff; border: 1px solid #E5E7EB; border-radius: 16px; margin-bottom: 24px; overflow: hidden; }
+.module-header { background: var(--navy); padding: 24px 28px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; transition: background 0.2s; }
+.module-header:hover { background: var(--navy-elevated); }
+.module-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); background: var(--emerald); padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+.module-title { font-size: 17px; font-weight: 700; color: var(--white); }
+.module-toggle { margin-left: auto; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; background: rgba(255,255,255,0.08); transition: transform 0.3s ease; flex-shrink: 0; }
+.module-toggle svg { width: 14px; height: 14px; stroke: var(--gray); stroke-width: 2.5; fill: none; }
+.module-block.open .module-toggle { transform: rotate(180deg); }
+.module-body { padding: 0 28px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+.module-block.open .module-body { padding: 28px; max-height: 4500px; }
+
+.module-section { margin-bottom: 24px; }
+.module-section:last-child { margin-bottom: 0; }
+.module-section-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--emerald); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #F3F4F6; }
+.module-section ul { list-style: none; padding: 0; }
+.module-section li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 15px; line-height: 1.65; color: #374151; }
+.module-section li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+
+.deliverable-block { background: var(--emerald-dim); border: 1px solid var(--emerald-border); border-radius: 10px; padding: 16px 20px; margin-top: 12px; }
+.deliverable-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #065F46; margin-bottom: 8px; }
+.deliverable-text { font-size: 14px; color: #064E3B; line-height: 1.6; }
+
+.acceptance-block { background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 10px; padding: 16px 20px; margin-top: 12px; }
+.acceptance-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #92400E; margin-bottom: 8px; }
+.acceptance-text { font-size: 14px; color: #78350F; line-height: 1.6; }
+
+.format-block { background: var(--navy-card); border: 1px solid var(--emerald-border); border-radius: 16px; padding: 32px; color: var(--white); margin-top: 24px; }
+.format-block h3 { color: var(--white); font-size: 20px; margin-bottom: 8px; }
+.format-block ul { list-style: none; padding: 0; }
+.format-block li { padding-left: 28px; position: relative; margin-bottom: 12px; font-size: 14px; color: #CBD5E1; line-height: 1.65; }
+.format-block li::before { content: ''; position: absolute; left: 0; top: 5px; width: 14px; height: 14px; border: 2px solid var(--emerald); border-radius: 3px; }
+.format-block strong { color: var(--white); }
+
+.exclude-block { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 24px 28px; }
+.exclude-block ul { list-style: none; padding: 0; }
+.exclude-block li { padding-left: 24px; margin-bottom: 8px; position: relative; font-size: 15px; color: #4B5563; line-height: 1.65; }
+.exclude-block li::before { content: '–'; position: absolute; left: 0; top: 0; color: #9CA3AF; font-weight: 700; }
+
+.page-footer { background: var(--navy); padding: 40px 0; text-align: center; margin-top: 40px; }
+.footer-logo { font-family: var(--font); font-weight: 900; font-size: 18px; color: var(--white); letter-spacing: -0.04em; margin-bottom: 8px; }
+.footer-logo .dot { color: var(--emerald); }
+.footer-text { font-size: 12px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .page-header { padding: 48px 0 40px; }
+  .page-header h1 { font-size: 26px; }
+  .header-meta { flex-direction: column; gap: 16px; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .module-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+@media print {
+  body { background: #fff; }
+  .module-block { break-inside: avoid; }
+  .module-block .module-body { max-height: none !important; padding: 28px !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+<div class="container">
+  <div class="header-logo">MD<span class="dot">.</span></div>
+  <div class="header-label">Программа работ № 004</div>
+  <h1>AI-автоматизация операций WB-селлера</h1>
+  <div class="subtitle">Альберт - разработка системы под ключ</div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">Заказчик</span><span class="meta-value">ИП Альберт Л.</span></div>
+    <div class="meta-item"><span class="meta-label">Исполнитель</span><span class="meta-value">ИП Дробот М.В.</span></div>
+    <div class="meta-item"><span class="meta-label">Формат</span><span class="meta-value">Разработка под ключ</span></div>
+    <div class="meta-item"><span class="meta-label">Срок</span><span class="meta-value">2 календарные недели</span></div>
+    <div class="meta-item"><span class="meta-label">Стоимость</span><span class="meta-value">150 000 руб</span></div>
+  </div>
+</div>
+</div>
+
+<div class="container">
+
+<!-- VALUE -->
+<div class="section">
+  <div class="value-block">
+    Система AI-автоматизации операций WB-селлера. Парсер данных Wildberries и аналитики маркетплейсов автоматически заполняет таблицу R&P по магазинам, считает ключевые метрики и присылает алерты в Telegram. Контроль поставок и шаблонные сообщения поставщикам - в одном контуре. Поиск интересных товаров и аналогов на 1688 запускается по команде и сразу заполняет Юнит-Экономику. AI-ассистент по SKU предлагает решения на основе ретроспективы менеджеров и анализа конкурентов - менеджер подтверждает или корректирует. Финал - передача исходного кода, доступов и документации.
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="section">
+  <div class="section-label">Состав поставки</div>
+  <h2>5 модулей. Каждый сдаётся отдельно, финальная приёмка - по всему составу</h2>
+  <div class="summary-grid">
+    <div class="summary-card"><div class="num">01</div><div class="label">Discovery + ТЗ</div><div class="desc">Доступы, бизнес-правила, архитектура</div></div>
+    <div class="summary-card"><div class="num">02</div><div class="label">R&P + дашборд</div><div class="desc">Автозаполнение, метрики, алерты</div></div>
+    <div class="summary-card"><div class="num">03</div><div class="label">Контроль поставок</div><div class="desc">Трекер сроков, шаблоны поставщикам</div></div>
+    <div class="summary-card"><div class="num">04</div><div class="label">Парсинг товаров</div><div class="desc">WB + 1688 + Юнит-Экономика</div></div>
+    <div class="summary-card"><div class="num">05</div><div class="label">AI-рекомендации</div><div class="desc">Ассистент по SKU, лог решений</div></div>
+  </div>
+</div>
+
+<!-- MODULE 1 -->
+<div class="module-block open">
+  <div class="module-header">
+    <span class="module-badge">Модуль 01</span>
+    <span class="module-title">Discovery и фиксация ТЗ</span>
+    <span class="module-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="module-body">
+    <div class="module-section">
+      <div class="module-section-label">Состав работ</div>
+      <ul>
+        <li>Инвентаризация доступов к информационным системам Заказчика: Wildberries Seller API, аналитические сервисы маркетплейсов, рекламные кабинеты, бидер, рабочие таблицы, источники данных по поставщикам</li>
+        <li>Фиксация бизнес-правил отбора товаров и решений менеджеров: управление ценой, рекламной кампанией, остатками, выкупами</li>
+        <li>Архитектурное решение по инфраструктуре системы</li>
+        <li>Согласование критериев готовности по каждому из последующих модулей</li>
+      </ul>
+    </div>
+    <div class="deliverable-block">
+      <div class="deliverable-label">Поставка</div>
+      <div class="deliverable-text">Документ ТЗ + перечень доступов + архитектурная схема системы</div>
+    </div>
+    <div class="acceptance-block">
+      <div class="acceptance-label">Приёмка</div>
+      <div class="acceptance-text">Заказчик утверждает ТЗ перед стартом разработки модулей 2-5</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE 2 -->
+<div class="module-block">
+  <div class="module-header">
+    <span class="module-badge">Модуль 02</span>
+    <span class="module-title">R&P-автозаполнение и базовый дашборд</span>
+    <span class="module-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="module-body">
+    <div class="module-section">
+      <div class="module-section-label">Состав работ</div>
+      <ul>
+        <li>Парсер Wildberries Seller API → нормализация данных → ежеутреннее автообновление таблицы R&P по магазинам Заказчика</li>
+        <li>Подтяжка рекламных расходов из рекламного контура</li>
+        <li>Дашборд по ключевым метрикам: ДРР, CTR, конверсии, выкупы, оборачиваемость</li>
+        <li>Алерты в Telegram ответственному менеджеру по правилам, согласованным в ТЗ</li>
+      </ul>
+    </div>
+    <div class="deliverable-block">
+      <div class="deliverable-label">Поставка</div>
+      <div class="deliverable-text">Работающий пайплайн в проде, исходный код, конфигурация алертов, инструкция по эксплуатации</div>
+    </div>
+    <div class="acceptance-block">
+      <div class="acceptance-label">Приёмка</div>
+      <div class="acceptance-text">Заказчик подтверждает корректность данных за 3 рабочих дня сравнением с ручной таблицей</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE 3 -->
+<div class="module-block">
+  <div class="module-header">
+    <span class="module-badge">Модуль 03</span>
+    <span class="module-title">Контроль поставок</span>
+    <span class="module-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="module-body">
+    <div class="module-section">
+      <div class="module-section-label">Состав работ</div>
+      <ul>
+        <li>Трекер сроков поставок по контуру Заказчика</li>
+        <li>Алерты в Telegram ответственному менеджеру при приближении к срокам и просрочках</li>
+        <li>Автогенерация шаблонных сообщений поставщикам</li>
+      </ul>
+    </div>
+    <div class="deliverable-block">
+      <div class="deliverable-label">Поставка</div>
+      <div class="deliverable-text">Трекер + бот алертов + шаблоны сообщений, исходный код, инструкция</div>
+    </div>
+    <div class="acceptance-block">
+      <div class="acceptance-label">Приёмка</div>
+      <div class="acceptance-text">Заказчик проверяет работу на реальных поставках в течение калибровочного периода</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE 4 -->
+<div class="module-block">
+  <div class="module-header">
+    <span class="module-badge">Модуль 04</span>
+    <span class="module-title">Парсинг товаров и поиск аналогов</span>
+    <span class="module-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="module-body">
+    <div class="module-section">
+      <div class="module-section-label">Состав работ</div>
+      <ul>
+        <li>Выгрузка категорий товаров из аналитического сервиса маркетплейса</li>
+        <li>Отбор товаров по критериям, зафиксированным в ТЗ</li>
+        <li>Получение карточек и фотографий товаров с Wildberries</li>
+        <li>Поиск аналогов по фото на 1688 и сбор данных по топ-продавцам</li>
+        <li>Заполнение таблицы Юнит-Экономики данными по найденным товарам</li>
+      </ul>
+    </div>
+    <div class="deliverable-block">
+      <div class="deliverable-label">Поставка</div>
+      <div class="deliverable-text">Пайплайн «по команде» + интеграция с таблицей Юнит-Экономики, исходный код, инструкция</div>
+    </div>
+    <div class="acceptance-block">
+      <div class="acceptance-label">Приёмка</div>
+      <div class="acceptance-text">Прогон на согласованной категории, сравнение результата с ручной выборкой менеджера</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE 5 -->
+<div class="module-block">
+  <div class="module-header">
+    <span class="module-badge">Модуль 05</span>
+    <span class="module-title">AI-рекомендации по SKU</span>
+    <span class="module-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="module-body">
+    <div class="module-section">
+      <div class="module-section-label">Состав работ</div>
+      <ul>
+        <li>Логика рекомендаций по SKU на основе ретроспективы решений менеджеров (данные из Модуля 2) и анализа конкурентов (из Модуля 4)</li>
+        <li>Параллельная работа «менеджер + AI» на калибровочном периоде</li>
+        <li>Лог решений и метрика сходимости рекомендаций AI с фактическими решениями менеджеров</li>
+        <li>Постепенное расширение зоны автономии AI по мере подтверждения качества</li>
+      </ul>
+    </div>
+    <div class="deliverable-block">
+      <div class="deliverable-label">Поставка</div>
+      <div class="deliverable-text">AI-ассистент по SKU, исходный код, инструкция, лог решений с метрикой сходимости</div>
+    </div>
+    <div class="acceptance-block">
+      <div class="acceptance-label">Приёмка</div>
+      <div class="acceptance-text">Прогон на согласованной выборке SKU за калибровочный период, сравнение AI-рекомендаций с фактическими решениями менеджеров</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMAT -->
+<div class="section">
+  <div class="section-label">Формат работы</div>
+  <h2>Разработка под ключ, не интенсив</h2>
+  <p class="section-desc">Исполнитель ведёт разработку самостоятельно. Заказчик участвует в постановке задач, демо промежуточных результатов и приёмке.</p>
+  <div class="format-block">
+    <h3>Как идёт работа</h3>
+    <ul>
+      <li><strong>Самостоятельная разработка Исполнителя</strong> в течение всего срока</li>
+      <li><strong>Рабочие созвоны 1-2 раза в неделю</strong> для синхронизации, демонстрации промежуточных результатов и приёмки модулей</li>
+      <li><strong>Оперативная коммуникация в Telegram</strong> в рабочее время (10:00-18:00 МСК)</li>
+      <li><strong>Параллельная приёмка модулей:</strong> Модуль N сдан → Заказчик проверяет → Исполнитель параллельно работает над N+1</li>
+      <li><strong>Календарь работ</strong> ведёт Исполнитель и согласовывает контрольные точки с Заказчиком</li>
+    </ul>
+  </div>
+</div>
+
+<!-- EXCLUDED -->
+<div class="section">
+  <div class="section-label">Что не входит в работы Исполнителя</div>
+  <h2>Границы поставки</h2>
+  <div class="exclude-block">
+    <ul>
+      <li>Платные тарифы и API сторонних сервисов (аналитика маркетплейса, LLM-провайдеры, инфраструктура) - оплачивает Заказчик</li>
+      <li>Развитие и сопровождение системы после подписания акта сдачи-приёмки - оформляется отдельным договором</li>
+      <li>Обучение персонала Заказчика по работе с маркетплейсами и закупками - программа касается только переданного ПО</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FINAL ACCEPTANCE -->
+<div class="section">
+  <div class="section-label">Финальная приёмка</div>
+  <h2>Что получает Заказчик по итогу</h2>
+  <div class="exclude-block">
+    <ul>
+      <li>Исходный код всех разработанных программных модулей</li>
+      <li>Конфигурации, настройки интеграций, доступы</li>
+      <li>Сопроводительная документация и инструкции по эксплуатации</li>
+      <li>Вводный инструктаж ответственного сотрудника Заказчика</li>
+      <li>Подписание акта сдачи-приёмки по всему объёму работ</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div class="footer-logo">MD<span class="dot">.</span></div>
+  <div class="footer-text">ИП Дробот М.В. | Программа работ № 004</div>
+</div>
+
+<script>
+document.querySelectorAll('.module-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const block = header.closest('.module-block');
+    block.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
