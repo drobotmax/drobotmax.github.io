@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тактическая программа: AI для светового бизнеса - Паша</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0A1628;
+  --navy-elevated: #0E1D33;
+  --navy-card: #12233D;
+  --navy-hover: #172B4A;
+  --emerald: #34D399;
+  --emerald-light: #6EE7B7;
+  --emerald-dim: rgba(52,211,153,0.08);
+  --emerald-border: rgba(52,211,153,0.2);
+  --white: #E8ECF1;
+  --gray: #8B9BB4;
+  --muted: #4A5E7A;
+  --border: #1A2D4A;
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: #F8F9FB;
+  color: #1A1A2E;
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-header { background: var(--navy); padding: 72px 0 56px; position: relative; overflow: hidden; }
+.page-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--emerald), transparent); }
+.header-logo { font-family: var(--font); font-weight: 900; font-size: 22px; color: var(--white); letter-spacing: -0.04em; margin-bottom: 32px; }
+.header-logo .dot { color: var(--emerald); }
+.header-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.header-label::before { content: '//'; opacity: 0.5; }
+.page-header h1 { font-size: 36px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; margin-bottom: 8px; }
+.page-header .subtitle { font-size: 16px; color: var(--gray); font-weight: 500; margin-bottom: 32px; }
+.header-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-item .meta-label { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.meta-item .meta-value { font-size: 14px; font-weight: 600; color: var(--white); }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+.section { padding: 56px 0; border-bottom: 1px solid #E5E7EB; }
+.section:last-child { border-bottom: none; }
+.section-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-label::before { content: '//'; opacity: 0.5; }
+
+h2 { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; margin-bottom: 12px; }
+h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.section-desc { font-size: 16px; color: #6B7280; max-width: 780px; margin-bottom: 32px; line-height: 1.75; }
+
+.value-block { background: var(--navy); border-radius: 16px; padding: 40px 48px; color: var(--white); font-size: 17px; line-height: 1.75; margin-bottom: 48px; position: relative; overflow: hidden; }
+.value-block::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--emerald); }
+
+.lesson-note { background: #FEF3C7; border-left: 3px solid #F59E0B; border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #78350F; margin-bottom: 20px; line-height: 1.6; }
+.lesson-note strong { color: #92400E; }
+
+.verified-badge { display: inline-block; font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #0A1628; background: var(--emerald); padding: 3px 8px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+
+.overview-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.overview-table th { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--navy); }
+.overview-table td { padding: 16px 18px; font-size: 15px; border-bottom: 1px solid #E5E7EB; vertical-align: top; }
+.overview-table tr:last-child td { border-bottom: none; }
+.overview-table .day-num { font-family: var(--mono); font-weight: 700; font-size: 12px; color: var(--emerald); white-space: nowrap; }
+.overview-table .day-topic { font-weight: 600; color: var(--navy); }
+.overview-table .day-result { color: #6B7280; font-size: 13px; }
+.overview-table .weekend { background: var(--emerald-dim); font-style: italic; color: var(--muted); }
+.overview-table .phase-row td { background: var(--navy); color: var(--emerald); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 16px; }
+
+.structure-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.structure-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; text-align: center; }
+.structure-card .num { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--emerald); margin-bottom: 4px; }
+.structure-card .label { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.structure-card .desc { font-size: 11px; color: #6B7280; }
+
+.week-divider { background: var(--navy); border-radius: 12px; padding: 24px 32px; margin: 48px 0 40px; display: flex; align-items: center; gap: 16px; }
+.week-divider .week-num { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); }
+.week-divider .week-title { font-size: 18px; font-weight: 700; color: var(--white); }
+.week-divider .week-dates { font-size: 13px; color: var(--gray); margin-left: auto; }
+
+.preflight-block { background: var(--navy-card); border: 1px solid var(--emerald-border); border-radius: 16px; padding: 32px; margin-bottom: 40px; color: var(--white); }
+.preflight-block h3 { color: var(--white); font-size: 20px; margin-bottom: 8px; }
+.preflight-block .preflight-desc { font-size: 14px; color: var(--gray); margin-bottom: 20px; }
+.preflight-block ul { list-style: none; padding: 0; }
+.preflight-block li { padding-left: 28px; position: relative; margin-bottom: 10px; font-size: 14px; color: #CBD5E1; }
+.preflight-block li::before { content: ''; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border: 2px solid var(--emerald); border-radius: 3px; }
+.preflight-block strong { color: var(--white); }
+
+.day-block { background: #fff; border: 1px solid #E5E7EB; border-radius: 16px; margin-bottom: 24px; overflow: hidden; }
+.day-header { background: var(--navy); padding: 20px 28px; display: flex; align-items: center; gap: 16px; cursor: pointer; user-select: none; transition: background 0.2s; }
+.day-header:hover { background: var(--navy-elevated); }
+.day-badge { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); background: var(--emerald); padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+.day-title { font-size: 17px; font-weight: 700; color: var(--white); }
+.day-date { font-size: 13px; color: var(--gray); white-space: nowrap; margin-left: auto; }
+.day-toggle { margin-left: auto; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; background: rgba(255,255,255,0.08); transition: transform 0.3s ease; flex-shrink: 0; }
+.day-toggle svg { width: 14px; height: 14px; stroke: var(--gray); stroke-width: 2.5; fill: none; }
+.day-block.open .day-toggle { transform: rotate(180deg); }
+.day-body { padding: 0 28px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+.day-block.open .day-body { padding: 28px; max-height: 4500px; }
+.day-note { background: var(--emerald-dim); border: 1px solid var(--emerald-border); border-radius: 10px; padding: 16px 20px; font-size: 14px; color: var(--navy); margin-bottom: 24px; line-height: 1.65; }
+
+.day-section { margin-bottom: 24px; }
+.day-section:last-child { margin-bottom: 0; }
+.day-section-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--emerald); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #F3F4F6; }
+.day-section ul { list-style: none; padding: 0; }
+.day-section li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 15px; line-height: 1.65; color: #374151; }
+.day-section li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+.day-section li.sub { padding-left: 38px; color: #6B7280; font-size: 14px; }
+.day-section li.sub::before { left: 18px; width: 4px; height: 4px; background: #D1D5DB; }
+.checklist li::before { display: none; }
+.checklist li { padding-left: 24px; position: relative; }
+.checklist li::after { content: ''; position: absolute; left: 0; top: 5px; width: 14px; height: 14px; border: 2px solid #D1D5DB; border-radius: 3px; }
+.link { color: #3B82F6; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+.code-sample { background: var(--navy); color: #E2E8F0; border-radius: 10px; padding: 16px 20px; font-family: var(--mono); font-size: 12px; line-height: 1.7; margin: 12px 0; white-space: pre-wrap; }
+
+.compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+.compare-card { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 14px 16px; }
+.compare-card .compare-name { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--emerald); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.compare-card .compare-desc { font-size: 12px; color: #4B5563; line-height: 1.5; }
+.compare-card.primary { background: var(--emerald-dim); border-color: var(--emerald-border); }
+
+.homework { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 16px 20px; }
+.homework-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #92400E; margin-bottom: 8px; }
+.homework ul { list-style: none; padding: 0; }
+.homework li { padding-left: 18px; margin-bottom: 4px; font-size: 13px; color: #78350F; position: relative; }
+.homework li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: #F59E0B; }
+
+.tasks-table { width: 100%; border-collapse: collapse; }
+.tasks-table th { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 10px 16px; border-bottom: 2px solid var(--navy); }
+.tasks-table td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #E5E7EB; }
+.tasks-table tr:last-child td { border-bottom: none; }
+.tasks-table .task-name { color: var(--navy); font-weight: 500; }
+.tasks-table .task-day { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--emerald); white-space: nowrap; }
+
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.tool-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; }
+.tool-day { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--emerald); background: var(--emerald-dim); padding: 2px 6px; border-radius: 4px; white-space: nowrap; margin-top: 2px; }
+.tool-info .tool-name { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+.tool-info .tool-desc { font-size: 12px; color: #6B7280; }
+
+.page-footer { background: var(--navy); padding: 40px 0; text-align: center; margin-top: 40px; }
+.footer-logo { font-family: var(--font); font-weight: 900; font-size: 18px; color: var(--white); letter-spacing: -0.04em; margin-bottom: 8px; }
+.footer-logo .dot { color: var(--emerald); }
+.footer-text { font-size: 12px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .container { padding: 0 20px; }
+  .page-header { padding: 48px 0 40px; }
+  .page-header h1 { font-size: 26px; }
+  .header-meta { flex-direction: column; gap: 16px; }
+  .structure-grid { grid-template-columns: repeat(2, 1fr); }
+  .compare-grid { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .day-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .day-date { margin-left: 0; }
+  .week-divider { flex-direction: column; align-items: flex-start; }
+  .week-divider .week-dates { margin-left: 0; }
+}
+@media print {
+  body { background: #fff; }
+  .day-block { break-inside: avoid; }
+  .week-divider { break-before: page; }
+  .day-block .day-body { max-height: none !important; padding: 28px !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="page-header">
+<div class="container">
+  <div class="header-logo">MD<span class="dot">.</span></div>
+  <div class="header-label">Тактическая программа</div>
+  <h1>AI для светового бизнеса</h1>
+  <div class="subtitle">Паша - учредитель, B2B-проекты освещения</div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">Старт</span><span class="meta-value">после pre-flight</span></div>
+    <div class="meta-item"><span class="meta-label">Формат</span><span class="meta-value">Async: видео + ДЗ + 2 созвона/нед</span></div>
+    <div class="meta-item"><span class="meta-label">Срок</span><span class="meta-value">10 рабочих дней (3 нед. календарных)</span></div>
+    <div class="meta-item"><span class="meta-label">Стоимость</span><span class="meta-value">100 000 руб (разовая)</span></div>
+  </div>
+</div>
+</div>
+
+<div class="container">
+
+<!-- VALUE -->
+<div class="section">
+  <div class="value-block">
+    Полный стек AI-инструментов под B2B-световой бизнес. Программа состоит из двух фаз: сначала фундамент (как устроены LLM, базовый промптинг, гигиена работы с AI, голосовой ввод, безопасность данных), потом боевые кейсы. AI-сборщик КП собирает предложение за 15 минут вместо 1-2 дней. AI-диспетчер логистики ловит ошибки доставки до отгрузки. AI-подбор по техническим параметрам - аналог новосибирского конкурента. База знаний компании как "второй мозг". Все процессы и задачи компании - не отдельный блок, это материал, на котором учимся.
+  </div>
+</div>
+
+<!-- PRE-FLIGHT -->
+<div class="section">
+  <div class="section-label">Pre-flight - ДО старта</div>
+  <h2>Что должно быть готово к старту</h2>
+  <p class="section-desc">Собираем доступы и материалы заранее. Урок Цветкова: API amoCRM отрубили в середине программы, потеряли день на ожидание. У Паши собираем всё в pre-flight. Без видео текущего процесса менеджера старт не имеет смысла - оно лежит в фундаменте Дня 4 и Дня 6.</p>
+  <div class="preflight-block">
+    <h3>Чеклист готовности</h3>
+    <div class="preflight-desc">Максим подключается за 3-4 дня до старта с проверкой каждого пункта.</div>
+    <ul>
+      <li><strong>Видео текущего процесса менеджера</strong> (15-30 мин screencast: проект от дизайнера → подбор поставщиков → составление КП). Без этого не стартуем</li>
+      <li><strong>MacBook / ноутбук</strong> 16 GB RAM, интернет 50+ Мбит</li>
+      <li><strong>Подписки оплачены:</strong> ChatGPT Plus, Claude Pro</li>
+      <li><strong>Freedom BI:</strong> контакты техспецов, документация API (если есть), логин/пароль для Playwright-fallback</li>
+      <li><strong>ЛК поставщиков:</strong> 10-15 проверенных + логины (для парсинга цен и остатков)</li>
+      <li><strong>Корпоративный университет:</strong> доступ для Максима для изучения</li>
+      <li><strong>Экспорт TG-чатов</strong> за 30 дней (логистика, общий, отчётность)</li>
+      <li><strong>5-10 типовых проектов</strong> с готовыми КП (вход + выход) - эталоны для AI-сборщика</li>
+      <li><strong>3-5 референсов</strong> конкурентных КП и сайтов поставщиков, которые нравятся</li>
+    </ul>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="section">
+  <div class="section-label">Обзор программы</div>
+  <h2>10 дней: 3 дня фундамента + 7 дней боевых кейсов</h2>
+  <table class="overview-table">
+    <thead><tr><th>День</th><th>Тема</th><th>Результат</th></tr></thead>
+    <tbody>
+      <tr class="phase-row"><td colspan="3">Фаза 1 - Фундамент (Дни 1-3)</td></tr>
+      <tr><td class="day-num">01</td><td class="day-topic">AI-101: что такое LLM, какие модели и как их выбирать</td><td class="day-result">Различает Claude / ChatGPT / Gemini, знает когда что включать</td></tr>
+      <tr><td class="day-num">02</td><td class="day-topic">Базовый промптинг: роли, контекст, ограничения, few-shot</td><td class="day-result">Собирает рабочие промпты под себя, не "пиши лучше"</td></tr>
+      <tr><td class="day-num">03</td><td class="day-topic">Гигиена + контекст/файлы + голос + 152-ФЗ</td><td class="day-result">Знает где AI врёт, что можно гнать, что нет</td></tr>
+      <tr class="phase-row"><td colspan="3">Фаза 2 - Боевые кейсы (Дни 4-10)</td></tr>
+      <tr><td class="day-num">04</td><td class="day-topic">Стек на ТВОИХ данных + аудит процесса КП</td><td class="day-result">Первый wow-инсайт: TG-чаты разобраны AI</td></tr>
+      <tr><td class="day-num">05</td><td class="day-topic">База знаний: шаблон под световую B2B</td><td class="day-result">30+ заметок: поставщики, проекты, ТЗ</td></tr>
+      <tr><td class="day-num">06</td><td class="day-topic">AI-сборщик КП v1: главный денежный кейс</td><td class="day-result">КП за 15 минут вместо 1-2 дней</td></tr>
+      <tr><td class="day-num">07</td><td class="day-topic">Freedom BI + ЛК поставщиков (API / Playwright)</td><td class="day-result">Цены и остатки в одном окне</td></tr>
+      <tr class="weekend"><td></td><td colspan="2" style="text-align:center">Выходные: практика + домашнее задание</td></tr>
+      <tr><td class="day-num">08</td><td class="day-topic">TG-чаты: AI-диспетчер логистики</td><td class="day-result">Бот тянет данные → структурированный отчёт</td></tr>
+      <tr><td class="day-num">09</td><td class="day-topic">Связка: КП → заказ → логистика → отчёт</td><td class="day-result">Полный цикл в одном дашборде</td></tr>
+      <tr><td class="day-num">10</td><td class="day-topic">AI-подбор по ТТХ + VPS + финальная сборка</td><td class="day-result">Аналог Новосибирска + ассистент 24/7</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;color:#6B7280;margin-top:12px;">Async-формат: 12 рабочих дней растянуты на 3-4 календарные недели. Финальное расписание подтверждаем на ознакомительной.</p>
+</div>
+
+<!-- STRUCTURE -->
+<div class="section">
+  <div class="section-label">Как устроен каждый день</div>
+  <h2>Async-ритм: видео + практика + созвоны</h2>
+  <div class="structure-grid">
+    <div class="structure-card"><div class="num">1</div><div class="label">Чеклист</div><div class="desc">Что подготовить к уроку</div></div>
+    <div class="structure-card"><div class="num">2</div><div class="label">Видеоурок</div><div class="desc">15-30 мин на данных Паши</div></div>
+    <div class="structure-card"><div class="num">3</div><div class="label">Практика</div><div class="desc">Руками, 1-2 часа</div></div>
+    <div class="structure-card"><div class="num">4</div><div class="label">Домашка + Checkpoint</div><div class="desc">Применить + созвон 2×/нед</div></div>
+  </div>
+  <div class="lesson-note">
+    <strong>Логика двух фаз:</strong> сначала Паша получает фундамент - как устроены LLM, базовый промптинг, что такое контекст и галлюцинации, голосовой ввод, безопасность данных. Без этого async-формат провалится: на боевых кейсах не будет хватать базы. Дни 1-3 - не теория ради теории, а инструменты, которые сразу применяются. С Дня 4 - на реальных данных компании.
+  </div>
+</div>
+
+<!-- WEEK 1 - FOUNDATION -->
+<div class="week-divider">
+  <div class="week-num">Фаза 1</div>
+  <div class="week-title">Фундамент: как устроен AI и как с ним работать</div>
+  <div class="week-dates">Дни 1-3</div>
+</div>
+
+<!-- DAY 1 - AI 101 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 1</span>
+    <span class="day-title">AI-101: что такое LLM и как выбирать модели</span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">
+      Разбираем фундамент без воды: что такое LLM, почему модели "галлюцинируют", чем Claude отличается от ChatGPT и Gemini, когда что включать. Без этого пункт "универсальность стека под разные модели" - пустой.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Claude Pro и ChatGPT Plus открываются</li>
+        <li>(опц.) Gemini, Perplexity - аккаунты</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Видеоурок (~40 мин)</div>
+      <ul>
+        <li>Andrej Karpathy <a class="link" href="https://www.youtube.com/watch?v=zjkBMFhNj_g" target="_blank">"Intro to LLMs"</a> на 1.5x - как работает токенизация и предсказание</li>
+        <li>Короткое демо Максима: один и тот же запрос в Claude / ChatGPT / Gemini - где разница</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (1-1.5 часа): какие модели и зачем</div>
+      <div class="compare-grid">
+        <div class="compare-card primary">
+          <div class="compare-name">Claude (Anthropic)</div>
+          <div class="compare-desc">Длинный контекст, аккуратные ответы, лучший для рабочих документов и больших файлов. Основной инструмент курса.</div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-name">ChatGPT</div>
+          <div class="compare-desc">Быстрая генерация, голосовой режим, картинки. Резерв и сравнение результатов. Хорош для быстрых рабочих задач.</div>
+        </div>
+        <div class="compare-card">
+          <div class="compare-name">Gemini / Perplexity</div>
+          <div class="compare-desc">Gemini - связка с Google Workspace, Perplexity - актуальный поиск. Узкие сценарии, не основной инструмент.</div>
+        </div>
+      </div>
+      <ul>
+        <li><strong>Принцип "универсальности":</strong> 90% промптов работают одинаково в Claude и ChatGPT. Если результат разный - это сигнал переформулировать</li>
+        <li><strong>Когда какая модель:</strong> крупные документы и КП - Claude, картинки и быстрые мелочи - ChatGPT, поиск с источниками - Perplexity</li>
+        <li><strong>Что такое "контекст" модели:</strong> почему длинный диалог "забывается", как с этим работать</li>
+        <li><strong>Цена и лимиты:</strong> Pro / Plus - чего хватает, когда нужно больше</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (показать на checkpoint)</div>
+      <ul>
+        <li>Прогнать 5 одинаковых рабочих вопросов через Claude и ChatGPT - сравнить</li>
+        <li>Записать: где Claude был лучше, где ChatGPT, что одинаково</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 2 - PROMPTING -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 2</span>
+    <span class="day-title">Базовый промптинг: роль, контекст, ограничения, примеры</span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">
+      Самый недооценённый блок. На промптинге выезжают 80% всех результатов. Без этого Паша будет писать "сделай КП" и получать мусор. Учимся структуре, а не магическим словам.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Видеоурок (~30 мин)</div>
+      <ul>
+        <li>Anthropic - <a class="link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">Prompt engineering basics</a></li>
+        <li>Демо Максима: "плохой промпт vs хороший промпт" на реальном вопросе подбора светильника</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (1.5-2 часа): 5 техник, которые работают</div>
+      <ul>
+        <li><strong>Роль:</strong> "Ты опытный менеджер по продажам световых решений" - модель сразу думает как нужный персонаж</li>
+        <li><strong>Контекст:</strong> кому КП, какой объект, бюджет, дедлайн, особые требования. Без контекста - фантазия модели</li>
+        <li><strong>Ограничения:</strong> "только проверенные поставщики из списка", "не предлагай маркетплейсы", "маржа не ниже N%"</li>
+        <li><strong>Формат вывода:</strong> таблица, список, текст письма, JSON. Заранее говорим что хотим</li>
+        <li><strong>Few-shot - примеры:</strong> "вот один готовый КП, сделай по такому же шаблону" - точнее любых инструкций</li>
+        <li><strong>Цепочка рассуждений:</strong> "сначала разбери требования, потом подбери лампы, потом посчитай бюджет, потом собери КП" - заставляет думать пошагово</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Шаблон рабочего промпта</div>
+      <div class="code-sample">[РОЛЬ] Ты менеджер по продажам в B2B-световом бизнесе.
+
+[КОНТЕКСТ]
+Клиент: интерьерное бюро "Дизайн+", проект - офис 200 м² в Москве.
+ТЗ: тёплый свет 3000K, диммирование, IP20, бюджет до 800К.
+Поставщики: Pollux, Lumens, Aledo (только эти).
+
+[ЗАДАЧА]
+1. Разобрать ТЗ на технические требования
+2. Подобрать 3 варианта по разным сериям
+3. Посчитать бюджет с маржой 25%
+4. Собрать КП в формате нашего шаблона (приложен)
+
+[ОГРАНИЧЕНИЯ]
+- Не использовать товары не из списка поставщиков
+- Указать аналог, если основная серия "под заказ"
+- Маржа не ниже 22%
+
+[ФОРМАТ] Готовое КП в таблице + сопроводительный текст письма.</div>
+      <ul>
+        <li>Прогоняем шаблон на 3 реальных проектах из pre-flight</li>
+        <li>Сохраняем в Obsidian как переиспользуемый промпт</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание</div>
+      <ul>
+        <li>Собрать 5 рабочих промптов под повторяющиеся задачи (КП, ответ клиенту, разбор спора, ТЗ от дизайнера, аналог при отсутствии товара)</li>
+        <li>Каждый - в формате роль + контекст + задача + ограничения + формат</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 3 - HYGIENE & VOICE & 152FZ -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 3</span>
+    <span class="day-title">Гигиена + контекст и файлы + голос + 152-ФЗ</span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">
+      Четыре быстрых блока, которые закрывают безопасность работы и скорость. Без этого Паша либо будет тормозить (всё печатать руками), либо сольёт чувствительные данные, либо поверит галлюцинации.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Блок 1: гигиена работы с AI (~30 мин)</div>
+      <ul>
+        <li><strong>Галлюцинации:</strong> модель уверенно врёт - примеры на цифрах, технических характеристиках, названиях серий</li>
+        <li><strong>Когда не доверять:</strong> точные цены / артикулы / даты / тех. характеристики - всегда проверять у поставщика</li>
+        <li><strong>Как ловить:</strong> просим источник, просим показать рассуждение, просим самокритику</li>
+        <li><strong>Принцип:</strong> AI - быстрый помощник, не источник истины. Финальное решение и проверка - человек</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Блок 2: контекст и работа с файлами (~30 мин)</div>
+      <ul>
+        <li><strong>Сколько влезает:</strong> Claude - до 200К токенов (~150 страниц), ChatGPT - меньше</li>
+        <li><strong>Как делить большие документы:</strong> на смысловые куски, по проекту, по поставщику</li>
+        <li><strong>Артефакты в Claude:</strong> отдельное окно для длинного результата (КП, договор, презентация)</li>
+        <li><strong>Drag-and-drop:</strong> закидываем PDF / Excel / картинку - модель сразу читает</li>
+        <li><strong>Когда диалог "забывает":</strong> признаки переполненного контекста, как стартовать новый</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Блок 3: голосовой ввод (~20 мин)</div>
+      <ul>
+        <li><strong>Wispr Flow / Voice Control:</strong> диктуешь - текст летит в любое окно. Скорость +3-5×</li>
+        <li><strong>Голос в ChatGPT:</strong> диалог как с собеседником, удобно по дороге в офис</li>
+        <li><strong>Голос в Claude (Mac):</strong> через системный диктант или Wispr</li>
+        <li>Установка и базовая настройка - руками</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Блок 4: 152-ФЗ и безопасность данных (~30 мин)</div>
+      <ul>
+        <li><strong>Что нельзя гнать в иностранные AI без анонимизации:</strong> ФИО сотрудников и клиентов, паспортные данные, контакты дизайнеров и прорабов</li>
+        <li><strong>Что чувствительно для бизнеса:</strong> прайсы поставщиков, маржа, договорные цены, внутренние конфликты</li>
+        <li><strong>Как анонимизировать:</strong> заменяем имена на "Клиент 1", контакты убираем, цены - на относительные ("100 у.е.")</li>
+        <li><strong>Где хранить чувствительное:</strong> локально в Obsidian, не в облачных AI-сервисах</li>
+        <li><strong>API-ключи и логины ЛК:</strong> локальный конфиг, не в чатах с моделью</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание</div>
+      <ul>
+        <li>Установить Wispr Flow или включить системный диктант, надиктовать 3 рабочих сообщения</li>
+        <li>Прогнать через AI один реальный документ компании - заранее анонимизировать ФИО и цены</li>
+        <li>Найти 2 примера, где модель "уверенно соврала" - зафиксировать, что именно</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- WEEK 2 - PRACTICAL CASES -->
+<div class="week-divider">
+  <div class="week-num">Фаза 2</div>
+  <div class="week-title">Боевые кейсы на реальных данных компании</div>
+  <div class="week-dates">Дни 4-12</div>
+</div>
+
+<!-- DAY 4 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 4</span>
+    <span class="day-title">Стек на ТВОИХ данных + аудит процесса КП<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова День 1:</strong> показ стека на РЕАЛЬНЫХ данных клиента (930 сделок amoCRM) вместо абстрактной теории - залип на весь вечер. У Паши работаем на экспорте TG-чатов, эталонных КП и видео процесса менеджера.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Видео текущего процесса менеджера (из pre-flight)</li>
+        <li>Экспорт TG-чатов и 5-10 эталонных КП на руках</li>
+        <li>5 рабочих промптов из ДЗ Дня 2</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Видеоурок (~30 мин)</div>
+      <ul>
+        <li>Демо Максима: загрузка реальных данных Паши в Claude</li>
+        <li><a class="link" href="https://www.anthropic.com/news/visible-extended-thinking" target="_blank">Extended Thinking</a> - когда включать на сложных задачах</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (2 часа)</div>
+      <ul>
+        <li><strong>Денежный кейс на TG-чатах:</strong></li>
+        <li class="sub">Загружаем экспорт за 30 дней в Claude</li>
+        <li class="sub">Claude разбирает: повторяющиеся ошибки доставки, города-проблемники, спорные заказы</li>
+        <li class="sub">Считаем финансовый эффект: возвраты, повторные доставки, упущенные клиенты</li>
+        <li><strong>Аудит процесса КП:</strong></li>
+        <li class="sub">Скармливаем транскрипт видео менеджера + эталонные КП</li>
+        <li class="sub">Claude формирует карту процесса: где менеджер тратит время, где ошибается, где автоматизировать</li>
+        <li><strong>System prompts под роли:</strong> собираем "КП-ассистент" и "Логист-ассистент" из шаблонов Дня 2</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание</div>
+      <ul>
+        <li>Прогнать "КП-ассистент" на 3 реальных проектах</li>
+        <li>Список знаний "в голове": особенности поставщиков, любимые серии, тех. нюансы</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 5 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 5</span>
+    <span class="day-title">База знаний: готовый шаблон под световую B2B<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> готовый шаблон vault зашёл лучше, чем "создай с нуля". У Димы перенесли 70+ документов за 90 минут. Максим приносит готовую структуру под световой B2B.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Obsidian установлен (пустой)</li>
+        <li>Каталоги, прайсы, тех. требования - в одну папку</li>
+        <li>Список знаний "из головы" (из ДЗ Дня 4)</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Видеоурок (~25 мин)</div>
+      <ul>
+        <li>Nicole van der Hoeven - 1-2 коротких видео про Obsidian</li>
+        <li>Короткий блок про Zettelkasten - почему связи важнее папок</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (1.5-2 часа): структура vault</div>
+      <ul>
+        <li><strong>Поставщики/</strong> - карточки: бренды, серии, маржа, условия, ЛК-доступы</li>
+        <li><strong>Проекты/</strong> - типовые: офис, ритейл, HoReCa, фасадка</li>
+        <li><strong>ТЗ-шаблоны/</strong> - технические требования по типам объектов</li>
+        <li><strong>КП/</strong> - готовые эталоны</li>
+        <li><strong>Логистика/</strong> - ТК, маршруты, сроки, кейсы ошибок</li>
+        <li><strong>Клиенты/</strong> - дизайнеры, прорабы, ГИПы</li>
+        <li><strong>Промпты/</strong> - все рабочие промпты из Дня 2 в одном месте</li>
+        <li><strong>FAQ/</strong> - для сайта и чат-бота</li>
+        <li>Массовый перенос существующей базы через Claude (аналог "70 документов за 90 минут")</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание</div>
+      <ul>
+        <li>Заполнить ещё 10-15 заметок</li>
+        <li>Карта процесса "от запроса дизайнера до отгрузки" с точками автоматизации</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 6 - AI-СБОРЩИК КП -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 6</span>
+    <span class="day-title">AI-сборщик КП v1: главный денежный кейс<span class="verified-badge">★ ядро программы</span></span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">
+      Сердце программы. Превращаем процесс "менеджер собирает КП за 1-2 дня" в "AI-сборщик за 15 минут". Использует всё, что собрали в Днях 1-5: промпт-инжиниринг, базу знаний, эталонные проекты.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>5-10 эталонных проектов в формате (вход дизайнера → выход КП)</li>
+        <li>Прайсы и каталоги проверенных поставщиков в одной папке</li>
+        <li>Шаблон КП компании</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Видеоурок (~30 мин)</div>
+      <ul>
+        <li>Демо Максима: сборка КП из проекта дизайнера за 15 минут</li>
+        <li>Когда Chat хватает, когда нужен Claude Code</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (2-3 часа)</div>
+      <ul>
+        <li><strong>Промпт-сборщик КП:</strong> Claude получает проект дизайнера + папку с прайсами → выдаёт КП</li>
+        <li><strong>Ограничения:</strong> только проверенные поставщики из base knowledge, не маркетплейсы</li>
+        <li><strong>Контроль маржи:</strong> правило "себестоимость + N%", прозрачно показывает наценку</li>
+        <li>Прогоняем на 3-5 реальных проектах, сравниваем с КП, которое менеджер собрал руками</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание (на выходные)</div>
+      <ul>
+        <li>5 реальных проектов через AI-сборщик</li>
+        <li>Сравнение метрик: время / точность / маржа vs ручной процесс</li>
+        <li>Список "где AI ошибся" - на checkpoint правим промпт</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 7 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 7</span>
+    <span class="day-title">Freedom BI + ЛК поставщиков (API / Playwright)<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> API amoCRM отрубили в середине программы - спасла автоматизация через браузер (Playwright). Готовим оба варианта с первой минуты.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Контакты техспецов Freedom BI или документация API</li>
+        <li>Логины/пароли к 5-10 ЛК поставщиков</li>
+        <li>10 типовых SKU, по которым AI должен тянуть цену и остаток</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Видеоурок (~30 мин)</div>
+      <ul>
+        <li>Что такое REST API (короткое объяснение)</li>
+        <li>Когда API, когда Playwright-fallback</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (2-3 часа)</div>
+      <ul>
+        <li><strong>Freedom BI:</strong></li>
+        <li class="sub">Если API есть - читаем доку с Claude, тянем сделки и контакты</li>
+        <li class="sub">Если закрыт - Playwright логинится в веб-интерфейс</li>
+        <li><strong>ЛК поставщиков:</strong></li>
+        <li class="sub">Playwright логинится в каждый ЛК, забирает цены и остатки по списку SKU</li>
+        <li class="sub">Складывает в единую таблицу - AI-сборщик КП теперь работает на свежих ценах</li>
+        <li>Подключаем Google Calendar, Gmail, Todoist MCP - Claude видит день Паши</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание</div>
+      <ul>
+        <li>День с автоматическим срезом цен/остатков по 30 SKU</li>
+        <li>AI-сборщик КП на свежих данных - сравнение с прежней версией</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 8 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 8</span>
+    <span class="day-title">TG-чаты: AI-диспетчер логистики</span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Telegram-аккаунт для бота-диспетчера</li>
+        <li>Доступ к рабочим чатам (логистика / общий / отчётность)</li>
+        <li>Список 10 типов событий: "отгружено", "принято", "спор", "возврат"</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Видеоурок (~30 мин)</div>
+      <ul>
+        <li>Как работают TG-боты (обзор)</li>
+        <li>Как AI слушает чат и извлекает структуру событий</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (2-3 часа)</div>
+      <ul>
+        <li>Бот подключается к рабочим чатам (telegram-mcp / Telethon)</li>
+        <li>AI разбирает каждое сообщение: тип, заказ, город, поставщик, ТК</li>
+        <li>Складывает в единую таблицу (Google Sheets или Obsidian)</li>
+        <li><strong>Утренняя сводка:</strong> "вчера 12 отгрузок, 1 спор по №2345, 1 возврат по №2289"</li>
+        <li><strong>Алерты:</strong> если упомянут не тот город / не тот товар - бот сразу сигналит ответственному</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание</div>
+      <ul>
+        <li>1 день работы бота-диспетчера на реальных чатах</li>
+        <li>Обратная связь от логиста и менеджеров</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 9 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 9</span>
+    <span class="day-title">Связка: КП → заказ → логистика → отчёт<span class="verified-badge">✓ Проверено</span></span>
+    <span class="day-date">async</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="lesson-note">
+      <strong>Урок Цветкова:</strong> Daily Report с конкретным шаблоном зашёл лучше, чем "настрой scheduled tasks". Приходим с готовым примером для светового бизнеса.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>Доступ к таблице заказов (или Freedom BI)</li>
+        <li>Список ответственных по этапам: КП, заказ, отгрузка, доставка, оплата</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Практика (2-3 часа)</div>
+      <ul>
+        <li><strong>Полный цикл:</strong> КП утверждён → заказ в Freedom BI → отгрузка → диспетчер → клиент получил → отчёт</li>
+        <li>AI ловит зависшие заказы: "КП №123 без ответа 5 дней", "отгрузка №456 без подтверждения от ТК"</li>
+      </ul>
+      <div class="code-sample">Паше (личный) - утро 09:00:
+  Вчера: 4 КП отправлено, 2 утверждены, 1 в работе, 1 без ответа 5+ дней
+  Заказы: 6 отгружено, 1 спор по доставке (Краснодар, не та люстра)
+  Поставщики: у Pollux упал остаток по серии XXX, у Lumens обновился прайс
+  Маржа недели: ~XX%, отклонение от целевой -2%
+
+Менеджеру (Telegram):
+  Сегодня: 3 КП на доработку, 2 заказа без отгрузки 3+ дня</div>
+      <ul>
+        <li>Routines / scheduled tasks - запускаем ежедневный отчёт в 09:00</li>
+      </ul>
+    </div>
+    <div class="homework">
+      <div class="homework-label">Домашнее задание</div>
+      <ul>
+        <li>2 дня работы системы, фидбек команды</li>
+        <li>10-20 запросов дизайнеров на подбор по ТТХ - для Дня 10</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 10 -->
+<div class="day-block">
+  <div class="day-header">
+    <span class="day-badge">День 10</span>
+    <span class="day-title">AI-подбор по ТТХ + VPS + финальная сборка</span>
+    <span class="day-date">созвон, 2-3 часа</span>
+    <span class="day-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+  </div>
+  <div class="day-body">
+    <div class="day-note">
+      Финальный день: догоняем новосибирского конкурента (AI-подбор по ТТХ), переезжаем стек на VPS, собираем 24/7-ассистент, ревьюим всё, что сделали.
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Чеклист</div>
+      <ul class="checklist">
+        <li>10-20 реальных запросов дизайнеров: "светильник 4000K, IP65, 30W, диммируемый"</li>
+        <li>Каталоги поставщиков с тех. характеристиками</li>
+        <li>Список вопросов за курс</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Блок 1: AI-подбор по ТТХ - аналог Новосибирска (~1.5 часа)</div>
+      <ul>
+        <li>Разбор продукта новосибирского конкурента: что они делают, как</li>
+        <li><strong>AI-подборщик:</strong> дизайнер пишет ТТХ → AI ищет в базе поставщиков → 3-5 вариантов с обоснованием</li>
+        <li><strong>Расширение:</strong> "чем заменить серию X, если её нет в наличии" - AI ищет аналог</li>
+        <li><strong>Опционально:</strong> обёртка в Telegram-бот для дизайнеров - они сами пишут запросы</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Блок 2: VPS + TG-ассистент Паши (~1 час)</div>
+      <ul>
+        <li>Бот-диспетчер логистики переезжает с MacBook на VPS - работает 24/7</li>
+        <li>Личный TG-ассистент Паши: голосовые команды с телефона, доступ к календарю, базе знаний, AI-сборщику КП</li>
+        <li>Стоимость - $6-10/мес</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">Финальное ревью стека</div>
+      <ul class="checklist">
+        <li>Claude Chat - самостоятельная работа</li>
+        <li>Промптинг и гигиена - на автомате</li>
+        <li>Obsidian - живая база знаний (поставщики, проекты, ТЗ, промпты)</li>
+        <li>AI-сборщик КП работает на свежих данных поставщиков</li>
+        <li>Freedom BI подключена (API или Playwright)</li>
+        <li>Бот-диспетчер логистики - работает с TG-чатами</li>
+        <li>Daily Report - утренние сводки</li>
+        <li>AI-подборщик по ТТХ - аналог новосибирского сервиса</li>
+        <li>VPS + TG-ассистент 24/7</li>
+      </ul>
+    </div>
+    <div class="day-section">
+      <div class="day-section-label">План развития (после программы)</div>
+      <ul>
+        <li><strong>AI-инструктор для корпуниверситета:</strong> видео процесса → SOP → ДЗ → проверка сотрудника. Не вошло в основной курс, делаем отдельным треком</li>
+        <li>Бот-квалификатор входящих заявок с сайта</li>
+        <li>AI-подборщик по ТТХ как публичный продукт - конкурент Новосибирска</li>
+        <li>SOP-генератор из реальных кейсов</li>
+        <li>Расширение на всю команду (менеджеры, логисты)</li>
+        <li>Онлайн-продукт: курс "AI для светового бизнеса"</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLS -->
+<div class="section">
+  <div class="section-label">Инструменты программы</div>
+  <h2>15+ инструментов под световой B2B</h2>
+  <div class="tools-grid">
+    <div class="tool-card"><span class="tool-day">01-10</span><div class="tool-info"><div class="tool-name">Claude (Chat)</div><div class="tool-desc">Основной инструмент, 90% работы</div></div></div>
+    <div class="tool-card"><span class="tool-day">01</span><div class="tool-info"><div class="tool-name">ChatGPT Plus</div><div class="tool-desc">Резервная модель, сравнение</div></div></div>
+    <div class="tool-card"><span class="tool-day">01</span><div class="tool-info"><div class="tool-name">Gemini / Perplexity</div><div class="tool-desc">Узкие сценарии, поиск</div></div></div>
+    <div class="tool-card"><span class="tool-day">02</span><div class="tool-info"><div class="tool-name">Промпт-шаблоны</div><div class="tool-desc">Роль + контекст + ограничения</div></div></div>
+    <div class="tool-card"><span class="tool-day">03</span><div class="tool-info"><div class="tool-name">Wispr Flow / Voice</div><div class="tool-desc">Голосовой ввод, +3-5× скорость</div></div></div>
+    <div class="tool-card"><span class="tool-day">04</span><div class="tool-info"><div class="tool-name">Granola</div><div class="tool-desc">AI-записи встреч</div></div></div>
+    <div class="tool-card"><span class="tool-day">05</span><div class="tool-info"><div class="tool-name">Obsidian</div><div class="tool-desc">База знаний: поставщики, проекты, ТЗ</div></div></div>
+    <div class="tool-card"><span class="tool-day">06</span><div class="tool-info"><div class="tool-name">AI-сборщик КП</div><div class="tool-desc">Главный денежный кейс</div></div></div>
+    <div class="tool-card"><span class="tool-day">06-07</span><div class="tool-info"><div class="tool-name">Claude Code (опц.)</div><div class="tool-desc">Автоматизация по расписанию, API</div></div></div>
+    <div class="tool-card"><span class="tool-day">07</span><div class="tool-info"><div class="tool-name">Freedom BI / Playwright</div><div class="tool-desc">CRM-интеграция, парсинг ЛК</div></div></div>
+    <div class="tool-card"><span class="tool-day">07</span><div class="tool-info"><div class="tool-name">Google / Todoist MCP</div><div class="tool-desc">Календарь, почта, задачи</div></div></div>
+    <div class="tool-card"><span class="tool-day">08</span><div class="tool-info"><div class="tool-name">Telegram MCP / Telethon</div><div class="tool-desc">Бот-диспетчер чатов</div></div></div>
+    <div class="tool-card"><span class="tool-day">08</span><div class="tool-info"><div class="tool-name">Whisper + Claude Vision</div><div class="tool-desc">Голос → текст, фото → структура</div></div></div>
+    <div class="tool-card"><span class="tool-day">09</span><div class="tool-info"><div class="tool-name">Scheduled tasks</div><div class="tool-desc">Daily Report</div></div></div>
+    <div class="tool-card"><span class="tool-day">10</span><div class="tool-info"><div class="tool-name">AI-подборщик по ТТХ</div><div class="tool-desc">Аналог новосибирского сервиса</div></div></div>
+    <div class="tool-card"><span class="tool-day">10</span><div class="tool-info"><div class="tool-name">VPS + TG-бот</div><div class="tool-desc">Ассистент 24/7</div></div></div>
+  </div>
+</div>
+
+<!-- TASKS -->
+<div class="section">
+  <div class="section-label">Бизнес-задачи в программе</div>
+  <h2>Всё, что обсудили на встрече 27 апреля - встроено как кейсы</h2>
+  <table class="tasks-table">
+    <thead><tr><th>Задача</th><th>День</th></tr></thead>
+    <tbody>
+      <tr><td class="task-name">AI-сборщик КП на реальных проектах</td><td class="task-day">06</td></tr>
+      <tr><td class="task-name">Свежие цены и остатки от поставщиков</td><td class="task-day">07</td></tr>
+      <tr><td class="task-name">Только проверенные поставщики, не маркетплейс</td><td class="task-day">06-07</td></tr>
+      <tr><td class="task-name">Контроль маржи в КП</td><td class="task-day">06</td></tr>
+      <tr><td class="task-name">Структурирование TG-чатов логистики</td><td class="task-day">08</td></tr>
+      <tr><td class="task-name">Ловля ошибок доставки (не тот город / товар)</td><td class="task-day">08</td></tr>
+      <tr><td class="task-name">Объединение заказов под одну ТК</td><td class="task-day">08-09</td></tr>
+      <tr><td class="task-name">Daily Report по заказам и КП</td><td class="task-day">09</td></tr>
+      <tr><td class="task-name">AI-подбор освещения по ТТХ (как Новосибирск)</td><td class="task-day">10</td></tr>
+      <tr><td class="task-name">База знаний компании как "второй мозг"</td><td class="task-day">05</td></tr>
+      <tr><td class="task-name">TG-ассистент Паши 24/7</td><td class="task-day">10</td></tr>
+      <tr><td class="task-name">Универсальность стека (Claude / ChatGPT / Gemini)</td><td class="task-day">01</td></tr>
+      <tr><td class="task-name">Безопасность данных + 152-ФЗ</td><td class="task-day">03</td></tr>
+      <tr><td class="task-name">AI-инструктор в корпуниверситете</td><td class="task-day">после</td></tr>
+      <tr><td class="task-name">Самостоятельная работа Паши с AI</td><td class="task-day">01-10</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- OPEN QUESTIONS -->
+<div class="section">
+  <div class="section-label">Открытые вопросы к учредителям</div>
+  <h2>Закрываем до старта</h2>
+  <table class="tasks-table">
+    <thead><tr><th>Вопрос</th><th>Влияние</th></tr></thead>
+    <tbody>
+      <tr><td class="task-name">Freedom BI: документация API на руках или нужно запрашивать у вендора</td><td class="task-day">День 7</td></tr>
+      <tr><td class="task-name">Корпуниверситет: какая платформа, можно ли встроить AI-инструктора нативно</td><td class="task-day">после</td></tr>
+      <tr><td class="task-name">Объём базы поставщиков: 10-15 или больше? Влияет на сложность парсинга</td><td class="task-day">День 7</td></tr>
+      <tr><td class="task-name">Кому принадлежат итоговые автоматизации - компании или Паше лично</td><td class="task-day">договор</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div class="footer-logo">MD<span class="dot">.</span></div>
+  <div class="footer-text">ИП Дробот М.В. | AI для светового бизнеса</div>
+</div>
+
+<script>
+document.querySelectorAll('.day-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const block = header.closest('.day-block');
+    block.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
