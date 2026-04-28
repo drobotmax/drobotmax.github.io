@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Плейбук Дня 1 - Николай × Максим</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0A1628;
+  --navy-elevated: #0E1D33;
+  --navy-card: #12233D;
+  --emerald: #34D399;
+  --emerald-light: #6EE7B7;
+  --emerald-dim: rgba(52,211,153,0.08);
+  --emerald-border: rgba(52,211,153,0.2);
+  --white: #E8ECF1;
+  --gray: #8B9BB4;
+  --muted: #4A5E7A;
+  --border: #1A2D4A;
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: #F8F9FB;
+  color: #1A1A2E;
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-header { background: var(--navy); padding: 64px 0 48px; position: relative; overflow: hidden; }
+.page-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--emerald), transparent); }
+.header-logo { font-family: var(--font); font-weight: 900; font-size: 22px; color: var(--white); letter-spacing: -0.04em; margin-bottom: 32px; }
+.header-logo .dot { color: var(--emerald); }
+.header-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.header-label::before { content: '//'; opacity: 0.5; }
+.page-header h1 { font-size: 36px; font-weight: 800; color: var(--white); letter-spacing: -0.03em; margin-bottom: 8px; }
+.page-header .subtitle { font-size: 16px; color: var(--gray); font-weight: 500; margin-bottom: 32px; }
+.header-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-item .meta-label { font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.meta-item .meta-value { font-size: 14px; font-weight: 600; color: var(--white); }
+.meta-item .meta-value a { color: var(--emerald-light); text-decoration: none; }
+.meta-item .meta-value a:hover { text-decoration: underline; }
+
+.container { max-width: 980px; margin: 0 auto; padding: 0 28px; }
+
+.section { padding: 48px 0; border-bottom: 1px solid #E5E7EB; }
+.section:last-child { border-bottom: none; }
+.section-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--emerald); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-label::before { content: '//'; opacity: 0.5; }
+
+h2 { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; margin-bottom: 12px; }
+h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.section-desc { font-size: 16px; color: #6B7280; max-width: 760px; margin-bottom: 32px; line-height: 1.75; }
+
+.value-block { background: var(--navy); border-radius: 16px; padding: 32px 40px; color: var(--white); font-size: 16px; line-height: 1.75; margin-bottom: 32px; position: relative; overflow: hidden; }
+.value-block::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--emerald); }
+.value-block strong { color: var(--emerald-light); }
+
+.preflight-block { background: var(--navy-card); border: 1px solid var(--emerald-border); border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; color: var(--white); }
+.preflight-block h3 { color: var(--white); font-size: 18px; margin-bottom: 6px; }
+.preflight-block .preflight-desc { font-size: 13px; color: var(--gray); margin-bottom: 18px; }
+.preflight-block ul { list-style: none; padding: 0; }
+.preflight-block li { padding-left: 28px; position: relative; margin-bottom: 12px; font-size: 14px; color: #CBD5E1; line-height: 1.6; }
+.preflight-block li::before { content: ''; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border: 2px solid var(--emerald); border-radius: 3px; }
+.preflight-block strong { color: var(--white); }
+.preflight-block .hint { display: block; margin-top: 4px; font-size: 12px; color: var(--gray); }
+
+.priority-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.priority-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; }
+.priority-card .label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+.priority-card.must .label { color: var(--emerald); }
+.priority-card.nice .label { color: #FBBF24; }
+.priority-card .desc { font-size: 13px; color: #CBD5E1; line-height: 1.5; }
+
+.block-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 14px; margin-bottom: 16px; overflow: hidden; }
+.block-header { background: var(--navy); padding: 18px 26px; display: flex; align-items: center; gap: 14px; }
+.block-time { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--navy); background: var(--emerald); padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+.block-title { font-size: 16px; font-weight: 700; color: var(--white); }
+.block-duration { font-family: var(--mono); font-size: 11px; color: var(--gray); margin-left: auto; }
+.block-body { padding: 22px 26px; }
+.block-goal { background: var(--emerald-dim); border: 1px solid var(--emerald-border); border-radius: 10px; padding: 14px 18px; font-size: 14px; color: var(--navy); margin-bottom: 16px; line-height: 1.6; }
+.block-goal strong { color: var(--navy); font-weight: 700; }
+.block-body ul { list-style: none; padding: 0; }
+.block-body li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: 14px; line-height: 1.6; color: #374151; }
+.block-body li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+
+.prompt-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+.prompt-header { background: #F9FAFB; padding: 16px 24px; border-bottom: 1px solid #E5E7EB; }
+.prompt-tag { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--emerald); text-transform: uppercase; margin-bottom: 4px; }
+.prompt-title { font-size: 15px; font-weight: 700; color: var(--navy); }
+.prompt-desc { font-size: 13px; color: #6B7280; margin-top: 4px; }
+.prompt-code { background: var(--navy); color: #E2E8F0; padding: 18px 22px; font-family: var(--mono); font-size: 12px; line-height: 1.7; white-space: pre-wrap; overflow-x: auto; }
+.prompt-tip { padding: 12px 22px; background: #FFFBEB; border-top: 1px solid #FDE68A; font-size: 12px; color: #78350F; }
+.prompt-tip strong { color: #92400E; }
+
+.notes-block { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 14px; padding: 24px 28px; }
+.notes-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #92400E; margin-bottom: 10px; }
+.notes-block h3 { color: #78350F; font-size: 17px; margin-bottom: 10px; }
+.notes-block ul { list-style: none; padding: 0; }
+.notes-block li { padding-left: 20px; margin-bottom: 8px; font-size: 14px; color: #78350F; position: relative; line-height: 1.6; }
+.notes-block li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: #F59E0B; }
+
+.homework-block { background: var(--navy); border-radius: 14px; padding: 28px 32px; color: var(--white); }
+.homework-label { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--emerald); margin-bottom: 10px; }
+.homework-block h3 { color: var(--white); font-size: 18px; margin-bottom: 12px; }
+.homework-block ul { list-style: none; padding: 0; }
+.homework-block li { padding-left: 24px; margin-bottom: 10px; font-size: 14px; color: #CBD5E1; position: relative; line-height: 1.65; }
+.homework-block li::before { content: counter(homework-counter, decimal); counter-increment: homework-counter; position: absolute; left: 0; top: 0; font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--emerald); }
+.homework-block ol { list-style: none; padding: 0; counter-reset: homework-counter; }
+.homework-block strong { color: var(--white); }
+
+.tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+.tip-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 18px 22px; }
+.tip-card .tip-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--emerald); margin-bottom: 6px; text-transform: uppercase; }
+.tip-card .tip-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.tip-card .tip-desc { font-size: 13px; color: #4B5563; line-height: 1.55; }
+
+.footer { background: var(--navy); padding: 32px 0; text-align: center; }
+.footer-content { color: var(--gray); font-size: 13px; line-height: 1.65; }
+.footer-content a { color: var(--emerald-light); text-decoration: none; }
+
+@media (max-width: 768px) {
+  .page-header { padding: 48px 0 36px; }
+  .page-header h1 { font-size: 28px; }
+  .container { padding: 0 20px; }
+  .section { padding: 36px 0; }
+  .priority-grid, .tips-grid { grid-template-columns: 1fr; }
+  .block-header { padding: 14px 18px; flex-wrap: wrap; }
+  .block-body { padding: 18px 20px; }
+  .prompt-code { font-size: 11px; padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="container">
+    <div class="header-logo">МАКСИМ ДРОБОТ<span class="dot">.</span></div>
+    <div class="header-label">Плейбук Дня 1</div>
+    <h1>Стек в работе на твоих данных</h1>
+    <p class="subtitle">Николай × Максим - 28 апреля 2026, вторник</p>
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">Время</span>
+        <span class="meta-value">14:30-16:30 МСК</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Длительность</span>
+        <span class="meta-value">2 часа</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Zoom</span>
+        <span class="meta-value"><a href="https://us06web.zoom.us/j/6637125548?pwd=WG5jYlFQVmV1RzJDK3hRL2FLOXBodz09">us06web.zoom.us/j/6637125548</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Программа</span>
+        <span class="meta-value"><a href="https://drobotmax.github.io/2026/2026-04/nikolay-program/">drobotmax.github.io/...nikolay-program</a></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Зачем этот плейбук</div>
+    <h2>Чтобы ты пришёл подготовленным и не тратил сессию на технику</h2>
+    <p class="section-desc">Это короткая шпаргалка на День 1. Что подготовить до 14:30, как пройдёт сессия, какие промпты будут под рукой и что сделать после. Открой эту страницу на втором экране или в телефоне рядом - будем по ней идти вместе.</p>
+
+    <div class="value-block">
+      <strong>Главное:</strong> мы не учимся «нейросетям». Мы за 2 часа разберём твои реальные жалобы клиентов через Claude, посчитаем сколько повторяющиеся проблемы стоят бизнесу, и наметим - где автоматизация даст быстрый эффект. Это hook на всю программу: дальше каждый день - такие же кейсы на твоих данных.
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Pre-flight - до 14:30</div>
+    <h2>Что подготовить заранее</h2>
+    <p class="section-desc">Если что-то не успеваешь - не страшно, подвезём в процессе. Но чем больше готово, тем плотнее идёт сессия. Приоритет №1 - данные жалоб, всё остальное вторично.</p>
+
+    <div class="preflight-block">
+      <h3>1. Данные для главного кейса</h3>
+      <p class="preflight-desc">На этих данных за первые 30 минут получишь wow-инсайт через Claude.</p>
+      <ul>
+        <li><strong>Жалобы клиентов за последние 30 дней</strong> - выгрузка в любом формате (Excel, CSV, скрин таблицы, даже текст из мессенджеров).
+          <span class="hint">Чем больше полей - тем лучше: дата, продукт/блюдо, текст жалобы, цех/линия, кто принял, что сделали.</span>
+        </li>
+        <li><strong>Выгрузка задач из Квант за 30 дней</strong> - если не успеешь к Дню 1, нужна обязательно к Дню 2 (среда, аудит производства).
+          <span class="hint">API-ключ Квант запросить у их поддержки заранее - может занять 3-5 дней.</span>
+        </li>
+        <li><strong>Если ничего из этого нет</strong> - в TG у нас лежит твоё ТЗ на QC-систему (7 сообщений от 24 апреля). Будем работать на нём.</li>
+      </ul>
+    </div>
+
+    <div class="preflight-block">
+      <h3>2. Технический минимум</h3>
+      <p class="preflight-desc">Чтобы шаринг экрана и инструменты работали без сбоев.</p>
+      <ul>
+        <li><strong>Claude Desktop</strong> установлен и открыт. Проверь, что входишь под своим аккаунтом и видишь чаты.</li>
+        <li><strong>ChatGPT Plus</strong> открыт во второй вкладке.</li>
+        <li><strong>Zoom</strong> работает, шаринг экрана проверен заранее (Zoom иногда просит разрешения macOS - лучше пройти это до 14:30).</li>
+        <li><strong>Стабильный интернет</strong> 50+ Мбит. Если есть мобильный - подключи на запасной случай.</li>
+      </ul>
+    </div>
+
+    <div class="preflight-block">
+      <h3>3. Контекст бизнеса (опционально, но полезно)</h3>
+      <p class="preflight-desc">Если есть под рукой - открой в отдельной вкладке. Не успел - возьмём в течение недели.</p>
+      <ul>
+        <li>2-3 ключевых регламента или SOP (приёмка, производство, упаковка, отгрузка - что есть)</li>
+        <li>Список цехов/линий и ключевых ролей (технолог, бригадир, операторы)</li>
+        <li>Ссылки или скрины 3-5 сайтов конкурентов или просто сайтов, которые тебе нравятся (для блока редизайна на Дне 9)</li>
+      </ul>
+    </div>
+
+    <div class="priority-grid">
+      <div class="priority-card must">
+        <div class="label">Must-have</div>
+        <div class="desc">Жалобы за 30 дней (или ТЗ из TG как fallback) + Claude Desktop работает + Zoom с шарингом</div>
+      </div>
+      <div class="priority-card nice">
+        <div class="label">Nice-to-have</div>
+        <div class="desc">Выгрузка Квант, регламенты, список цехов, референсы сайтов. Без этого тоже стартанём.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Программа Дня 1 / 14:30-16:30</div>
+    <h2>Как пройдёт сессия</h2>
+    <p class="section-desc">5 блоков плюс перерыв. Главное - Блок 2: денежный кейс на твоих жалобах. Это якорь, всё остальное вокруг него.</p>
+
+    <div class="block-card">
+      <div class="block-header">
+        <span class="block-time">14:30-14:45</span>
+        <span class="block-title">Блок 0 - Открытие, карта программы, даты</span>
+        <span class="block-duration">15 мин</span>
+      </div>
+      <div class="block-body">
+        <div class="block-goal">Сверим карту 10 дней, согласуем даты с учётом праздников 1 и 9 мая, проверим что технически всё работает.</div>
+        <ul>
+          <li>Приветствие, проверка техники (Claude / ChatGPT / Zoom-шаринг)</li>
+          <li>Обзор карты программы на 2 недели</li>
+          <li>Согласование дат: День 3 (1 мая) и День 9 (9 мая) - праздники, решаем как сдвигать</li>
+          <li>Подтверждение редизайна сайта через «Клуб Дизайн» (включаем в план Дня 9)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block-card">
+      <div class="block-header">
+        <span class="block-time">14:45-15:15</span>
+        <span class="block-title">Блок 1 - Денежный кейс на твоих данных</span>
+        <span class="block-duration">30 мин</span>
+      </div>
+      <div class="block-body">
+        <div class="block-goal"><strong>Главный блок дня.</strong> Загружаем жалобы за 30 дней в Claude. За 2 минуты получаем разбор: типы нарушений, цеха-рекордсмены, корневые причины, оценка «денег на столе». Это та сумма, которую программа должна вернуть в бизнес.</div>
+        <ul>
+          <li>Загрузка файла с жалобами в Claude Desktop</li>
+          <li>Включаем Extended Thinking - режим глубоких рассуждений</li>
+          <li>Запускаем главный промпт (см. ниже «Промпт #1»)</li>
+          <li>Разбор результата: что сработало, чего не хватает в данных, что докрутить</li>
+          <li>Фиксируем сумму «денег на столе» - якорь на всю программу</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block-card">
+      <div class="block-header">
+        <span class="block-time">15:15-15:35</span>
+        <span class="block-title">Блок 2 - Обзор стека под пищёвку</span>
+        <span class="block-duration">20 мин</span>
+      </div>
+      <div class="block-body">
+        <div class="block-goal">Не учу пользоваться - показываю что возможно. Детали будут в следующие дни. Цель - чтобы ты видел полную картину.</div>
+        <ul>
+          <li><strong>Claude Desktop</strong> - основной инструмент 90% задач</li>
+          <li><strong>ChatGPT Plus</strong> - быстрые задачи, картинки, голос в дороге</li>
+          <li><strong>Obsidian</strong> - твоя будущая база знаний (Рецептуры, SOP, HACCP)</li>
+          <li><strong>Granola</strong> - запись и структурирование встреч</li>
+          <li><strong>MCP-коннекторы</strong> - разъёмы между Claude и твоими сервисами (Квант, рекламные кабинеты)</li>
+          <li><strong>Claude Code</strong> - продвинутый ассистент с доступом к файлам и API (опционально)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block-card">
+      <div class="block-header">
+        <span class="block-time">15:35-15:40</span>
+        <span class="block-title">Перерыв 5 минут</span>
+        <span class="block-duration">5 мин</span>
+      </div>
+    </div>
+
+    <div class="block-card">
+      <div class="block-header">
+        <span class="block-time">15:40-15:50</span>
+        <span class="block-title">Блок 3 - Chat vs Projects vs Cowork</span>
+        <span class="block-duration">10 мин</span>
+      </div>
+      <div class="block-body">
+        <div class="block-goal">Короткий слайд: когда какой режим Claude использовать. Основа курса - Chat (90% задач). Projects и Cowork показываю чтобы знал, когда вспомнить.</div>
+        <ul>
+          <li><strong>Chat</strong> - разовая задача, быстрая итерация. Например: «разбери эти жалобы»</li>
+          <li><strong>Projects</strong> - постоянный контекст: документы, регламенты, шаблоны. Соберём на Дне 2 проект «QC производства»</li>
+          <li><strong>Cowork</strong> - совместное редактирование с командой, как Google Docs</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block-card">
+      <div class="block-header">
+        <span class="block-time">15:50-16:15</span>
+        <span class="block-title">Блок 4 - Ты пишешь промпты сам</span>
+        <span class="block-duration">25 мин</span>
+      </div>
+      <div class="block-body">
+        <div class="block-goal">Пишешь руками 3 промпта на свои задачи. Я подсказываю где докрутить контекст. Так быстрее запоминается, чем когда смотришь как пишу я.</div>
+        <ul>
+          <li>Короткий слайд: структура хорошего промпта (роль / контекст / задача / формат)</li>
+          <li><strong>Промпт #2:</strong> связка одной реальной жалобы → задача в Квант для технолога/бригадира</li>
+          <li><strong>Промпт #3:</strong> прототип утренней сводки для бригадира цеха</li>
+          <li><strong>Промпт #4:</strong> запрос к маркетингу - что прозрачно, что нет</li>
+          <li>Разбор: что получилось, где модель не поняла, что докрутить</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block-card">
+      <div class="block-header">
+        <span class="block-time">16:15-16:30</span>
+        <span class="block-title">Блок 5 - Закрытие, домашка, даты</span>
+        <span class="block-duration">15 мин</span>
+      </div>
+      <div class="block-body">
+        <div class="block-goal">Фиксируем домашку, финальные даты Дней 3 и 9, обратная связь по сегодняшнему формату.</div>
+        <ul>
+          <li>Домашка на День 2 (см. блок «Домашка» ниже)</li>
+          <li>Подтверждение дат и pre-flight статусов на следующие дни</li>
+          <li>Обратная связь: что было полезно, что докрутить</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Промпты-заготовки</div>
+    <h2>Готовые промпты для копирования</h2>
+    <p class="section-desc">Эти промпты пойдут в работу на сессии. Можешь скопировать заранее в заметку - на сессии будем дорабатывать их под твой бизнес.</p>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-tag">Промпт #1 - Денежный разбор жалоб</div>
+        <div class="prompt-title">Запускаем сразу после загрузки выгрузки жалоб</div>
+        <div class="prompt-desc">Это главный промпт Дня 1. Включаем Extended Thinking перед отправкой.</div>
+      </div>
+      <div class="prompt-code">Ты опытный директор по качеству пищевого производства.
+
+Контекст: производство готовых блюд + доставка, Томск.
+Жалобы клиентов за последние 30 дней - в приложенном файле.
+
+Задача: разбери жалобы по нескольким срезам.
+
+1. Топ-5 типов нарушений (что ломается чаще всего?)
+2. Где в процессе возникает проблема (приёмка, производство,
+   упаковка, доставка)?
+3. Какие SOP/регламенты пробивает - что недоработано в процессе?
+4. Прикинь стоимость для бизнеса:
+   - возвраты и компенсации
+   - потерянные клиенты (LTV)
+   - время руководителя на разбор
+5. Топ-3 точки, где автоматизация даст быстрый эффект.
+
+Формат: структурированный отчёт с таблицами и
+конкретными цифрами. Если данных не хватает -
+явно укажи что нужно доспросить.</div>
+      <div class="prompt-tip"><strong>Подсказка:</strong> если жалоб не подвезли - заменить «жалобы клиентов за 30 дней» на «моё ТЗ на QC-систему (приложено)» и работать на нём.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-tag">Промпт #2 - Жалоба → задача в Квант</div>
+        <div class="prompt-title">Берём одну реальную жалобу из выгрузки</div>
+        <div class="prompt-desc">Прототип того, как должна работать связка «жалоба → задача → отчёт» из твоего запроса.</div>
+      </div>
+      <div class="prompt-code">Ты технолог производства готовых блюд.
+
+Вот реальная жалоба клиента: [вставить текст одной жалобы]
+
+Задача:
+1. Определи корневую причину - что в процессе пошло не так.
+2. Сформулируй задачу для конкретной роли (технолог,
+   бригадир, оператор, кладовщик) - чёткую, с измеримым
+   результатом, без воды.
+3. Предложи дедлайн (часы или дни) с обоснованием.
+4. Опиши какой фото/видео-отчёт должен прислать
+   исполнитель чтобы задача считалась закрытой.
+5. Если жалоба повторяющаяся - предложи изменение в
+   процессе (SOP, чеклист, обучение), чтобы устранить
+   корневую причину.
+
+Формат: карточка задачи готовая для постановки в Квант.</div>
+      <div class="prompt-tip"><strong>На сессии:</strong> возьмём одну сложную жалобу и пройдём этот промпт целиком, чтобы ты увидел как работает паттерн.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-tag">Промпт #3 - Утренняя сводка цеха</div>
+        <div class="prompt-title">Прототип ежедневной сводки для бригадира</div>
+        <div class="prompt-desc">Если есть выгрузка Квант - работаем на ней. Если нет - пишем «представь что у тебя есть...».</div>
+      </div>
+      <div class="prompt-code">Ты ассистент бригадира цеха пищевого производства.
+
+Задача: на основе данных за последние 24 часа собери
+утреннюю сводку для бригадира. Сводка нужна в 8:00,
+бригадир читает её 2-3 минуты и заходит в смену
+с понятной картиной.
+
+Что должно быть в сводке:
+1. Просроченные задачи по моему цеху - кто, что, на сколько.
+2. Новые жалобы клиентов за вчера, которые касаются
+   моего цеха - 1-2 строки на каждую.
+3. Ключевые метрики качества за смену (если данные есть):
+   процент возвратов, время на разбор, количество
+   повторных жалоб.
+4. Точки внимания на сегодня - что бригадир должен
+   проверить или с кем поговорить в первую очередь.
+
+Тон: телеграмный, без воды. Никаких «доброго утра»,
+сразу к делу. Длина - до 250 слов.
+
+Формат: структурированный текст с эмодзи-маркерами
+для разделов, чтобы быстро сканировался с телефона.</div>
+        <div class="prompt-tip"><strong>На сессии:</strong> попробуем 2-3 варианта тона и формата, выберем лучший. Это будущий шаблон, который запустим на неделе 2.</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-header">
+        <div class="prompt-tag">Промпт #4 - Аудит маркетинга</div>
+        <div class="prompt-title">Что прозрачно, что нет, какие вопросы задать</div>
+        <div class="prompt-desc">Готовит почву для Дня 8 - дашборд рекламных кабинетов.</div>
+      </div>
+      <div class="prompt-code">Ты опытный директор по маркетингу в нише доставки
+готовых блюд.
+
+Контекст: у меня производство + доставка, Томск.
+Текущая команда маркетинга работает [опиши что
+делают - подрядчик/штатный, какие каналы, какие
+отчёты получаешь].
+
+Задача:
+1. На основе того что я описал - какие 5-7 вопросов
+   я ДОЛЖЕН видеть ответы на каждую неделю,
+   чтобы маркетинг был прозрачным?
+2. Какие 3 цифры должны быть на главном экране
+   моего дашборда, чтобы за 30 секунд понять -
+   маркетинг работает или нет?
+3. Какие красные флаги в текущем процессе мне стоит
+   проверить в первую очередь?
+4. Если бы ты пришёл на моё место - что бы ты
+   спросил у текущей команды на ближайшей встрече?
+
+Тон: прямой, без воды. Я владелец, не маркетолог -
+объясняй простыми словами.</div>
+      <div class="prompt-tip"><strong>На сессии:</strong> докрутим под твою конкретную ситуацию. Этот промпт - заготовка, которую ты потом будешь использовать каждую неделю.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Что фиксировать во время сессии</div>
+    <h2>Заметки для домашки</h2>
+    <p class="section-desc">Открой простую заметку (Notes / телефон / бумага) и записывай по ходу. Это материал для Дня 2 - там разберём, что сработало и где модель не поняла.</p>
+
+    <div class="notes-block">
+      <div class="notes-label">Записывай</div>
+      <h3>Простой шаблон заметки</h3>
+      <ul>
+        <li><strong>Wow-моменты:</strong> где Claude дал ответ, который сэкономил тебе время или показал что-то новое</li>
+        <li><strong>Проблемы:</strong> где модель не поняла, ушла в сторону, нагенерила воды</li>
+        <li><strong>Идеи:</strong> что захотелось попробовать на твоих данных уже после сессии</li>
+        <li><strong>Вопросы:</strong> что осталось непонятным - вынесем в начало Дня 2</li>
+        <li><strong>Цифры:</strong> сумма «денег на столе» из Блока 1 - запомни её, она якорь на всю программу</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Домашка на День 2</div>
+    <h2>Что сделать до завтра, 14:30 МСК</h2>
+    <p class="section-desc">Не нужно делать на 100% - главное попробовать руками. Завтра разберём что сработало, что не сработало, и докрутим.</p>
+
+    <div class="homework-block">
+      <div class="homework-label">К Дню 2 - среда, 14:30 МСК</div>
+      <h3>Список заданий</h3>
+      <ol>
+        <li><strong>Решить 5 реальных бизнес-задач через Claude Chat.</strong> Идеи: SOP «приём входящей жалобы», чеклист утренней проверки цеха, текст для повторных клиентов с акцией, разбор сложной жалобы, идеи названий для нового блюда.</li>
+        <li><strong>Записать в заметке:</strong> что сработало хорошо, где модель «не поняла». Это материал для разбора в начале Дня 2.</li>
+        <li><strong>Подготовить выгрузку Квант за 30 дней</strong> (через API или ручную выгрузку). Завтра делаем аудит производства на этих данных - без них сессия будет беднее.</li>
+        <li><strong>Если есть - 2-3 бизнес-документа</strong>: регламенты, рецептуры, должностные инструкции. Загрузим в Claude как контекст для промпт-ассистентов.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Тон сессии</div>
+    <h2>Несколько правил, чтобы было максимально полезно</h2>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-label">Правило 1</div>
+        <div class="tip-title">Ты водишь мышкой</div>
+        <div class="tip-desc">Я подсказываю. Так быстрее запоминается, чем когда смотришь как делаю я. Шаринг экрана - твой.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-label">Правило 2</div>
+        <div class="tip-title">Тупые вопросы - норма</div>
+        <div class="tip-desc">Никто не родился с пониманием как работает Claude. Чем больше спросишь сейчас - тем меньше потеряешь времени потом.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-label">Правило 3</div>
+        <div class="tip-title">Тормозим сразу</div>
+        <div class="tip-desc">Если что-то непонятно - стопаем и разбираем. Не копи вопросы на конец - забудем оба.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-label">Правило 4</div>
+        <div class="tip-title">Всё - на твоих задачах</div>
+        <div class="tip-desc">Никаких абстрактных примеров про «компанию из учебника». Только твоё производство, твои жалобы, твои цеха.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      Максим Дробот - AI-консалтинг для бизнеса<br>
+      Telegram: <a href="https://t.me/drobotmax">@drobotmax</a> · Программа: <a href="https://drobotmax.github.io/2026/2026-04/nikolay-program/">drobotmax.github.io</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
