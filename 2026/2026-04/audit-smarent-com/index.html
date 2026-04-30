@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аудит сайта Smarent - KUBRIK</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#10b981;--accent2:#059669;--accent-bg:rgba(16,185,129,0.10);
+  --black:#0e0e10;--white:#fff;--off:#f7f8f7;--off2:#eef1ef;
+  --border:#dde2de;--muted:#6b7570;--soft:#9aa39c;
+  --green:#10b981;--green-bg:#e6f7f0;
+  --red:#c0392b;--red-bg:#fdecea;
+  --blue:#1a4f8a;--blue-bg:#e8f0fb;
+  --yellow:#b27500;--yellow-bg:#fff5dc;
+  --r:4px;--rlg:8px;
+  --sh:0 2px 12px rgba(0,0,0,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Montserrat',sans-serif;background:var(--off);color:var(--black);line-height:1.6;-webkit-font-smoothing:antialiased}
+.topbar{background:var(--black);padding:10px 48px;display:flex;align-items:center;justify-content:space-between}
+.topbar-logo{display:flex;align-items:center;gap:10px}
+.topbar-box{width:30px;height:30px;background:var(--accent);border-radius:3px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px}
+.topbar-name{font-weight:800;font-size:16px;letter-spacing:3px;color:#fff;text-transform:uppercase}
+.topbar-name .dot{color:var(--accent);}
+.topbar-right{font-size:12px;color:#aaa;font-weight:500;display:flex;gap:24px;align-items:center}
+.topbar-badge{background:var(--accent-bg);border:1px solid rgba(16,185,129,.35);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.hero{background:var(--black);padding:64px 48px 56px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:0;right:0;width:35%;height:100%;background:linear-gradient(135deg,transparent 40%,rgba(16,185,129,.06) 100%);pointer-events:none}
+.hero-tag{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.hero-h{font-weight:800;font-size:46px;color:#fff;text-transform:uppercase;letter-spacing:-1px;line-height:1.05;margin-bottom:18px}
+.hero-h span{color:var(--accent)}
+.hero-desc{font-size:14px;color:#aaa;max-width:620px;font-weight:400;line-height:1.8;margin-bottom:24px}
+.hero-meta{font-size:12px;color:#888;letter-spacing:1px;text-transform:uppercase}
+.hero-meta b{color:#fff}
+.section{padding:56px 48px}
+.sh{margin-bottom:32px}
+.sh-tag{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.sh-h{font-weight:800;font-size:28px;text-transform:uppercase;letter-spacing:-.5px;color:var(--black)}
+.sh-desc{font-size:14px;color:var(--muted);margin-top:8px;max-width:760px;line-height:1.7}
+.diagnosis{background:#fff;border:1px solid var(--border);border-radius:var(--rlg);padding:40px;text-align:center;margin-bottom:40px;box-shadow:var(--sh)}
+.diag-tag{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.diag-text{font-size:22px;font-weight:800;color:var(--black);line-height:1.4;max-width:780px;margin:0 auto;letter-spacing:-.3px}
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;margin-bottom:32px}
+.score-cell{background:#fff;padding:24px}
+.score-icon{font-size:20px;margin-bottom:10px}
+.score-val{font-weight:800;font-size:38px;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.score-val.red{color:var(--red)}
+.score-val.yellow{color:var(--yellow)}
+.score-val.green{color:var(--green)}
+.score-val.orange{color:var(--accent)}
+.score-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--soft)}
+.score-sub{font-size:11px;color:var(--muted);margin-top:6px;font-weight:500}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px}
+.block{border-radius:var(--r);padding:22px}
+.block-red{background:var(--red-bg);border-left:3px solid var(--red)}
+.block-green{background:var(--green-bg);border-left:3px solid var(--green)}
+.block-blue{background:var(--blue-bg);border-left:3px solid var(--blue)}
+.block-yellow{background:var(--yellow-bg);border-left:3px solid var(--yellow)}
+.block h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.block-red h4{color:var(--red)}
+.block-green h4{color:var(--green)}
+.block-blue h4{color:var(--blue)}
+.block-yellow h4{color:var(--yellow)}
+.block ul{padding-left:18px;font-size:13px;line-height:1.7}
+.block li{margin-bottom:8px}
+.page-card{background:#fff;border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;margin-bottom:24px;box-shadow:var(--sh)}
+.page-card-header{padding:18px 24px;display:flex;align-items:center;gap:14px;cursor:pointer;border-bottom:1px solid var(--border)}
+.page-card-header:hover{background:var(--off)}
+.page-num{width:36px;height:36px;background:var(--accent-bg);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--accent);flex-shrink:0}
+.page-title{font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.5px}
+.page-url{font-size:12px;color:var(--soft);font-weight:400;margin-top:2px;font-family:'SF Mono',Menlo,monospace}
+.page-score-badge{margin-left:auto;padding:6px 12px;border-radius:100px;font-size:12px;font-weight:700}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow)}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.page-card-body{padding:24px;display:none;background:var(--off)}
+.page-card-body.open{display:block}
+.metric-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.metric-bar{padding:12px;border:1px solid var(--border);border-radius:var(--r);background:#fff}
+.mb-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--soft)}
+.mb-val{font-size:22px;font-weight:800;margin-top:4px;letter-spacing:-1px}
+.shot-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:22px}
+.shot{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:#fff;position:relative}
+.shot img{display:block;width:100%;height:auto;max-height:320px;object-fit:cover;object-position:top}
+.shot-tag{position:absolute;top:8px;left:8px;background:rgba(14,14,16,.85);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:100px}
+.persona-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.persona-tag{background:var(--accent-bg);color:var(--accent2);font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:.3px}
+.verdict-box{background:#fff;border-left:3px solid var(--accent);padding:16px 18px;border-radius:0 var(--r) var(--r) 0;margin-bottom:18px;font-size:13px;line-height:1.7;color:var(--black)}
+.recs{display:grid;gap:14px}
+.rec{background:#fff;border:1px solid var(--border);border-radius:var(--rlg);padding:18px;box-shadow:var(--sh)}
+.rec-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.rec-title{font-weight:800;font-size:14px;letter-spacing:-.2px}
+.rec-meta{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:100px}
+.tag-metric{background:var(--blue-bg);color:var(--blue)}
+.tag-effort-low{background:var(--green-bg);color:var(--green)}
+.tag-effort-medium{background:var(--yellow-bg);color:var(--yellow)}
+.tag-effort-high{background:var(--red-bg);color:var(--red)}
+.tag-delta{background:var(--accent-bg);color:var(--accent2)}
+.rec-row{font-size:12px;line-height:1.65;margin-top:6px;color:var(--muted)}
+.rec-row b{color:var(--black);font-weight:700}
+.rec-evidence{margin-top:10px;background:var(--off2);border-left:3px solid var(--soft);padding:8px 12px;font-size:11px;color:var(--muted);font-family:'SF Mono','Menlo',monospace;border-radius:0 var(--r) var(--r) 0;word-break:break-word}
+.rec-persona{font-size:11px;color:var(--accent2);font-weight:700;letter-spacing:.3px;margin-top:8px;text-transform:uppercase}
+.timeline{position:relative;padding-left:30px;margin-top:8px}
+.timeline::before{content:'';position:absolute;top:6px;bottom:6px;left:8px;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-dot{position:absolute;top:8px;left:-30px;width:18px;height:18px;border-radius:50%;border:3px solid var(--white);box-shadow:0 0 0 2px var(--accent)}
+.tl-dot.critical{background:var(--red)}
+.tl-dot.content{background:var(--yellow)}
+.tl-dot.growth{background:var(--green)}
+.tl-card{background:#fff;border:1px solid var(--border);border-radius:var(--rlg);padding:20px 24px;box-shadow:var(--sh)}
+.tl-phase{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.tl-phase.critical{color:var(--red)}
+.tl-phase.content{color:var(--yellow)}
+.tl-phase.growth{color:var(--green)}
+.tl-title{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:12px}
+.tl-card ul{padding-left:20px;font-size:13px;line-height:1.7}
+.tl-card li{margin-bottom:6px}
+.lead-magnet{background:linear-gradient(135deg,var(--black) 0%,#1a1a20 100%);color:#fff;padding:56px 48px;border-radius:var(--rlg);margin:8px 48px 56px;position:relative;overflow:hidden}
+.lead-magnet::before{content:'';position:absolute;top:-20px;right:-20px;width:240px;height:240px;background:radial-gradient(circle,var(--accent-bg) 0%,transparent 70%)}
+.lm-tag{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;position:relative}
+.lm-h{font-weight:800;font-size:32px;letter-spacing:-.5px;margin-bottom:14px;line-height:1.2;position:relative}
+.lm-h span{color:var(--accent)}
+.lm-desc{font-size:14px;color:#aaa;line-height:1.8;max-width:620px;margin-bottom:24px;position:relative}
+.lm-cta{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;padding:14px 28px;border-radius:6px;font-weight:800;font-size:14px;letter-spacing:.5px;text-decoration:none;text-transform:uppercase;transition:all .2s;position:relative}
+.lm-cta:hover{background:var(--accent2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(16,185,129,.3)}
+.lm-meta{margin-top:20px;color:var(--soft);font-size:12px;position:relative;letter-spacing:.5px}
+.lm-meta b{color:#fff}
+.summary-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;font-size:13px;box-shadow:var(--sh)}
+.summary-table th{background:var(--off);padding:14px 16px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border)}
+.summary-table td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+.summary-table tr:last-child td{border-bottom:none}
+.footer{background:var(--black);color:#888;padding:28px 48px;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.footer span{color:var(--accent);font-weight:700}
+@media (max-width:900px){
+  .score-grid,.metric-bars{grid-template-columns:repeat(2,1fr)}
+  .cols2{grid-template-columns:1fr}
+  .hero-h{font-size:30px}
+  .lm-h{font-size:24px}
+  .section,.hero,.topbar,.lead-magnet{padding-left:20px;padding-right:20px}
+  .lead-magnet{margin-left:14px;margin-right:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="topbar-box">K</div>
+    <span class="topbar-name">KUBRIK<span class="dot">.</span></span>
+  </div>
+  <div class="topbar-right">
+    <span>Site Audit · 2026-04-30 12:47</span>
+    <span class="topbar-badge">v0.2</span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-tag">Стратегический аудит сайта · smarent.com</div>
+  <h1 class="hero-h">Аудит сайта<br><span>Smarent</span></h1>
+  <p class="hero-desc">Smarent имеет сильный продуктовый фундамент (1100+ объектов, полный цикл, гарантия выплаты 1-го числа), но сайт это не транслирует: hero-блоки на главной и /arenda дублируют пустую формулировку «эксперт и надёжный партнёр», proof-цифр на первом экране нет, видимый CTA отсутствует на всех 8 страницах аудита. Сегментации трафика под 3 ICP (собственник / инвестор / арендатор) нет - все попадают в одинаковую воронку с формой на 4-5 обязательных полей.</p>
+  <div class="hero-meta">Профиль · <b>SERVICES</b> &nbsp;·&nbsp; Страниц проверено · <b>8</b> &nbsp;·&nbsp; Проверок · <b>31</b> &nbsp;·&nbsp; Рекомендаций · <b>20</b></div>
+</section>
+
+<section class="section">
+  <div class="sh">
+    <div class="sh-tag">Главный диагноз</div>
+    <div class="sh-h">Что не так в одной фразе</div>
+  </div>
+  <div class="diagnosis">
+    <div class="diag-tag">Диагноз</div>
+    <div class="diag-text">Сайт говорит «мы эксперты на рынке недвижимости» вместо «вот сколько вы получите от своей квартиры 1-го числа без хлопот» - и не разводит 3 ICP по разным путям.</div>
+  </div>
+
+  <div class="sh">
+    <div class="sh-tag">Общая оценка</div>
+    <div class="sh-h">Скоры по 4 метрикам</div>
+    <div class="sh-desc">Скоры — детерминированные: каждая проверка имеет вес и однозначное правило. Калибровка проводится на эталонных сайтах ниши. LLM-аудит (далее) дополняет цифры качественной интерпретацией.</div>
+  </div>
+
+  <div class="score-grid">
+    
+    
+    <div class="score-cell">
+      <div class="score-icon">📋</div>
+      <div class="score-val red">2.9</div>
+      <div class="score-lbl">Ясность ценности / 10</div>
+      <div class="score-sub">5/9 проверок пройдено</div>
+    </div>
+    
+    
+    <div class="score-cell">
+      <div class="score-icon">🎯</div>
+      <div class="score-val red">1.0</div>
+      <div class="score-lbl">Сегментация аудитории / 10</div>
+      <div class="score-sub">1/6 проверок пройдено</div>
+    </div>
+    
+    
+    <div class="score-cell">
+      <div class="score-icon">🔄</div>
+      <div class="score-val red">2.4</div>
+      <div class="score-lbl">Конверсионные сценарии / 10</div>
+      <div class="score-sub">3/9 проверок пройдено</div>
+    </div>
+    
+    
+    <div class="score-cell">
+      <div class="score-icon">🔗</div>
+      <div class="score-val orange">6.0</div>
+      <div class="score-lbl">Перекрёстные продажи / 10</div>
+      <div class="score-sub">4/7 проверок пройдено</div>
+    </div>
+    
+  </div>
+
+  <div class="cols2">
+    <div class="block block-red">
+      <h4>Главные проблемы</h4>
+      <ul>
+        <li>Hero главной и /arenda дублирует пустой H1 «SMARENT - эксперт и надёжный партнёр на рынке недвижимости» - не закрывает ни один JTBD из 3 ICP</li><li>Ни на одной из 8 страниц аудита нет видимого CTA в первом экране (ctas_count=0 везде) - пользователю некуда нажать до скролла</li><li>Сегментации под ICP нет: persona_specific_h1_ratio = 0.0, dedicated_segment_pages_count = 0 - собственник, инвестор и арендатор видят один и тот же сайт</li><li>Proof-цифры из брифа (1100+ объектов, 4К+ районов, гарантия 1-го числа) не вынесены в hero - на главной фигурирует только слово «объект» без числа</li><li>Формы заявок требуют 4-5 обязательных полей - выше отраслевого порога 3, режет конверсию холодного трафика</li><li>Нет калькулятора доходности и квиза подбора - инвестор и новичок не получают инструмента для само-квалификации, хотя это явная цель из брифа</li><li>Cross-sell декларирован архитектурой ссылок, но pages_with_next_step_ratio = 0.11 и pages_with_recommendations_ratio = 0 - воронки покупка→меблировка→управление в явном виде нет</li>
+      </ul>
+    </div>
+    <div class="block block-green">
+      <h4>Сильные стороны</h4>
+      <ul>
+        <li>Глубокая внутренняя перелинковка: в среднем 30.8 service-ссылок на странице (футер 21) - архитектура для cross-sell уже готова</li><li>Программа лояльности присутствует на всех страницах аудита - есть основа для удержания и LTV</li><li>Наличие bundle-логики: продукты «Покупка → Меблировка → Управление» уже связаны в навигации (полный цикл, заявленный в брифе)</li><li>Hero-разнообразие 0.875 - страницы услуг не клонируют один и тот же баннер, есть запас под персонализацию</li><li>На /podbor есть и pricing, и lifecycle-диаграмма - нестандартно сильная подача для landing категории «Покупка»</li><li>Бренд закрепляет доверие через YouTube (400К аудитории по брифу) - актив, который пока не интегрирован в сайт</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--off2);">
+  <div class="sh">
+    <div class="sh-tag">Постраничный разбор</div>
+    <div class="sh-h">Аудит каждой страницы</div>
+    <div class="sh-desc">Скриншот первого экрана, скоры по метрикам, и 2-4 рекомендации в виде A/B-гипотез: «если изменим X, то Y вырастет на Z%, потому что W». Каждая рекомендация привязана к конкретному элементу страницы и сегменту из брифа.</div>
+  </div>
+
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">01</div>
+      <div>
+        <div class="page-title">Smarent</div>
+        <div class="page-url">/</div>
+      </div>
+      <span class="page-score-badge badge-red">3.1 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Собственник московской квартиры 35-55</span><span class="persona-tag">Инвестор</span><span class="persona-tag">Арендатор среднего класса</span><span class="persona-tag">Новичок «купить или нет»</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">Главная работает как визитка компании, а не как развилка для 3 ICP. Hero «эксперт и надёжный партнёр» не закрывает ни одну боль (потеря дохода, риск порчи, поиск инвест-объекта), CTA в первом экране нет, proof-цифры из брифа (1100+ объектов, 4К+ районов) не используются.</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val red">2.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">3.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/index.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>H1 «SMARENT - эксперт и надёжный партнёр на рынке недвижимости» - набор пустых слов, без числа и конкретного результата</li><li>Subheading «Проведение сделок купли-продажи, подготовка к аренде и управление объектами» описывает ЧТО мы делаем, не какую проблему решаем</li><li>ctas_count = 0: в первом экране нет ни одной кнопки действия</li><li>Нет развилки под 3 ICP - все попадают в одну форму на 5 обязательных полей</li><li>proof_numbers содержит только слово «объект» без цифры 1100+ из брифа</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>Has trust signal в первом экране (логика отображения присутствует)</li><li>30 внутренних service-ссылок - архитектура для развода трафика готова</li><li>Программа лояльности и bundle уже подключены</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Заменить пустой H1 на proof-driven по доходу собственника</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Conversion</span>
+              <span class="tag tag-delta">+12..20%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если заменить hero «эксперт и надёжный партнёр» на конкретное обещание дохода с цифрой из брифа (1100+ квартир, выплата 1-го числа), то конверсия в заявку с главной вырастет на 12-20%, потому что собственник 35-55 ищет ответ на JTBD «получать аренду без личного участия и без риска неплательщиков», а не визитку компании.</div>
+          <div class="rec-row"><b>Что меняем:</b> Новый H1: «Сдаём вашу квартиру в Москве и переводим аренду 1-го числа - 1100+ объектов в управлении». Subheading: «Берём на себя поиск арендатора, заселение, оплату коммуналки и контроль состояния. Вы получаете деньги в срок, даже если арендатор задержал платёж».</div>
+          
+          <div class="rec-evidence">H1: SMARENT - эксперт и надежный партнер на рынке недвижимости / Subheading: Проведение сделок купли-продажи, подготовка к аренде и управление объектами <span style="opacity:.65;"> · hero h1</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Развилка hero под 3 ICP (3 карточки выбора)</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Bounce</span>
+              <span class="tag tag-delta">-15..25%</span>
+              <span class="tag tag-effort-medium">Medium</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если под hero добавить блок «Что вам нужно?» с 3 карточками (Сдать свою квартиру / Купить под инвестиции / Снять квартиру), то bounce rate главной снизится на 15-25%, потому что 3 разных ICP получают релевантный путь вместо общего меню из 12 пунктов и формы на 5 полей.</div>
+          <div class="rec-row"><b>Что меняем:</b> Сразу под hero: 3 карточки 1/3 ширины. Карточка 1 - «У меня есть квартира - хочу сдавать без хлопот» -> /arenda. Карточка 2 - «Хочу купить квартиру под сдачу» -> /podbor. Карточка 3 - «Ищу квартиру в аренду» -> каталог арендаторов. На каждой карточке - 1 цифра из брифа (1100+ / 4К+ районов / гарантия выплаты 1-го числа).</div>
+          
+          <div class="rec-evidence">persona_specific_h1_ratio = 0.0, dedicated_segment_pages_count = 0; в навигации 12 пунктов меню без приоритезации под персону <span style="opacity:.65;"> · section.hero + section.audience-router (новый блок)</span></div>
+          
+          <div class="rec-persona">→ для: Все 3 ICP - сегментация трафика</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Видимый CTA в первом экране</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">CTR</span>
+              <span class="tag tag-delta">+8..14%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если добавить в hero основной CTA «Рассчитать доход с моей квартиры» (ведёт на калькулятор/короткую форму на 2 поля), то конверсия первого экрана вырастет на 8-14%, потому что собственник получает действие до скролла, а не вынужден искать форму внизу страницы.</div>
+          <div class="rec-row"><b>Что меняем:</b> Кнопка в hero справа от H1: «Рассчитать доход с моей квартиры» (primary, accent-color). Вторая кнопка-link: «Посмотреть кейсы выплат». На клик - открывается шорт-форма (район + площадь + телефон), без обязательных 5 полей.</div>
+          
+          <div class="rec-evidence">ctas_count = 0; cta_text пустой; форма требует 5 обязательных полей <span style="opacity:.65;"> · hero .cta-primary</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Proof-полоса с цифрами из брифа</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Time</span>
+              <span class="tag tag-delta">+10..18%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если под hero вывести 4 цифры (1100+ объектов / 4К+ районов в аналитике / выплата 1-го числа / 400К на YouTube), то time on page вырастет на 10-18%, потому что инвестор и новичок получают мгновенный сигнал доверия и листают дальше, а не уходят к конкуренту.</div>
+          <div class="rec-row"><b>Что меняем:</b> Полоса 4 ячейки сразу после hero: «1100+ квартир в управлении» / «4 000+ районов в аналитической базе» / «Выплата 1-го числа каждого месяца» / «400 000 подписчиков YouTube об инвестициях в недвижимость». Каждая цифра кликабельна - ведёт на соответствующий раздел (кейсы / аналитика / гарантия / YouTube).</div>
+          
+          <div class="rec-evidence">proof_numbers = ['объект'] - на главной нет ни одной конкретной цифры из брифа <span style="opacity:.65;"> · section.proof-bar (новый блок под hero)</span></div>
+          
+          <div class="rec-persona">→ для: Инвестор + Новичок «купить или нет»</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">02</div>
+      <div>
+        <div class="page-title">Подбор недвижимости от компании SMARENT</div>
+        <div class="page-url">/podbor</div>
+      </div>
+      <span class="page-score-badge badge-red">3.2 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Инвестор</span><span class="persona-tag">Новичок «купить или нет»</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">Сильнее главной по структуре (есть pricing и lifecycle), но H1 «сделок за год» оборван - очевидно visual-эффект ломает SEO и orientation. Для инвестора нет калькулятора доходности и квиза - ключевых инструментов само-квалификации.</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val yellow">4.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">2.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/podbor.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>H1 «сделок за год» - обрывок без цифры; парсер не находит число, значит и Google, и пользователь видят оборванный заголовок</li><li>Subheading «Сделаем независимый подбор недвижимости с сопровождением сделки» не отвечает на главный вопрос инвестора - «какая доходность»</li><li>Нет калькулятора и квиза - инвестор не может само-квалифицироваться</li><li>Форма на 4 обязательных поля - режет холодный трафик</li><li>Нет блока «следующий шаг» (next_step_block = false) - после прочтения непонятно что делать</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>Есть pricing на странице - редкая для рынка прозрачность</li><li>Lifecycle-диаграмма закрывает «как устроен процесс»</li><li>33 service-ссылки - максимум cross-sell в выборке</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Восстановить H1 с конкретной цифрой по доходности</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Scroll</span>
+              <span class="tag tag-delta">+15..25%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если поставить H1 с измеримым результатом для инвестора (например «Подберём квартиру с доходностью 7-9% годовых в Москве - 1100+ закрытых сделок»), то scroll depth вырастет на 15-25%, потому что инвестор получает ответ на единственный важный для него вопрос в первом экране.</div>
+          <div class="rec-row"><b>Что меняем:</b> H1: «Подберём квартиру под сдачу с доходностью 7-9% годовых». Subheading: «Анализируем 4000+ районов Москвы, считаем cash flow на 5 лет вперёд, сопровождаем сделку и сразу подключаем меблировку и управление». Дополнить: «1100+ объектов в управлении - вы видите реальные ставки аренды по нашему портфелю».</div>
+          
+          <div class="rec-evidence">H1: «сделок за год» - оборванная фраза без числа <span style="opacity:.65;"> · hero h1</span></div>
+          
+          <div class="rec-persona">→ для: Инвестор</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Калькулятор доходности в первом экране</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Leads</span>
+              <span class="tag tag-delta">+20..35%</span>
+              <span class="tag tag-effort-high">High</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если внедрить калькулятор «доходность моих инвестиций» (бюджет / район / тип квартиры -> прогноз cash flow и срок окупаемости), то leads вырастут на 20-35%, потому что инвестор получает инструмент принятия решения, а не статичный landing.</div>
+          <div class="rec-row"><b>Что меняем:</b> Виджет 4 поля: бюджет (slider 5-50 млн), район (selector), тип (студия/1к/2к), горизонт (3/5/10 лет). Output: ежемесячный cash flow, IRR, срок окупаемости. CTA на финале: «Подобрать конкретные объекты - оставьте телефон». Под результатом - 3 примера из портфеля 1100+ с фактической доходностью.</div>
+          
+          <div class="rec-evidence">has_calculator = false, has_quiz = false; форма требует 4 обязательных поля <span style="opacity:.65;"> · section.investment-calculator (новый блок)</span></div>
+          
+          <div class="rec-persona">→ для: Инвестор + Новичок «купить или нет»</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Блок «следующий шаг» в конце страницы</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Engagement</span>
+              <span class="tag tag-delta">+25..40%</span>
+              <span class="tag tag-effort-medium">Medium</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если в конце /podbor добавить блок «После покупки - меблировка и управление одной командой» с переходом на /uslugi, то engagement rate cross-sell вырастет на 25-40%, потому что инвестор движется по воронке полного цикла, заявленной в брифе как ключевой differentiator.</div>
+          <div class="rec-row"><b>Что меняем:</b> Перед футером: блок «Полный цикл одной командой» с тремя карточками (Меблировка под аренду / Управление 1100+ квартир / Гарантия выплаты 1-го числа) и CTA «Получить расчёт всего цикла - покупка + меблировка + управление».</div>
+          
+          <div class="rec-evidence">next_step_block = false; pages_with_next_step_ratio по сайту = 0.11 <span style="opacity:.65;"> · section.next-step (новый блок перед футером)</span></div>
+          
+          <div class="rec-persona">→ для: Инвестор</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">03</div>
+      <div>
+        <div class="page-title">Уборка квартир</div>
+        <div class="page-url">/uborka</div>
+      </div>
+      <span class="page-score-badge badge-red">3.1 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Собственник московской квартиры 35-55</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">Сервисная подстраница - правильно существует как поддержка управления, но H1 «Уборкой занимается профессиональный клининг сервис» описывает кто исполнитель, а не что получает собственник. CTA в первом экране нет.</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val red">3.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">2.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/uborka.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>H1 описывает исполнителя, а не результат для собственника</li><li>Title «Уборка квартир» - без бренда</li><li>Нет CTA в первом экране, форма на 4 обязательных поля</li><li>proof_numbers пустой - нет цифр о количестве уборок</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>Pricing присутствует - редкая прозрачность для клининга</li><li>Связь с управлением заявлена в subheading</li><li>Программа лояльности подключена</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">H1 от лица результата собственника</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Conversion</span>
+              <span class="tag tag-delta">+10..18%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если переписать H1 в «Готовим квартиру к каждому новому арендатору за 24 часа» с цифрой из портфеля, то конверсия в заявку вырастет на 10-18%, потому что собственник видит результат для своей экономики (быстрая ротация = меньше простоя), а не описание процесса.</div>
+          <div class="rec-row"><b>Что меняем:</b> H1: «Готовим квартиру к каждому новому арендатору за 24 часа». Subheading: «Генеральная и базовая уборка с фотоотчётом - часть управления Smarent или отдельная услуга. 1100+ квартир обслуживаем по этому стандарту».</div>
+          
+          <div class="rec-evidence">H1: Уборкой занимается профессиональный клининг сервис / Subheading: Уборка квартир в управлении Smarent <span style="opacity:.65;"> · hero h1</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">CTA в первом экране + сокращение формы</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Leads</span>
+              <span class="tag tag-delta">+12..20%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если добавить CTA «Заказать уборку - от 2500₽» прямо в hero и сократить форму до 2 обязательных полей (телефон + район), то leads вырастут на 12-20%, потому что мотивированный собственник не должен скроллить страницу до формы из 4 полей.</div>
+          <div class="rec-row"><b>Что меняем:</b> Кнопка в hero: «Заказать уборку - от 2500₽» (с реальной ценой из pricing-блока ниже). Форма: только телефон и район (опционально - дата). Остальные параметры выясняем по звонку.</div>
+          
+          <div class="rec-evidence">ctas_count = 0; форма на 4 обязательных поля <span style="opacity:.65;"> · hero .cta-primary, form.primary</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">04</div>
+      <div>
+        <div class="page-title">Организация ремонтных работ</div>
+        <div class="page-url">/remont</div>
+      </div>
+      <span class="page-score-badge badge-red">2.8 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Собственник московской квартиры 35-55</span><span class="persona-tag">Инвестор</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">Лучший по message-clarity hero на сайте («Бесплатно подберём ремонтную бригаду» - конкретное действие и условие), но без CTA, без proof, без подзаголовка и без связи с управлением. Не используется как точка входа в полный цикл.</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val red">2.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">1.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/remont.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>Subheading отсутствует - hero обрывается</li><li>Нет CTA в первом экране</li><li>Title «Организация ремонтных работ» - без бренда</li><li>proof_numbers пустой - нет цифры «сколько бригад в пуле»</li><li>Нет связки «Ремонт -> Меблировка -> Управление» в воронку</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>H1 содержит конкретное обещание (бесплатный подбор)</li><li>28 service-ссылок - cross-sell-архитектура</li><li>Программа лояльности подключена</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Добавить subheading с механикой и CTA в hero</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Conversion</span>
+              <span class="tag tag-delta">+15..22%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если добавить под H1 описание механики (как мы выбираем бригаду) и CTA «Получить 3 предложения за 48 часов», то заявки на ремонт вырастут на 15-22%, потому что собственник, не знающий рынок подрядчиков, получает понятный процесс и таймлайн вместо «бесплатно подберём».</div>
+          <div class="rec-row"><b>Что меняем:</b> Под H1 добавить: «Из 30+ проверенных бригад выберем 3 под ваш бюджет и стандарт качества Smarent. Получите сметы за 48 часов и сравните в одном окне». CTA: «Получить 3 предложения за 48 часов» - форма на 2 поля (телефон + площадь квартиры).</div>
+          
+          <div class="rec-evidence">H1: Бесплатно подберем ремонтную бригаду / Subheading: (пусто) / ctas_count = 0 <span style="opacity:.65;"> · hero .subheading, hero .cta-primary</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Воронка «Ремонт -> Меблировка -> Управление»</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Engagement</span>
+              <span class="tag tag-delta">+20..30%</span>
+              <span class="tag tag-effort-medium">Medium</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если в конце /remont добавить блок «После ремонта мы меблируем и сдадим квартиру за 30 дней», то cross-sell в управление вырастет на 20-30%, потому что собственник, делающий ремонт, чаще всего готовит квартиру под сдачу - это естественный момент допродажи.</div>
+          <div class="rec-row"><b>Что меняем:</b> Блок перед футером: «Что после ремонта?» - 2 карточки (Меблировка под аренду за 7 дней / Управление с гарантией выплаты 1-го числа). CTA: «Связать ремонт с меблировкой и управлением - получите единую смету».</div>
+          
+          <div class="rec-evidence">next_step_block = false; в hero и тексте нет связи с другими услугами <span style="opacity:.65;"> · section.cross-sell (новый блок перед футером)</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">05</div>
+      <div>
+        <div class="page-title">Обзоры новостроек от Smarent</div>
+        <div class="page-url">/obzori</div>
+      </div>
+      <span class="page-score-badge badge-red">3.0 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Инвестор</span><span class="persona-tag">Новичок «купить или нет»</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">Видеообзоры новостроек - сильный SEO/контент-актив (опирается на YouTube-аудиторию 400К из брифа), но страница работает как каталог видео без конверсионной механики. Нет связи с /podbor, нет квиза «какой объект подходит вам».</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val red">3.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">1.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/obzori.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>H1 «Обзоры новостроек» - generic, без бренда и без числа (сколько обзоров?)</li><li>Meta description короткое (52 символа) - ниже порога 60-160</li><li>Нет CTA в первом экране и нет 2+ CTA на странице</li><li>Форма на 4 обязательных поля - не подходит для холодного видеотрафика</li><li>Нет квиза «подобрать новостройку под мой бюджет/цель»</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>41 service-ссылка - максимум перелинковки в выборке</li><li>Есть честная дисклеймер-формулировка про «не прямая рекомендация» - усиливает доверие</li><li>Контент-актив привязан к YouTube-каналу</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Превратить /obzori в воронку «видео -> квиз -> заявка»</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Leads</span>
+              <span class="tag tag-delta">+18..30%</span>
+              <span class="tag tag-effort-high">High</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если в начале страницы и после каждых 3-5 обзоров добавлять блок-квиз «Какая новостройка подходит вам?» (бюджет / цель / горизонт), то leads с органического видеотрафика вырастут на 18-30%, потому что зритель YouTube-обзора находится на стадии problem-aware, и квиз даёт ему путь дальше вместо просмотра 50 видео подряд.</div>
+          <div class="rec-row"><b>Что меняем:</b> Сразу под H1 - блок «Не знаете с чего начать?» с квизом из 4 шагов (бюджет 5-50 млн / цель: жить или сдавать / горизонт / район или «без предпочтений»). Output: 3 рекомендованных обзора + CTA «Получить персональную подборку с расчётом доходности».</div>
+          
+          <div class="rec-evidence">has_quiz = false; ctas_count = 0; H1: Обзоры новостроек <span style="opacity:.65;"> · section.quiz (новый блок под hero)</span></div>
+          
+          <div class="rec-persona">→ для: Инвестор + Новичок «купить или нет»</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Заполнить meta description и H1 цифрой</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">CTR</span>
+              <span class="tag tag-delta">+8..15%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если переписать H1 в «150+ обзоров новостроек Москвы - выбираем по доходности» и meta до 140 символов, то CTR из поиска вырастет на 8-15%, потому что в SERP появляются число и benefit вместо общего «Обзоры новостроек от Smarent».</div>
+          <div class="rec-row"><b>Что меняем:</b> H1: «150+ видеообзоров новостроек Москвы - смотрите цифры доходности и стандарты застройщика». Meta: «Smarent разбирает каждую новостройку Москвы: цена, инфраструктура, прогноз доходности под сдачу и риски. 4000+ районов в аналитической базе». (укажите реальное число обзоров).</div>
+          
+          <div class="rec-evidence">H1: Обзоры новостроек / meta: Полный список обзоров от Smarent на новостройки Москвы (52 char) <span style="opacity:.65;"> · head meta[name=description], hero h1</span></div>
+          
+          <div class="rec-persona">→ для: Инвестор</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">06</div>
+      <div>
+        <div class="page-title">Smarent</div>
+        <div class="page-url">/arenda</div>
+      </div>
+      <span class="page-score-badge badge-red">3.1 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Собственник московской квартиры 35-55</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">Критичная страница для главной бизнес-цели брифа («поднять конверсию страницы Управление в заявку»), но фактически клон главной: тот же H1 «эксперт и надёжный партнёр», то же subheading, та же meta. Никакой специализации под собственника.</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val red">2.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">3.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/arenda.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>Полное дублирование hero и meta с главной - страница не отличает себя</li><li>H1 «эксперт и надёжный партнёр» не закрывает страх собственника (порча, неплательщики, простой)</li><li>Форма на 5 обязательных полей</li><li>Нет блока «как выглядит выплата 1-го числа» - ключевой differentiator из брифа не используется</li><li>Нет калькулятора «сколько вы получите со своей квартиры»</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>Trust signal в первом экране</li><li>30 service-ссылок и логика lifecycle</li><li>Программа лояльности подключена</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Уникальный hero под боль собственника</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Conversion</span>
+              <span class="tag tag-delta">+18..28%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если заменить hero на «Сдадим вашу квартиру в Москве и переведём аренду 1-го числа - даже если арендатор задержал платёж», то конверсия в заявку с /arenda вырастет на 18-28%, потому что собственник попадает на страницу с прямым ответом на 2 главных страха (потеря дохода и риск неплательщика), а не на дубль главной.</div>
+          <div class="rec-row"><b>Что меняем:</b> H1: «Сдадим вашу квартиру в Москве и переведём аренду 1-го числа - даже если арендатор задержал платёж». Subheading: «Берём на себя поиск, заселение, контроль состояния и форс-мажоры. 1100+ квартир в управлении, средний срок поиска арендатора - 11 дней (укажите реальную цифру)». CTA: «Узнать сколько я получу со своей квартиры» -> калькулятор.</div>
+          
+          <div class="rec-evidence">H1: SMARENT - эксперт и надежный партнер на рынке недвижимости / Subheading: Проведение сделок купли-продажи, подготовка к аренде и управление объектами (полный дубль главной) <span style="opacity:.65;"> · hero h1, hero .subheading</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Калькулятор «Доход с моей квартиры»</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Leads</span>
+              <span class="tag tag-delta">+25..40%</span>
+              <span class="tag tag-effort-high">High</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если вынести в первый экран калькулятор «Сколько я получу 1-го числа?» (район + площадь + тип ремонта), то leads вырастут на 25-40%, потому что собственник получает персональную цифру до того как заполнит форму - классический trigger Cialdini «коммитмент через расчёт».</div>
+          <div class="rec-row"><b>Что меняем:</b> Виджет в правой колонке hero: 3 поля (район Москвы / площадь / тип ремонта). Output: ожидаемая ежемесячная выплата ± диапазон + комментарий «по аналогам из нашего портфеля». CTA после результата: «Получить договор управления» - форма на 2 поля (телефон + удобное время звонка).</div>
+          
+          <div class="rec-evidence">has_calculator = false; форма требует 5 обязательных полей <span style="opacity:.65;"> · hero aside.rent-calculator (новый блок)</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Сократить форму с 5 до 2 обязательных полей</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Conversion</span>
+              <span class="tag tag-delta">+12..22%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если урезать обязательные поля формы с 5 до 2 (телефон + площадь, остальное опционально), то заявки вырастут на 12-22%, потому что лимит 3 обязательных поля - индустриальный benchmark, а Smarent сейчас выше порога.</div>
+          <div class="rec-row"><b>Что меняем:</b> Поля: «Телефон» (обязательно), «Адрес/район» (обязательно), «Площадь» (опционально), «Когда сдаёте» (опционально), «Комментарий» (опционально). Уведомление: «Перезвоним в течение 30 минут с расчётом по аналогам».</div>
+          
+          <div class="rec-evidence">primary_form: fields_count = 5, required_fields_count = 5 <span style="opacity:.65;"> · form.primary input[required]</span></div>
+          
+          <div class="rec-persona">→ для: Собственник московской квартиры 35-55</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">07</div>
+      <div>
+        <div class="page-title">Услуги компании</div>
+        <div class="page-url">/uslugi</div>
+      </div>
+      <span class="page-score-badge badge-red">2.8 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Все 3 ICP - точка маршрутизации</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">Самая слабая страница в выборке: H1 пустой, subheading пустой, conversion-rubric ниже всех. Это узел навигации, но фактически он не несёт смысла - просто список ссылок. Под бизнес-цель «связать страницы покупки→меблировки→управления» страница должна быть хабом воронки.</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">3.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/uslugi.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>H1 пустой - на главной/landing нет h1 в первом экране (failed_check)</li><li>Subheading пустой</li><li>Title не содержит бренд</li><li>Это просто меню без сегментации и без story о полном цикле</li><li>Нет CTA, нет формы лидогенерации, нет блока «полный цикл одной командой»</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>Trust signal присутствует</li><li>Программа лояльности подключена</li><li>Title «Услуги компании» содержит правильный intent</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Превратить /uslugi в хаб полного цикла с сегментацией</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Engagement</span>
+              <span class="tag tag-delta">+30..50%</span>
+              <span class="tag tag-effort-medium">Medium</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если переделать /uslugi в narrative «Полный цикл недвижимости одной командой» с диаграммой Покупка -> Меблировка -> Управление и развилкой под 3 ICP, то pages_with_next_step и cross-sell вырастут на 30-50%, потому что страница превратится из мёртвого меню в осмысленный хаб с явным следующим шагом.</div>
+          <div class="rec-row"><b>Что меняем:</b> H1: «Полный цикл вашей недвижимости одной командой - от покупки до выплаты аренды 1-го числа». Subheading: «1100+ квартир в Москве проходят через нашу систему: подбор -> ремонт -> меблировка -> управление». Lifecycle-диаграмма с кликабельными узлами. Внизу - 3 карточки под ICP (собственник / инвестор / новичок), каждая ведёт на специализированный путь.</div>
+          
+          <div class="rec-evidence">H1: (пусто) / Subheading: (пусто) / has_lifecycle_diagram: false <span style="opacity:.65;"> · hero h1, section.lifecycle (новый блок)</span></div>
+          
+          <div class="rec-persona">→ для: Все 3 ICP</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Заполнить базовый hero (H1 + subheading + CTA)</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Bounce</span>
+              <span class="tag tag-delta">-10..15%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если просто закрыть критическую дыру (отсутствующий H1 и subheading), то bounce rate с этой страницы упадёт на 10-15%, потому что посетитель видит хотя бы что предлагается, а не пустоту над меню ссылок.</div>
+          <div class="rec-row"><b>Что меняем:</b> Минимально: H1 «Услуги Smarent для вашей недвижимости в Москве». Subheading «Покупка, меблировка, управление, ремонт, уборка и аналитика - всё под единым стандартом и с гарантией выплаты 1-го числа». CTA «Получить план под мой случай».</div>
+          
+          <div class="rec-evidence">H1: (пусто) / failed_check: «На главной/landing есть один h1 в первом экране» <span style="opacity:.65;"> · hero h1, hero .subheading</span></div>
+          
+          <div class="rec-persona">→ для: Все 3 ICP</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="page-card">
+    <div class="page-card-header" onclick="this.nextElementSibling.classList.toggle('open')">
+      <div class="page-num">08</div>
+      <div>
+        <div class="page-title">О нас</div>
+        <div class="page-url">/aboutus</div>
+      </div>
+      <span class="page-score-badge badge-red">3.4 / 10</span>
+    </div>
+    <div class="page-card-body">
+      
+      <div class="persona-tags">
+        <span class="persona-tag">Все 3 ICP - стадия проверки доверия</span>
+      </div>
+      
+
+      
+      <div class="verdict-box">О нас в правильной роли (поддержка доверия), но не использует ключевые активы из брифа: 400К на YouTube, собственная аналитическая база на 4К+ районов, 1100+ объектов. H1 «О компании» - generic, без числа.</div>
+      
+
+      <div class="metric-bars">
+        
+        <div class="metric-bar">
+          <div class="mb-name">Ясность ценности</div>
+          <div class="mb-val red">3.5</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Сегментация аудитории</div>
+          <div class="mb-val red">1.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Конверсионные сценарии</div>
+          <div class="mb-val red">3.0</div>
+        </div>
+        
+        <div class="metric-bar">
+          <div class="mb-name">Перекрёстные продажи</div>
+          <div class="mb-val orange">6.0</div>
+        </div>
+        
+      </div>
+
+      
+      <div class="shot-row">
+        <div class="shot">
+          <span class="shot-tag">Первый экран · desktop 1280×800</span>
+          <img src="pages/aboutus.png" alt="Above-fold screenshot">
+        </div>
+      </div>
+      
+
+      <div class="cols2">
+        <div class="block block-red">
+          <h4>Что не работает</h4>
+          <ul><li>H1 «О компании» - без бренда и без числа</li><li>Title «О нас» - без бренда</li><li>Нет упоминания YouTube 400К, аналитической базы 4К+ районов, 1100+ квартир</li><li>Нет media-логотипов (media_logo_mentions пустой) - где упоминания в СМИ</li><li>Форма на 4 обязательных поля</li></ul>
+        </div>
+        <div class="block block-green">
+          <h4>Что работает</h4>
+          <ul>
+            <li>Subheading формулирует позиционирование «единый сервис: купля-продажа + подготовка + управление»</li><li>proof_numbers содержит «год» (видимо «X лет на рынке»)</li><li>Trust signal в первом экране</li>
+            
+          </ul>
+        </div>
+      </div>
+
+      <div class="sh-tag" style="margin:24px 0 12px;">Рекомендации (A/B-гипотезы)</div>
+      <div class="recs">
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Hero с цифрами компании</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Scroll</span>
+              <span class="tag tag-delta">+12..22%</span>
+              <span class="tag tag-effort-low">Low</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если заменить H1 «О компании» на «Smarent: 1100+ квартир в управлении, 4000+ районов в аналитической базе, 400 000 подписчиков YouTube о недвижимости», то time on page и доверие (proxy: scroll depth) вырастут на 12-22%, потому что инвестор и новичок проверяют именно компанию, и им нужны цифры, а не «спокойствие для собственников».</div>
+          <div class="rec-row"><b>Что меняем:</b> H1: «Smarent: 1100+ квартир в управлении, 4000+ районов в аналитической базе, 400К подписчиков YouTube о недвижимости» (укажите реальные актуальные цифры). Subheading: оставить про единый сервис. Под hero - полоса с этими 3 цифрами как кликабельные блоки (на кейсы / на аналитику / на YouTube).</div>
+          
+          <div class="rec-evidence">H1: О компании / proof_numbers = ['год']; ни одна из 3 цифр из брифа не использована <span style="opacity:.65;"> · hero h1, section.proof-bar</span></div>
+          
+          <div class="rec-persona">→ для: Все 3 ICP - стадия проверки доверия</div>
+        </div>
+        
+        <div class="rec">
+          <div class="rec-head">
+            <div class="rec-title">Блок «Smarent в медиа и YouTube»</div>
+            <div class="rec-meta">
+              <span class="tag tag-metric">Engagement</span>
+              <span class="tag tag-delta">+15..25%</span>
+              <span class="tag tag-effort-medium">Medium</span>
+            </div>
+          </div>
+          <div class="rec-row"><b>Гипотеза:</b> Если добавить блок с YouTube-каналом 400К и упоминаниями в медиа, то engagement rate (proxy: переходы на YouTube + scroll до футера) вырастут на 15-25%, потому что 400К аудитория из брифа - неиспользованный signal доверия для холодного трафика, и сайт не строит мост между этими активами.</div>
+          <div class="rec-row"><b>Что меняем:</b> Блок перед футером: «Smarent в медиа» - 1) embedded YouTube preview с цифрой 400К подписчиков и 3 топ-видео 2) полоса логотипов СМИ (РБК, Forbes, Ведомости и т.д. - что есть реально) 3) CTA «Подписаться на разборы новостроек».</div>
+          
+          <div class="rec-evidence">media_logo_mentions = []; YouTube не упоминается на странице <span style="opacity:.65;"> · section.media-trust (новый блок)</span></div>
+          
+          <div class="rec-persona">→ для: Все 3 ICP</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+</section>
+
+<section class="section">
+  <div class="sh">
+    <div class="sh-tag">План улучшений</div>
+    <div class="sh-h">Дорожная карта на 3 этапа</div>
+    <div class="sh-desc">Приоритизировано по влиянию на конверсию и трудозатратам. Каждый пункт - реализуем как самостоятельный спринт с метрикой выхода.</div>
+  </div>
+
+  <div class="timeline">
+    
+    <div class="tl-item">
+      <div class="tl-dot critical"></div>
+      <div class="tl-card">
+        <div class="tl-phase critical">Этап · 2-4 недели · Критические правки</div>
+        <div class="tl-title">Закрыть критические дыры hero и CTA на главных страницах</div>
+        <ul>
+          <li>Переписать H1 главной и /arenda с пустого «эксперт и надёжный партнёр» на proof-driven «Сдаём квартиру и переводим аренду 1-го числа - 1100+ объектов»</li><li>Добавить видимый CTA в hero на всех 8 страницах аудита (сейчас ctas_count = 0 везде)</li><li>Заполнить пустой H1 и subheading на /uslugi (сейчас оба пустые)</li><li>Восстановить оборванный H1 на /podbor («сделок за год» -> полная фраза с цифрой доходности)</li><li>Сократить обязательные поля основной формы с 5 до 2 на /arenda и главной</li><li>Добавить proof-полосу с 4 цифрами из брифа (1100+ объектов / 4000+ районов / выплата 1-го числа / 400К YouTube) под hero главной и /arenda</li><li>Заполнить meta description на главной, /arenda и /obzori (сейчас короткие или generic)</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="tl-item">
+      <div class="tl-dot content"></div>
+      <div class="tl-card">
+        <div class="tl-phase content">Этап · 4-8 недель · Контент и конверсия</div>
+        <div class="tl-title">Сегментация под 3 ICP и инструменты само-квалификации</div>
+        <ul>
+          <li>Внедрить блок-развилку под hero главной с 3 карточками (Сдать / Купить под инвестиции / Снять)</li><li>Запустить калькулятор доходности на /podbor: бюджет + район + горизонт -> cash flow</li><li>Запустить калькулятор «Доход с моей квартиры» на /arenda: район + площадь + ремонт</li><li>Внедрить квиз «Какая новостройка подходит вам» на /obzori (использовать 400К YouTube-трафик)</li><li>Переделать /uslugi в хаб полного цикла с lifecycle-диаграммой Покупка -> Меблировка -> Управление</li><li>Добавить уникальные H1 и subheading на /uborka, /remont, /aboutus с цифрами и benefit для собственника</li><li>Создать выделенные страницы под 3 ICP-сегмента (сейчас dedicated_segment_pages_count = 0): /собственник, /инвестор, /арендатор</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="tl-item">
+      <div class="tl-dot growth"></div>
+      <div class="tl-card">
+        <div class="tl-phase growth">Этап · 2-3 месяца · Рост и персонализация</div>
+        <div class="tl-title">Cross-sell воронка полного цикла + интеграция YouTube</div>
+        <ul>
+          <li>Внедрить блоки next_step на всех страницах услуг (сейчас pages_with_next_step_ratio = 0.11) с явной воронкой Покупка -> Ремонт -> Меблировка -> Управление</li><li>Связать /podbor, /remont, /uslugi через единую сквозную смету «полного цикла одной командой»</li><li>Интегрировать YouTube 400К аудитории как канал доверия: embedded плеер на главной, /aboutus и /obzori с топ-3 видео по теме страницы</li><li>Запустить блок «Smarent в медиа» с логотипами СМИ на /aboutus (сейчас media_logo_mentions пустой)</li><li>Внедрить пост-сделочную воронку для собственников: после покупки автоматическое касание по меблировке и управлению</li><li>Подключить персональные рекомендации на основе квиза/калькулятора (сейчас pages_with_recommendations_ratio = 0)</li><li>Добавить кейс-стори с конкретными цифрами выплат собственникам (формат «квартира N м² в районе Y - выплата Z₽ 1-го числа 24 месяца подряд»)</li><li>Запустить A/B-тестирование всех гипотез из page_audits с приоритетом hero-копи и калькуляторов</li>
+        </ul>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+
+<section class="section" style="background:var(--off2);">
+  <div class="sh">
+    <div class="sh-tag">Конкуренты</div>
+    <div class="sh-h">Сравнение первых экранов</div>
+    <div class="sh-desc">Снимок главных страниц вас и 2 конкурентов: что они говорят в hero, какие CTA, есть ли калькулятор/квиз, какие proof-сигналы. Подсвечиваем паттерны, которые вы не используете.</div>
+  </div>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th style="min-width:160px;">Сайт</th>
+        <th>Hero H1</th>
+        <th>CTA</th>
+        <th>Сегментные пути</th>
+        <th>Calc</th>
+        <th>Quiz</th>
+        <th>Pricing</th>
+        <th>Trust</th>
+        <th>Required fields</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr style="background:var(--accent-bg);">
+        <td>
+          <strong style="color:var(--accent2);">Smarent (вы)</strong>
+          <br><span style="color:var(--soft);font-size:11px;">https://smarent.com</span>
+        </td>
+        <td style="font-size:12px;max-width:280px;">SMARENT — эксперт и надежный партнер на рынке недвижимости</td>
+        <td style="font-size:12px;">-</td>
+        <td>1</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>✓</td>
+        <td>5</td>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>homeapp.ru</strong>
+          <br><span style="color:var(--soft);font-size:11px;">https://homeapp.ru</span>
+        </td>
+        <td style="font-size:12px;max-width:280px;">IT-агентство недвижимости</td>
+        <td style="font-size:12px;">Купить</td>
+        <td>0</td>
+        <td>-</td>
+        <td>-</td>
+        <td>✓</td>
+        <td>-</td>
+        <td>1</td>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>etagi.com</strong>
+          <br><span style="color:var(--soft);font-size:11px;">https://www.etagi.com</span>
+        </td>
+        <td style="font-size:12px;max-width:280px;">Агентство недвижимости Этажи в Печорах</td>
+        <td style="font-size:12px;">Оформить ипотеку</td>
+        <td>0</td>
+        <td>✓</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>0</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+
+<section class="section" style="background:var(--off2);">
+  <div class="sh">
+    <div class="sh-tag">Сводная таблица</div>
+    <div class="sh-h">Скоры по страницам</div>
+  </div>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Страница</th>
+        <th>Ясность</th>
+        <th>Сегментация</th>
+        <th>Конверсия</th>
+        <th>Cross-sell</th>
+        <th>Среднее</th>
+        <th>Рекомендаций</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td><strong>Smarent</strong><br><span style="color:var(--soft);font-size:11px;">/</span></td>
+        <td><span class="score-val red" style="font-size:16px;">2.5</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">3.0</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">3.1</strong></td>
+        <td>4</td>
+      </tr>
+      
+      <tr>
+        <td><strong>Подбор недвижимости от компании SMARENT</strong><br><span style="color:var(--soft);font-size:11px;">/podbor</span></td>
+        <td><span class="score-val yellow" style="font-size:16px;">4.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">2.0</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">3.2</strong></td>
+        <td>3</td>
+      </tr>
+      
+      <tr>
+        <td><strong>Уборка квартир</strong><br><span style="color:var(--soft);font-size:11px;">/uborka</span></td>
+        <td><span class="score-val red" style="font-size:16px;">3.5</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">2.0</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">3.1</strong></td>
+        <td>2</td>
+      </tr>
+      
+      <tr>
+        <td><strong>Организация ремонтных работ</strong><br><span style="color:var(--soft);font-size:11px;">/remont</span></td>
+        <td><span class="score-val red" style="font-size:16px;">2.5</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.5</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">2.8</strong></td>
+        <td>2</td>
+      </tr>
+      
+      <tr>
+        <td><strong>Обзоры новостроек от Smarent</strong><br><span style="color:var(--soft);font-size:11px;">/obzori</span></td>
+        <td><span class="score-val red" style="font-size:16px;">3.5</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.5</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">3.0</strong></td>
+        <td>2</td>
+      </tr>
+      
+      <tr>
+        <td><strong>Smarent</strong><br><span style="color:var(--soft);font-size:11px;">/arenda</span></td>
+        <td><span class="score-val red" style="font-size:16px;">2.5</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">3.0</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">3.1</strong></td>
+        <td>3</td>
+      </tr>
+      
+      <tr>
+        <td><strong>Услуги компании</strong><br><span style="color:var(--soft);font-size:11px;">/uslugi</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">3.0</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">2.8</strong></td>
+        <td>2</td>
+      </tr>
+      
+      <tr>
+        <td><strong>О нас</strong><br><span style="color:var(--soft);font-size:11px;">/aboutus</span></td>
+        <td><span class="score-val red" style="font-size:16px;">3.5</span></td>
+        <td><span class="score-val red" style="font-size:16px;">1.0</span></td>
+        <td><span class="score-val red" style="font-size:16px;">3.0</span></td>
+        <td><span class="score-val orange" style="font-size:16px;">6.0</span></td>
+        <td><strong style="font-size:16px;">3.4</strong></td>
+        <td>2</td>
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+<div class="lead-magnet">
+  <div class="lm-tag">Хотите такой же аудит для своего сайта</div>
+  <div class="lm-h">KUBRIK делает<br><span>стратегические аудиты сайтов</span></div>
+  <div class="lm-desc">Этот отчёт сгенерирован за 8 минут на инструменте KUBRIK Site Audit. Под клиентский кейс мы дополняем его конкурентным разбором, прототипом квиза-сегментатора и пошаговым планом внедрения. Без воды, на основе вашего ICP.</div>
+  <a href="https://t.me/drobotmaxim" class="lm-cta">Получить аудит вашего сайта →</a>
+  <div class="lm-meta">Максим Дробот &nbsp;·&nbsp; <b>t.me/drobotmaxim</b></div>
+</div>
+
+<div class="footer">
+  <div>Сгенерировано <span>KUBRIK Site Audit</span> · 2026-04-30 12:47 · Run latest</div>
+  <div>8 страниц · 20 A/B-гипотез · профиль: services</div>
+</div>
+
+</body>
+</html>
