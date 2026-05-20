@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Полгода в LLM за 5 минут – пересказ Саймона Уиллисона</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #6b6b6b;
+    --line: #e5e3dd;
+    --bg: #faf8f3;
+    --accent: #0f7a5a;
+    --card: #ffffff;
+    --slide-bg: #1c1a17;
+    --slide-ink: #f3eede;
+    --slide-accent: #f5b942;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 96px; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 40px; }
+  .kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: "Charter", "Iowan Old Style", "Source Serif Pro", Georgia, serif;
+    font-size: 40px;
+    line-height: 1.15;
+    margin: 12px 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .lede { font-size: 19px; color: var(--muted); margin: 0; }
+  .meta {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .meta a { color: var(--accent); text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  section { margin: 56px 0; }
+  section h2 {
+    font-family: "Charter", "Iowan Old Style", Georgia, serif;
+    font-size: 26px;
+    line-height: 1.25;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  section .num {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 10px;
+    vertical-align: 2px;
+  }
+  section p { margin: 14px 0; }
+
+  figure {
+    margin: 28px 0 8px;
+    padding: 0;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  figcaption {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 10px 14px;
+    border-top: 1px solid var(--line);
+    background: #fbfaf6;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .grid figure { margin: 0; }
+
+  /* Слайд-карточки в стиле Уиллисона: тёмный фон, крупная типографика */
+  .slide {
+    aspect-ratio: 4 / 3;
+    background: var(--slide-bg);
+    color: var(--slide-ink);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: "Charter", Georgia, serif;
+    position: relative;
+  }
+  .slide-title {
+    font-size: 28px;
+    line-height: 1.15;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+  .slide-sub {
+    font-size: 15px;
+    color: #a89c80;
+    margin: 0 0 16px;
+    font-family: -apple-system, system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .slide-big {
+    font-size: 52px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--slide-accent);
+    margin: 8px 0;
+    letter-spacing: -0.02em;
+  }
+  .slide ul {
+    margin: 0; padding: 0; list-style: none;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .slide ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #2e2a24;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .slide ul li:last-child { border-bottom: 0; }
+  .slide ul li .date {
+    color: var(--slide-accent);
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .slide .corner {
+    position: absolute;
+    bottom: 16px; right: 20px;
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 11px;
+    color: #6b6256;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Стек диаграмма */
+  .stack {
+    display: flex; flex-direction: column; gap: 6px;
+    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+    font-size: 14px;
+  }
+  .stack .layer {
+    background: #2a2520;
+    border-left: 3px solid var(--slide-accent);
+    padding: 8px 14px;
+    color: var(--slide-ink);
+  }
+  .stack .layer:nth-child(1) { margin-left: 0; }
+  .stack .layer:nth-child(2) { margin-left: 16px; }
+  .stack .layer:nth-child(3) { margin-left: 32px; }
+  .stack .layer:nth-child(4) { margin-left: 48px; }
+  .stack .layer:nth-child(5) { margin-left: 64px; }
+
+  /* Сравнение двух моделей */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .compare .col {
+    background: #2a2520;
+    padding: 18px;
+    border-radius: 6px;
+  }
+  .compare h4 {
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--slide-accent);
+    margin: 0 0 10px;
+  }
+  .compare .val { font-size: 22px; font-weight: 600; margin: 4px 0; }
+  .compare .lbl { font-size: 13px; color: #a89c80; font-family: -apple-system, system-ui, sans-serif; }
+
+  /* Карточка коммита */
+  .commit {
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    padding: 18px;
+    border-radius: 6px;
+    line-height: 1.55;
+    border: 1px solid #30363d;
+  }
+  .commit .hash { color: var(--slide-accent); }
+  .commit .added { color: #56d364; }
+  .commit .meta-line { color: #8b949e; margin-bottom: 8px; }
+
+  /* Аквариум: Mac Mini с клешнёй */
+  .aquarium {
+    display: flex; align-items: center; justify-content: center; gap: 22px;
+    margin-top: 12px;
+  }
+  .mini {
+    width: 140px; height: 140px;
+    background: linear-gradient(180deg, #3a342c 0%, #1f1c18 100%);
+    border-radius: 14px;
+    position: relative;
+    border: 1px solid #4a4239;
+  }
+  .mini::after {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--slide-accent);
+    transform: translate(-50%,-50%);
+    box-shadow: 0 0 16px var(--slide-accent);
+  }
+  .claw { font-size: 64px; line-height: 1; }
+
+  .pullquote {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 18px;
+    margin: 28px 0;
+    font-family: "Charter", Georgia, serif;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .takeaway {
+    background: #f3efe4;
+    border: 1px solid #e0d9c4;
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin: 48px 0 0;
+  }
+  .takeaway h3 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+  }
+  .takeaway ul { margin: 0; padding-left: 18px; }
+  .takeaway li { margin: 6px 0; }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 36px 18px 64px; }
+    h1 { font-size: 30px; }
+    body { font-size: 17px; }
+    .grid { grid-template-columns: 1fr; }
+    .slide { padding: 22px; }
+    .slide-title { font-size: 22px; }
+    .slide-big { font-size: 40px; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .wrap { max-width: 100%; padding: 0 16mm; }
+    figure { break-inside: avoid; page-break-inside: avoid; border-color: #ddd; }
+    section { break-inside: avoid; page-break-inside: avoid; }
+    .takeaway { break-inside: avoid; }
+    .slide { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Перевод и конспект · PyCon US 2026</div>
+  <h1>Полгода в LLM за 5 минут</h1>
+  <p class="lede">Саймон Уиллисон рассказал на конференции, что важного случилось с искусственным интеллектом с прошлой осени по эту весну. Коротко, по делу, без жаргона. Пересобрал его выступление на русском, чтобы прочитать мог любой – не только программист.</p>
+  <div class="meta">
+    <span>19 мая 2026</span>
+    <span>Чтение ~5 мин</span>
+    <a href="https://simonwillison.net/2026/May/19/5-minute-llms/" target="_blank" rel="noopener">Оригинал</a>
+  </div>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Ноябрь 2025: всё ускорилось</h2>
+  <p>За один месяц сильнейшая модель для программирования сменилась пять раз. Сначала впереди была Claude от Anthropic, потом ChatGPT, потом Gemini от Google, и так по кругу. Раньше такие перестановки случались раз в год, а тут – пять штук за тридцать дней.</p>
+  <p>Чтобы понять, какая модель сильнее, Саймон не смотрит в таблицы с цифрами. Он просит каждую новую модель нарисовать одну и ту же картинку – пеликана на велосипеде. На картинках видно глазами, чего цифры не покажут.</p>
+
+  <figure>
+    <div class="slide">
+      <p class="slide-sub">Ноябрь 2025</p>
+      <h3 class="slide-title">Лидерство сменилось пять раз за месяц</h3>
+      <ul>
+        <li><span>Claude Sonnet 4.5</span><span class="date">Anthropic</span></li>
+        <li><span>GPT-5.1</span><span class="date">OpenAI</span></li>
+        <li><span>Gemini 3</span><span class="date">Google</span></li>
+        <li><span>GPT-5.1 Codex Max</span><span class="date">OpenAI</span></li>
+        <li><span>Claude Opus 4.5</span><span class="date">Anthropic</span></li>
+      </ul>
+      <div class="corner">Слайд 03</div>
+    </div>
+    <figcaption>Пять смен лидера за месяц. До этого такое не случалось ни за один год.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="https://static.simonwillison.net/static/2026/5-minutes-llms/5-minutes-llms.005.jpeg" alt="Пять SVG-пеликанов на велосипедах от разных моделей" style="display:block;width:100%;height:auto;">
+    <figcaption>Тест Уиллисона: один и тот же пеликан, нарисованный пятью моделями подряд. Когда цифры сравнялись, остаётся смотреть глазами.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Программирующие помощники стали надёжными</h2>
+  <p>Раньше нейросеть-помощник в коде работала как студент-стажёр: иногда выдаёт нужное, иногда чушь, и проверять надо всё. Осенью изменился способ обучения – модели стали тренировать на задачах, где результат можно сразу проверить (запустить и посмотреть, работает ли). После этого помощники перешли из режима «иногда» в режим «обычно работает». Это и есть главный сдвиг последних полугода для всех, кто пишет код.</p>
+
+  <figure>
+    <div class="slide">
+      <p class="slide-sub">Ноябрь 2025 · OpenClaw</p>
+      <h3 class="slide-title">Первая запись в истории проекта, с которой пошла волна</h3>
+      <div class="commit">
+        <div class="meta-line">commit <span class="hash">a3f9e21</span> · Author: anonymous · Nov 14 2025</div>
+        <div>Initial commit</div>
+        <div style="margin-top:8px;">
+          <span class="added">+ LICENSE (MIT)</span><br>
+          <span class="added">+ README.md</span><br>
+          <span class="added">+ agent/loop.py</span><br>
+          <span class="added">+ agent/tools.py</span>
+        </div>
+      </div>
+      <div class="corner">Слайд 07</div>
+    </div>
+    <figcaption>OpenClaw – один из таких помощников, выросший из ноябрьской волны. Код открыли бесплатно, и за неделю его скопировали себе тысячи человек.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Декабрь и январь: всех немного занесло</h2>
+  <p>Когда помощники резко стали мощнее, людей повело. Все начали делать заведомо избыточные штуки – просто потому, что теперь это занимает вечер, а не месяц. Сам Саймон собрал матрёшку из пяти технологий, которая в итоге делает то же самое, что одна из них в самом начале. Зачем – непонятно, но получилось.</p>
+
+  <figure>
+    <div class="slide">
+      <p class="slide-sub">Зачем – непонятно. Получилось.</p>
+      <h3 class="slide-title">Матрёшка из пяти технологий</h3>
+      <div class="stack">
+        <div class="layer">Программа на одном языке</div>
+        <div class="layer">Запущена внутри второго языка</div>
+        <div class="layer">Который работает поверх третьей среды</div>
+        <div class="layer">Та крутится в четвёртой</div>
+        <div class="layer">А она запущена обратно в первом языке</div>
+      </div>
+      <div class="corner">Слайд 10</div>
+    </div>
+    <figcaption>Признак того, что порог «попробовать что-нибудь сумасшедшее» упал почти до нуля.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Февраль: у людей появились «клешни»</h2>
+  <p>Прижилось новое слово – «клешня». Это личный помощник на основе нейросети, который живёт прямо на вашем компьютере, а не где-то в облаке. Не надо платить за подписку, не надо отправлять свои данные в чужой сервис. В Кремниевой долине под такие домашние помощники массово скупили маленькие Apple Mac mini – их физически не осталось на складах.</p>
+
+  <figure>
+    <img src="https://static.simonwillison.net/static/2026/5-minutes-llms/5-minutes-llms.016.jpeg" alt="Пеликан с рыбой в корзинке от Gemini" style="display:block;width:100%;height:auto;">
+    <figcaption>Параллельно Gemini от Google догнал остальных по картинкам: пеликан наконец-то с рыбой в корзинке.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="slide">
+      <p class="slide-sub">Февраль 2026</p>
+      <h3 class="slide-title">Аквариум для твоей клешни</h3>
+      <div class="aquarium">
+        <div class="mini" aria-label="Mac mini"></div>
+        <div class="claw">🦞</div>
+      </div>
+      <p style="font-size:15px;line-height:1.5;color:#cdc4ad;font-family:-apple-system,system-ui,sans-serif;margin:18px 0 0;text-align:center;">
+        Маленький Mac mini как домашний «аквариум» для личного помощника.<br>В Калифорнии они закончились на складах.
+      </p>
+      <div class="corner">Слайд 14</div>
+    </div>
+    <figcaption>Образ Уиллисона: своя «клешня» в своём «аквариуме» вместо аренды чужого облака.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Апрель: бесплатные модели догнали платные</h2>
+  <p>Раньше так: топовая нейросеть – это подписка у большой компании. Сейчас всё чаще можно скачать модель к себе и запустить бесплатно, без подписки и без интернета. За апрель вышло сразу три таких релиза, и качество у них уже как у платных.</p>
+
+  <figure>
+    <div class="slide">
+      <p class="slide-sub">Апрель 2026 · Открытые модели</p>
+      <h3 class="slide-title">Три релиза за месяц</h3>
+      <ul>
+        <li><span>Gemma 4 <span style="color:#a89c80;font-size:14px;font-family:-apple-system,system-ui,sans-serif;">— сильнейшая из бесплатных</span></span><span class="date">Google</span></li>
+        <li><span>GLM-5.1 <span style="color:#a89c80;font-size:14px;font-family:-apple-system,system-ui,sans-serif;">— огромная, для серверов</span></span><span class="date">Китай</span></li>
+        <li><span>Qwen 3.6 <span style="color:#a89c80;font-size:14px;font-family:-apple-system,system-ui,sans-serif;">— запускается на обычном ноутбуке</span></span><span class="date">Alibaba</span></li>
+      </ul>
+      <div class="corner">Слайд 18</div>
+    </div>
+    <figcaption>Бесплатные модели больше не «компромисс ради приватности». По качеству они рядом с платными.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="https://static.simonwillison.net/static/2026/5-minutes-llms/5-minutes-llms.021.jpeg" alt="Пеликан от китайской модели GLM" style="display:block;width:100%;height:auto;">
+    <figcaption>Пеликан от китайской бесплатной модели GLM-5.1. Внешне неотличимо от платных.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="slide">
+      <p class="slide-sub">Сравнение</p>
+      <h3 class="slide-title">На ноутбуке – то же качество, что и в облаке</h3>
+      <div class="compare">
+        <div class="col">
+          <h4>На своём компьютере</h4>
+          <div class="val">Qwen 3.6</div>
+          <div class="lbl">бесплатно · без интернета · обычный ноутбук</div>
+        </div>
+        <div class="col">
+          <h4>В облаке</h4>
+          <div class="val">Claude Opus 4.7</div>
+          <div class="lbl">платная подписка · через интернет · сервера Anthropic</div>
+        </div>
+      </div>
+      <p style="font-size:14px;color:#a89c80;font-family:-apple-system,system-ui,sans-serif;margin:18px 0 0;">
+        На обычных задачах разница уже не видна.
+      </p>
+      <div class="corner">Слайд 25</div>
+    </div>
+    <figcaption>Если важна приватность или цена – ждать «когда-нибудь» больше не нужно.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Галерея пеликанов: как выросло качество</h2>
+  <p>Все картинки – ответы разных моделей на одну и ту же просьбу: «нарисуй пеликана на велосипеде». Свежие версии справляются с задачей всё спокойнее.</p>
+
+  <div class="grid">
+    <figure>
+      <img src="https://static.simonwillison.net/static/2026/5-minutes-llms/5-minutes-llms.016.jpeg" alt="Пеликан от Gemini 3.1 Pro" style="display:block;width:100%;height:auto;">
+      <figcaption>Gemini 3.1 Pro (Google) – пеликан с рыбой в корзинке, велосипед в порядке.</figcaption>
+    </figure>
+    <figure>
+      <img src="https://static.simonwillison.net/static/2026/5-minutes-llms/5-minutes-llms.021.jpeg" alt="Пеликан от GLM-5.1" style="display:block;width:100%;height:auto;">
+      <figcaption>GLM-5.1 (Китай, бесплатная) – уверенный пеликан, велосипед чуть кривоват.</figcaption>
+    </figure>
+  </div>
+
+  <p style="margin-top:24px;color:var(--muted);font-size:15px;">Если поставить эти картинки рядом с пеликанами годовой давности – разница примерно как между детским рисунком и иллюстрацией из книжки. Та же просьба, тот же тест, разница в полгода.</p>
+</section>
+
+<section>
+  <h2>Что из всего этого вынести</h2>
+
+  <p class="pullquote">Привязываться к «самой лучшей модели» больше нет смысла. Выигрывает тот, кто умеет легко её менять – раз в две недели, без боли.</p>
+
+  <div class="takeaway">
+    <h3>Три вывода в одну строку</h3>
+    <ul>
+      <li><b>Помощник в коде стал надёжным.</b> Если вы пишете программы и до сих пор не используете его в работе – тратите часы зря.</li>
+      <li><b>Бесплатное догнало платное.</b> Для задач, где важна приватность или цена, есть рабочие варианты прямо сейчас.</li>
+      <li><b>Лидер меняется за недели, не за годы.</b> Любая ставка на одну конкретную модель – временная. Стройте так, чтобы менять её было легко.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  Оригинал выступления: <a href="https://simonwillison.net/2026/May/19/5-minute-llms/" target="_blank" rel="noopener">simonwillison.net/2026/May/19/5-minute-llms/</a><br>
+  Текст и слайды пересобраны на русском по мотивам доклада Саймона Уиллисона.
+</footer>
+
+</div>
+</body>
+</html>
