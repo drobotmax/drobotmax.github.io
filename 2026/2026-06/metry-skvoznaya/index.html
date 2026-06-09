@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>МЕТРЫ · Сквозная аналитика</title>
+<style>
+:root {
+  --green-900:#1f4a3c; --green-700:#2a5e45; --green-500:#3d7a5e;
+  --green-200:#9fc9b0; --green-100:#e3efe8; --green-50:#f1f7f3;
+  --cream:#f7f6f1; --paper:#fff; --ink:#1c1c1c; --ink-60:#5a5a5a;
+  --ink-40:#8a8a8a; --ink-15:#dcdcd4; --red:#c0392b; --red-bg:#fbeae8;
+  --amber:#c48a14; --amber-bg:#fdf6e2; --green-pass:#2a5e45;
+  --grey:#7a7a7a; --grey-bg:#f0f0ed; --radius:10px; --radius-lg:14px;
+  --shadow-sm:0 1px 3px rgba(31,74,60,.07); --shadow-md:0 4px 16px rgba(31,74,60,.09);
+  --shadow-lg:0 8px 32px rgba(31,74,60,.13);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--cream);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.55}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;font-weight:600;color:var(--green-900);margin:0}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 32px 56px}
+.dash-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.dash-header h1{font-size:26px;letter-spacing:-.3px}
+.badge-kub{display:inline-block;background:var(--green-700);color:#fff;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;padding:3px 10px;border-radius:20px;font-weight:600;margin-bottom:10px}
+.dash-meta{font-size:12px;color:var(--ink-40);line-height:1.7;text-align:right}
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.kpi-card{background:var(--paper);border-radius:var(--radius-lg);padding:16px 18px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--ink-15)}
+.kpi-card.good{background:var(--green-100);border-color:var(--green-200)}
+.kpi-card.bad{background:var(--red-bg);border-color:#e8bab6}
+.kpi-card.ok{background:var(--amber-bg);border-color:#e8d49a}
+.kpi-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-40);font-weight:600}
+.kpi-value{font-family:Georgia,serif;font-size:28px;margin-top:4px;line-height:1;font-weight:600;color:var(--green-900)}
+.kpi-sub{font-size:11px;color:var(--ink-60);margin-top:3px}
+.panel{background:var(--paper);border-radius:var(--radius-lg);border:1px solid var(--ink-15);
+  box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:18px}
+.panel-head{padding:14px 20px;border-bottom:1px solid var(--ink-15)}
+.panel-head h2{font-size:16px}
+.tbl-wrap{overflow-x:auto}
+table.ch{width:100%;font-size:13px;border-collapse:collapse}
+table.ch thead th{background:var(--green-50);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--ink-60);font-weight:600;padding:10px 12px;text-align:right;border-bottom:2px solid var(--green-200);white-space:nowrap}
+table.ch thead th:first-child{text-align:left}
+table.ch tbody tr{border-bottom:1px solid var(--ink-15);cursor:pointer;transition:background .1s}
+table.ch tbody tr:hover{background:var(--green-50)}
+table.ch td{padding:10px 12px;text-align:right;font-variant-numeric:tabular-nums}
+table.ch td.name{text-align:left;font-weight:600}
+table.ch tfoot td{font-weight:700;border-top:2px solid var(--green-200);background:var(--green-50);
+  padding:10px 12px;text-align:right;font-variant-numeric:tabular-nums}
+table.ch tfoot td:first-child{text-align:left}
+.romi-pos{color:var(--green-pass);font-weight:700}
+.romi-neg{color:var(--red);font-weight:700}
+.muted{color:var(--ink-40)}
+.note{background:var(--grey-bg);padding:10px 14px;border-radius:var(--radius);color:var(--grey);
+  font-style:italic;font-size:12px;margin:8px 0 0}
+/* readiness */
+.ready-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;padding:16px 20px}
+.ready-item{display:flex;align-items:center;gap:10px;font-size:13px}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.dot.on{background:var(--green-pass)} .dot.off{background:var(--red)} .dot.part{background:var(--amber)}
+/* gate */
+#gate{position:fixed;inset:0;background:var(--cream);z-index:500;display:flex;align-items:center;justify-content:center}
+.gate-card{background:var(--paper);border:1px solid var(--ink-15);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);padding:32px 36px;max-width:360px;width:90%;text-align:center}
+.gate-card h2{font-size:20px;margin-bottom:6px}
+.gate-card p{font-size:13px;color:var(--ink-60);margin:0 0 18px}
+.gate-card input{width:100%;border:1px solid var(--ink-15);border-radius:8px;padding:10px 12px;
+  font-size:15px;outline:none;margin-bottom:12px}
+.gate-card input:focus{border-color:var(--green-500)}
+.gate-card button{width:100%;background:var(--green-900);color:#fff;border:none;border-radius:8px;
+  padding:10px;font-size:14px;font-weight:600;cursor:pointer}
+.gate-card button:hover{background:var(--green-700)}
+.gate-err{color:var(--red);font-size:12px;min-height:16px;margin-top:6px}
+#app{display:none}
+/* modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(31,74,60,.45);z-index:100;overflow-y:auto}
+.modal-overlay.open{display:block}
+.modal-card{max-width:820px;margin:40px auto;background:var(--paper);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);border:1px solid var(--ink-15);overflow:hidden}
+.modal-header{padding:20px 28px;border-bottom:1px solid var(--ink-15);display:flex;justify-content:space-between;align-items:flex-start}
+.modal-body{padding:22px 28px;display:flex;flex-direction:column;gap:18px}
+.modal-section h3{font-size:14px;margin-bottom:8px}
+table.mini{width:100%;font-size:12.5px;border-collapse:collapse}
+table.mini th{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-40);
+  text-align:right;padding:5px 8px;border-bottom:1px solid var(--ink-15)}
+table.mini th:first-child{text-align:left}
+table.mini td{padding:6px 8px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--ink-15)}
+table.mini td:first-child{text-align:left}
+.btn{padding:6px 14px;font-size:12px;border-radius:7px;cursor:pointer;border:1px solid var(--ink-15);background:var(--paper)}
+.btn:hover{background:var(--green-50)}
+.foot{margin-top:36px;text-align:center;font-size:11px;color:var(--ink-40)}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <h2>МЕТРЫ · Аналитика</h2>
+    <p>Доступ по паролю</p>
+    <input id="gate-pw" type="password" placeholder="Пароль" autocomplete="off">
+    <button onclick="checkGate()">Войти</button>
+    <div class="gate-err" id="gate-err"></div>
+  </div>
+</div>
+
+<div id="app">
+<div class="wrap">
+  <header class="dash-header">
+    <div>
+      <div class="badge-kub">KUBRIK · Сквозная аналитика</div>
+      <h1>МЕТРЫ · канал → лид → сделка → выручка</h1>
+      <p id="period" style="color:var(--ink-60);font-size:13px;margin:4px 0 0"></p>
+      <p id="load-note" style="color:var(--ink-40);font-size:12px;margin:4px 0 0"></p>
+    </div>
+    <div class="dash-meta" id="meta"></div>
+  </header>
+
+  <div class="kpi-strip" id="kpi"></div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Каналы привлечения (клик - разбивка)</h2></div>
+    <div class="tbl-wrap"><table class="ch">
+      <thead><tr>
+        <th>Канал</th><th>Заявок</th><th>Дозвон</th><th>Квал</th>
+        <th>Сделок</th><th>Продаж</th><th>Выручка ₽</th>
+        <th>Расход ₽</th><th>CPL</th><th>CAC</th><th>ROMI</th>
+      </tr></thead>
+      <tbody id="ch-body"></tbody>
+      <tfoot id="ch-foot"></tfoot>
+    </table></div>
+    <div class="note" id="spend-note"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2>Готовность сквозной атрибуции</h2></div>
+    <div class="ready-grid" id="ready"></div>
+    <div class="note">Полная сквозная аналитика до клика по рекламе (офлайн-конверсии в Я.Директ)
+      разблокируется после установки Яндекс.Метрики на сайт и проброса yclid/clientid с форм в Битрикс.</div>
+  </div>
+
+  <div class="foot">KUBRIK · приватные данные · noindex · агрегаты без персональных данных</div>
+</div>
+</div>
+
+<div id="modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div><div class="muted" style="font-size:12px" id="m-sub"></div><h2 id="m-title"></h2></div>
+      <button class="btn" onclick="closeModal()">Закрыть</button>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+  </div>
+</div>
+
+<script>
+const PW_HASH="96bdd16e5f9280f59626b5724754ddd6c27800ce30d01270034f4686f6a334aa", SALT_HEX="eb45eed8f604d902706e9d459aa14cdb", ITER=200000;
+let KEY=null;
+function hexToBytes(h){const a=new Uint8Array(h.length/2);for(let i=0;i<a.length;i++)a[i]=parseInt(h.substr(i*2,2),16);return a}
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function deriveKey(pw){
+  const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2',salt:hexToBytes(SALT_HEX),iterations:ITER,hash:'SHA-256'},
+    base,{name:'AES-GCM',length:256},false,['decrypt']);
+}
+async function decryptEnc(b64){
+  const raw=Uint8Array.from(atob(b64.trim()),c=>c.charCodeAt(0));
+  const iv=raw.slice(0,12), data=raw.slice(12);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv},KEY,data);
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function checkGate(){
+  const v=document.getElementById('gate-pw').value;
+  if(await sha256(v)===PW_HASH){KEY=await deriveKey(v);sessionStorage.setItem('metry_pw',v);showApp()}
+  else{document.getElementById('gate-err').textContent='Неверный пароль'}
+}
+function showApp(){document.getElementById('gate').style.display='none';
+  document.getElementById('app').style.display='block';boot()}
+document.getElementById('gate-pw').addEventListener('keydown',e=>{if(e.key==='Enter')checkGate()});
+
+let FUNNEL=null;
+function fmtMoney(v){if(v==null)return '—';if(v>=1e6)return (v/1e6).toFixed(1)+' млн';
+  if(v>=1e3)return Math.round(v/1e3)+' тыс';return Math.round(v)}
+function fmtNum(v){return v==null?'—':v.toLocaleString('ru-RU')}
+
+async function loadFunnel(){
+  const note=document.getElementById('load-note');
+  for(let a=1;a<=8;a++){try{
+    const r=await fetch(`${location.origin}${location.pathname.replace(/[^/]*$/,'')}data/funnel.json.enc`,{cache:'no-cache'});
+    if(!r.ok)throw 0;return await decryptEnc(await r.text());
+  }catch(e){if(note)note.textContent=`Загрузка данных… попытка ${a}`;await new Promise(s=>setTimeout(s,1200))}}
+  return null;
+}
+
+function romiCell(v){if(v==null)return '<span class="muted">—</span>';
+  const cls=v>=0?'romi-pos':'romi-neg';return `<span class="${cls}">${v>0?'+':''}${v}%</span>`}
+
+function render(){
+  const m=FUNNEL.meta, rows=FUNNEL.channels, t=FUNNEL.totals;
+  document.getElementById('period').textContent=`Период: ${m.date_from} – ${m.date_to} · воронка: канал → заявка → дозвон → квал → сделка → продажа → выручка`;
+  document.getElementById('meta').innerHTML=`сформировано ${m.generated_at}<br>источник: Битрикс24 (актуальные данные)<br>продажи: успешно закрытые сделки`;
+
+  document.getElementById('kpi').innerHTML=`
+    <div class="kpi-card good"><div class="kpi-label">Выручка</div><div class="kpi-value">${fmtMoney(t.revenue)} ₽</div><div class="kpi-sub">${t.won} продаж</div></div>
+    <div class="kpi-card"><div class="kpi-label">Заявок</div><div class="kpi-value">${fmtNum(t.leads)}</div><div class="kpi-sub">все каналы</div></div>
+    <div class="kpi-card ${t.reached_pct>=60?'good':'bad'}"><div class="kpi-label">Дозвон</div><div class="kpi-value">${t.reached_pct}%</div><div class="kpi-sub">${fmtNum(t.reached)} из ${fmtNum(t.leads)}</div></div>
+    <div class="kpi-card ${t.qualified_pct>=10?'good':'ok'}"><div class="kpi-label">Квал</div><div class="kpi-value">${t.qualified_pct}%</div><div class="kpi-sub">${fmtNum(t.qualified)} квалов</div></div>
+    <div class="kpi-card"><div class="kpi-label">Расход (учтён)</div><div class="kpi-value">${fmtMoney(t.spend)} ₽</div><div class="kpi-sub">ROMI ${t.romi==null?'—':(t.romi>0?'+':'')+t.romi+'%'}</div></div>`;
+
+  const tb=document.getElementById('ch-body');tb.innerHTML='';
+  for(const r of rows){
+    const tr=document.createElement('tr');tr.onclick=()=>openChannel(r.channel,r.slug);
+    tr.innerHTML=`<td class="name">${r.channel}</td>
+      <td>${fmtNum(r.leads)}</td><td>${r.reached_pct}%</td><td>${r.qualified_pct}%</td>
+      <td>${fmtNum(r.deals)}</td><td>${fmtNum(r.won)}</td><td>${fmtNum(Math.round(r.revenue))}</td>
+      <td>${r.spend?fmtNum(Math.round(r.spend)):'<span class="muted">—</span>'}</td>
+      <td>${r.cpl!=null?fmtNum(r.cpl):'<span class="muted">—</span>'}</td>
+      <td>${r.cac!=null?fmtNum(r.cac):'<span class="muted">—</span>'}</td>
+      <td>${romiCell(r.romi)}</td>`;
+    tb.appendChild(tr);
+  }
+  document.getElementById('ch-foot').innerHTML=`<tr>
+    <td>ИТОГО (${rows.length} каналов)</td><td>${fmtNum(t.leads)}</td><td>${t.reached_pct}%</td>
+    <td>${t.qualified_pct}%</td><td>${fmtNum(t.deals)}</td><td>${fmtNum(t.won)}</td>
+    <td>${fmtNum(Math.round(t.revenue))}</td><td>${fmtNum(Math.round(t.spend))}</td>
+    <td></td><td></td><td>${romiCell(t.romi)}</td></tr>`;
+
+  const sp=FUNNEL.meta.spend_source||'ручные данные';
+  document.getElementById('spend-note').innerHTML=
+    `Расход: <b>${sp}</b> - заведён частично, поэтому CPL/CAC/ROMI считаются только для каналов с расходом и являются ориентировочными `+
+    `(окно расхода может не совпадать с окном выручки). Полный авторасход подключится с новых рекламных кабинетов. `+
+    `Восстановлено атрибуции выручки: ${FUNNEL.readiness.reattrib_pct}%; без источника осталось ${FUNNEL.readiness.still_empty_pct}%.`;
+
+  const rd=FUNNEL.readiness;
+  const items=[
+    ['Яндекс.Метрика на сайте',rd.metrica_installed?'on':'off',rd.metrica_installed?'установлена':'не установлена'],
+    ['Формы пробрасывают ключи',rd.forms_pass_keys?'on':'off',rd.forms_pass_keys?'да':'нет (yclid/clientid)'],
+    ['Лиды с ключом клика',rd.leads_with_key_pct>0?'part':'off',rd.leads_with_key_pct+'%'],
+    ['Лиды с UTM',rd.leads_with_utm_pct>=50?'on':'part',rd.leads_with_utm_pct+'%'],
+  ];
+  document.getElementById('ready').innerHTML=items.map(([t,s,v])=>
+    `<div class="ready-item"><span class="dot ${s}"></span><div><div>${t}</div><div class="muted" style="font-size:11px">${v}</div></div></div>`).join('');
+}
+
+async function openChannel(ch,slug){
+  document.getElementById('m-title').textContent=ch;
+  document.getElementById('m-sub').textContent='Разбивка канала';
+  document.getElementById('m-body').innerHTML='<div class="muted">Загрузка…</div>';
+  document.getElementById('modal').classList.add('open');
+  let d;try{const r=await fetch(`${location.origin}${location.pathname.replace(/[^/]*$/,'')}data/detail/${slug}.json.enc`,{cache:'no-cache'});
+    if(!r.ok)throw 0;d=await decryptEnc(await r.text())}catch(e){
+    document.getElementById('m-body').innerHTML='<div style="color:var(--red)">Не удалось загрузить разбивку.</div>';return}
+  const s=d.summary;
+  const camps=d.campaigns.map(c=>`<tr><td>${c.camp}</td><td>${c.leads}</td><td>${c.qualified}</td><td>${c.qual_pct}%</td></tr>`).join('')
+    ||'<tr><td colspan=4 class="muted">нет кампаний</td></tr>';
+  const deals=d.won_deals.map(x=>`<tr><td>${x.date}</td><td>${Math.round(x.amount).toLocaleString('ru-RU')} ₽</td><td class="muted">${x.attribution}</td></tr>`).join('')
+    ||'<tr><td colspan=3 class="muted">нет продаж</td></tr>';
+  document.getElementById('m-body').innerHTML=`
+    <div class="modal-section"><h3>Сводка</h3>
+      <table class="mini"><tbody>
+      <tr><td>Заявок</td><td>${fmtNum(s.leads)}</td></tr>
+      <tr><td>Дозвон / Квал</td><td>${fmtNum(s.reached)} / ${fmtNum(s.qualified)}</td></tr>
+      <tr><td>Сделок / Продаж</td><td>${fmtNum(s.deals)} / ${fmtNum(s.won)}</td></tr>
+      <tr><td>Выручка</td><td>${Math.round(s.revenue).toLocaleString('ru-RU')} ₽</td></tr>
+      <tr><td>Расход / CPL / CAC / ROMI</td><td>${s.spend?Math.round(s.spend).toLocaleString('ru-RU'):'—'} / ${s.cpl??'—'} / ${s.cac??'—'} / ${s.romi!=null?s.romi+'%':'—'}</td></tr>
+      </tbody></table></div>
+    <div class="modal-section"><h3>Кампании (топ-15 по заявкам)</h3>
+      <table class="mini"><thead><tr><th>Кампания</th><th>Заявок</th><th>Квал</th><th>%</th></tr></thead><tbody>${camps}</tbody></table></div>
+    <div class="modal-section"><h3>Продажи (обезличенно, до 50)</h3>
+      <table class="mini"><thead><tr><th>Дата</th><th>Сумма</th><th>Атрибуция</th></tr></thead><tbody>${deals}</tbody></table></div>`;
+}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+
+async function boot(){
+  FUNNEL=await loadFunnel();
+  const note=document.getElementById('load-note');
+  if(!FUNNEL){if(note)note.innerHTML='Не удалось загрузить данные. <a href="" onclick="location.reload();return false">Повторить</a>';return}
+  if(note)note.textContent='';render();
+}
+(async()=>{const pw=sessionStorage.getItem('metry_pw');
+  if(pw){KEY=await deriveKey(pw);showApp()}})();
+</script>
+</body></html>
