@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>451° по Фаренгейту — твой разбор</title>
+<style>
+  :root{
+    --bg:#0f0d12; --panel:#1a1620; --ink:#f4ede4; --muted:#9a8f86;
+    --fire:#ff5a1f; --fire2:#ffb02e; --ember:#e23a00;
+    --ok:#3ddc84; --bad:#ff6b6b; --line:#2c2530; --accent:#ffb02e;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,90,31,.18), transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6; min-height:100vh;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 80px}
+  header{text-align:center;margin-bottom:8px}
+  .flame{font-size:54px;line-height:1;filter:drop-shadow(0 0 18px rgba(255,90,31,.6))}
+  h1{font-size:30px;margin:10px 0 4px;letter-spacing:.5px}
+  h1 .deg{color:var(--fire);text-shadow:0 0 24px rgba(255,90,31,.7)}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:6px}
+  .by{color:var(--muted);font-size:13px}
+  .progress{height:8px;background:var(--line);border-radius:99px;margin:24px 0 30px;overflow:hidden}
+  .progress > i{display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--ember),var(--fire),var(--fire2));
+    transition:width .4s ease}
+  .card{
+    background:linear-gradient(180deg,var(--panel),#15121b);
+    border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .tag{display:inline-block;font-size:12px;letter-spacing:.8px;text-transform:uppercase;
+    color:var(--fire2);background:rgba(255,176,46,.1);border:1px solid rgba(255,176,46,.25);
+    padding:3px 10px;border-radius:99px;margin-bottom:12px}
+  .tag.think{color:#7ec8ff;background:rgba(126,200,255,.08);border-color:rgba(126,200,255,.25)}
+  .q{font-size:19px;font-weight:600;margin:4px 0 16px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;width:100%;cursor:pointer;font:inherit;color:var(--ink);
+    background:#221c2a;border:1px solid var(--line);border-radius:12px;padding:13px 16px;
+    transition:.15s;display:flex;gap:12px;align-items:flex-start;
+  }
+  .opt:hover{border-color:var(--fire);background:#271f30}
+  .opt .key{font-weight:700;color:var(--fire2);min-width:18px}
+  .opt.correct{border-color:var(--ok);background:rgba(61,220,132,.12)}
+  .opt.wrong{border-color:var(--bad);background:rgba(255,107,107,.12)}
+  .opt:disabled{cursor:default}
+  .fb{margin-top:14px;font-size:15px;padding:12px 14px;border-radius:12px;display:none}
+  .fb.show{display:block;animation:fade .3s}
+  .fb.good{background:rgba(61,220,132,.1);border:1px solid rgba(61,220,132,.3)}
+  .fb.miss{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3)}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  textarea{
+    width:100%;min-height:120px;resize:vertical;font:inherit;color:var(--ink);
+    background:#16121d;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:6px;
+  }
+  textarea:focus{outline:none;border-color:var(--fire2)}
+  .hint{color:var(--muted);font-size:13px;margin-top:8px;font-style:italic}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;font:inherit;font-weight:600;
+    color:#1a1208;background:linear-gradient(90deg,var(--fire2),var(--fire));
+    border:none;border-radius:12px;padding:14px 26px;font-size:16px;transition:.15s;
+    box-shadow:0 6px 20px rgba(255,90,31,.35);
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(255,90,31,.5)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+  .center{text-align:center}
+  .hidden{display:none}
+  #result .score{font-size:64px;font-weight:800;
+    background:linear-gradient(90deg,var(--fire2),var(--fire));-webkit-background-clip:text;background-clip:text;color:transparent}
+  #result .verdict{font-size:20px;font-weight:600;margin:6px 0 4px}
+  .reflect-block{margin-top:18px;text-align:left;background:#16121d;border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px}
+  .reflect-block .rq{color:var(--fire2);font-weight:600;font-size:14px;margin-bottom:4px}
+  .reflect-block .ra{white-space:pre-wrap;color:var(--ink);font-size:15px}
+  .quote{border-left:3px solid var(--fire);padding-left:14px;color:var(--muted);font-style:italic;margin:18px 0}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="flame">🔥</div>
+    <h1>451<span class="deg">°</span> по Фаренгейту</h1>
+    <div class="sub">Рэй Брэдбери — разбор и размышления</div>
+    <div class="by">для Андрея</div>
+  </header>
+
+  <div class="progress"><i id="bar"></i></div>
+
+  <!-- INTRO -->
+  <div class="card center" id="intro">
+    <div class="tag">старт</div>
+    <p style="font-size:17px">Это не школьная контрольная. Тут нет цели поймать тебя на ошибке.</p>
+    <p>Половина вопросов — на память: что произошло в книге. Вторая половина — на <b>твоё мнение</b>. Правильного ответа там нет, важно что ты <i>думаешь</i>.</p>
+    <div class="quote">«Хранить знания — не значит держать их под замком. Книга заряжена. Её надо разрядить, выстрелив в голову.»</div>
+    <p class="hint">Свои ответы на открытые вопросы в конце можно перечитать и распечатать. Ничего никуда не отправляется — всё остаётся на этом экране.</p>
+    <button class="btn" onclick="start()">Поехали 🔥</button>
+  </div>
+
+  <!-- QUESTIONS render here -->
+  <div id="quiz"></div>
+
+  <!-- RESULT -->
+  <div class="card center hidden" id="result">
+    <div class="tag">итог</div>
+    <div class="score" id="scoreNum">0/0</div>
+    <div class="verdict" id="verdict"></div>
+    <p id="resultText" class="hint"></p>
+    <div id="reflectDump"></div>
+    <div style="margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn" onclick="window.print()">🖨 Сохранить / распечатать мои мысли</button>
+      <button class="btn ghost" onclick="location.reload()">Пройти заново</button>
+    </div>
+  </div>
+
+  <footer>Рэй Брэдбери, 1953 · разбор для разговора, а не для оценки</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    type:"quiz",
+    q:"Кто такой Гай Монтэг и чем он занимается в начале книги?",
+    opts:[
+      "Учитель литературы, который тайно прячет книги",
+      "Пожарный, который не тушит пожары, а сжигает книги",
+      "Учёный, который изобретает телевизионные стены",
+      "Беглец, скрывающийся в лесу с другими изгнанниками"
+    ],
+    correct:1,
+    fb:"Да. В этом мире пожарные не спасают от огня, а наоборот — приходят сжигать книги. Монтэг гордится своей работой… пока не начинает сомневаться."
+  },
+  {
+    type:"quiz",
+    q:"Почему число 451 вынесено в название?",
+    opts:[
+      "Столько книг сжигает Монтэг за год",
+      "Это номер пожарной части",
+      "Температура (°F), при которой воспламеняется бумага",
+      "Год, в котором происходит действие"
+    ],
+    correct:2,
+    fb:"451 градус по Фаренгейту — температура возгорания бумаги. Брэдбери сделал саму физику горения названием книги о сожжении книг."
+  },
+  {
+    type:"quiz",
+    q:"Какую роль в пробуждении Монтэга играет соседка Кларисса?",
+    opts:[
+      "Она доносит на него пожарным",
+      "Она задаёт странные вопросы и заставляет его впервые задуматься, счастлив ли он",
+      "Она даёт ему первую запрещённую книгу",
+      "Она возглавляет подпольное сопротивление"
+    ],
+    correct:1,
+    fb:"Кларисса просто разговаривает с ним и спрашивает: «А вы счастливы?». Этот наивный вопрос ломает всю его прежнюю жизнь."
+  },
+  {
+    type:"think",
+    q:"Кларисса спрашивает Монтэга: «Вы счастливы?» — и он не может ответить. А если бы кто-то спросил тебя прямо сейчас — что бы ты ответил и почему?",
+    hint:"Тут нет правильного ответа. Напиши честно, хоть пару строк."
+  },
+  {
+    type:"quiz",
+    q:"Что делает жена Монтэга Милдред почти всё своё время?",
+    opts:[
+      "Читает книги втайне от мужа",
+      "Сидит в «ракушках» в ушах и смотрит интерактивные ТВ-стены, называя героев «роднёй»",
+      "Работает в пожарной части вместе с ним",
+      "Пишет доносы соседям"
+    ],
+    correct:1,
+    fb:"Милдред живёт в наушниках-«ракушках» и среди ТВ-стен. Живых людей рядом она почти не замечает — а телегероев зовёт «семьёй». Брэдбери в 1953-м описал зависимость от экранов."
+  },
+  {
+    type:"quiz",
+    q:"На рукаве у пожарных — саламандра, а их машина зовётся «Саламандра». Почему именно это животное стало их символом?",
+    opts:[
+      "Саламандра ядовита — намёк, что пожарные опасны",
+      "По древней легенде саламандра живёт в огне и не сгорает — пожарные тоже «свои» в огне",
+      "Это просто красивое слово без смысла",
+      "Саламандра умеет отращивать хвост — символ восстановления"
+    ],
+    correct:1,
+    fb:"В старых поверьях саламандра живёт в пламени и не горит. Брэдбери сделал её гербом пожарных: они существа огня. Рядом второй символ — феникс, птица, сгорающая и возрождающаяся из пепла. Два разных отношения к огню в одной книге."
+  },
+  {
+    type:"quiz",
+    q:"Огонь в книге — не только зло. Где он показан с другой, тёплой стороны?",
+    opts:[
+      "Огонь нигде не показан хорошим — он только разрушает",
+      "Костёр изгнанников у реки, который греет и собирает людей, а не сжигает",
+      "Огонь в камине у Битти",
+      "Пожар, в котором гибнет город"
+    ],
+    correct:1,
+    fb:"Та же стихия, что сжигала книги, у реки превращается в костёр, вокруг которого люди греются и делятся знанием. Брэдбери показывает: дело не в огне, а в том, как человек его использует. Один и тот же инструмент — и оружие, и тепло."
+  },
+  {
+    type:"quiz",
+    q:"Во время одного из вызовов хозяйка дома отказывается уходить и сжигает себя вместе со своими книгами. Зачем Брэдбери вставил эту сцену?",
+    opts:[
+      "Чтобы показать, что читатели — сумасшедшие",
+      "Это ключевой удар по Монтэгу: если человек готов умереть за книги, значит в них есть что-то, чего он не понимает",
+      "Чтобы оправдать работу пожарных",
+      "Просто для драматизма, на сюжет это не влияет"
+    ],
+    correct:1,
+    fb:"Эта женщина переворачивает всё. Монтэг привык, что книги — мусор. Но никто не умирает за мусор. Её выбор заставляет его впервые украсть книгу и спросить: что там такого, ради чего отдают жизнь?"
+  },
+  {
+    type:"quiz",
+    q:"Кто такой брандмейстер Битти и в чём его роль?",
+    opts:[
+      "Тайный союзник Монтэга, помогающий прятать книги",
+      "Начальник Монтэга, который сам много читал и теперь умно защищает сжигание книг",
+      "Простой малограмотный надзиратель",
+      "Изобретатель Механического пса"
+    ],
+    correct:1,
+    fb:"Битти — самый умный защитник системы. Он читал кучу книг и именно поэтому презирает их: цитирует классику, чтобы доказать, что книги приносят только боль и споры. Опасен именно тем, что он не дурак."
+  },
+  {
+    type:"quiz",
+    q:"В финале Битти фактически провоцирует Монтэга и даже не сопротивляется, когда тот направляет на него огнемёт. На что это намекает?",
+    opts:[
+      "Битти просто оступился и не успел убежать",
+      "Битти, начитанный и уставший, возможно сам хотел умереть — он защищал систему, в которую больше не верил",
+      "Битти хотел, чтобы Монтэг промахнулся",
+      "Это случайность, без всякого смысла"
+    ],
+    correct:1,
+    fb:"Один из самых спорных моментов книги. Битти знал слишком много и, похоже, был несчастлив. Он почти подталкивает Монтэга к убийству. Умный защитник системы, который втайне ей тяготится, — фигура трагическая, не просто злодей."
+  },
+  {
+    type:"quiz",
+    q:"Гренджер в финале рассказывает про феникса и говорит, что у человека есть то, чего у птицы не было. Что именно?",
+    opts:[
+      "Крылья",
+      "Память: человек знает, что уже совершал ошибки, и может перестать их повторять",
+      "Бессмертие",
+      "Огонь"
+    ],
+    correct:1,
+    fb:"Феникс вечно сгорает и возрождается одинаковым — он не помнит прошлых жизней. Человек помнит. Гренджер верит: если помнить свои ошибки (войны, костры), однажды перестанешь их повторять. В этом — вся надежда финала."
+  },
+  {
+    type:"think",
+    q:"В книге люди сами перестали читать — государство потом лишь закрепило это запретом. Брэдбери говорил, что боялся не цензуры, а того, что людям просто станет лень думать. Как тебе кажется — это про наш мир сегодня? Где ты это видишь?",
+    hint:"Подумай про телефон, ленты, короткие видео. Согласен с Брэдбери или нет?"
+  },
+  {
+    type:"quiz",
+    q:"Кто такой Фабер?",
+    opts:[
+      "Бывший профессор, который тайно помогает Монтэгу и говорит с ним через крошечный наушник",
+      "Пожарный-предатель",
+      "Брат Милдред",
+      "Лидер города"
+    ],
+    correct:0,
+    fb:"Фабер — старый профессор литературы, трус по собственному признанию. Он становится «голосом в ухе» Монтэга — умом, которого тому не хватает."
+  },
+  {
+    type:"quiz",
+    q:"Чем заканчивается путь Монтэга?",
+    opts:[
+      "Его ловят и сжигают вместе с книгами",
+      "Он бежит из города к «людям-книгам», которые заучивают тексты наизусть, чтобы сохранить их; город гибнет в войне",
+      "Он становится новым брандмейстером",
+      "Он сдаётся и возвращается к прежней жизни"
+    ],
+    correct:1,
+    fb:"Монтэг сбегает к изгнанникам у реки. Каждый из них помнит наизусть одну книгу — они и есть живые библиотеки. Город уничтожает война, но надежда остаётся в людях, которые хранят знание в голове."
+  },
+  {
+    type:"think",
+    q:"Изгнанники в финале заучивают книги наизусть, чтобы спасти их. Представь: можно сохранить только ОДНУ книгу, фильм или игру — выучить наизусть и передать будущему. Что бы выбрал ты и почему именно это?",
+    hint:"Что из историй, которые ты знаешь, не должно пропасть?"
+  },
+  {
+    type:"think",
+    q:"Сложный вопрос. Битти не глупый — он прочитал гору книг и именно поэтому решил, что они приносят только споры, боль и несчастье. Сможешь ли ты возразить ему? Что ты ответил бы Битти, чтобы доказать, что читать всё-таки стоит?",
+    hint:"Представь, что споришь с очень умным человеком, который против тебя. Просто «книги — это хорошо» его не убедит."
+  },
+  {
+    type:"think",
+    q:"Главный вопрос. Зачем вообще нужны книги, если есть фильмы, ролики и игры по тем же сюжетам? Что книга даёт такого, чего не даёт экран — или ты считаешь, что ничего? Поспорь со мной.",
+    hint:"Можешь не соглашаться с Брэдбери. Главное — объясни свою позицию."
+  }
+];
+
+let idx = 0, score = 0, quizTotal = 0;
+const reflections = [];
+QUESTIONS.forEach(q=>{ if(q.type==="quiz") quizTotal++; });
+
+const quiz = document.getElementById('quiz');
+const bar = document.getElementById('bar');
+
+function start(){
+  document.getElementById('intro').classList.add('hidden');
+  render();
+}
+
+function setBar(){
+  bar.style.width = (idx/QUESTIONS.length*100) + '%';
+}
+
+function render(){
+  setBar();
+  if(idx >= QUESTIONS.length){ return finish(); }
+  const item = QUESTIONS[idx];
+  quiz.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  if(item.type === 'quiz'){
+    card.innerHTML = `
+      <div class="tag">вопрос ${idx+1} · память</div>
+      <div class="q">${item.q}</div>
+      <div class="opts"></div>
+      <div class="fb"></div>
+      <div class="center" style="margin-top:18px"><button class="btn next hidden">Дальше →</button></div>`;
+    const optsBox = card.querySelector('.opts');
+    const fb = card.querySelector('.fb');
+    const nextBtn = card.querySelector('.next');
+    const keys = ['А','Б','В','Г'];
+    item.opts.forEach((o,i)=>{
+      const b = document.createElement('button');
+      b.className = 'opt';
+      b.innerHTML = `<span class="key">${keys[i]}</span><span>${o}</span>`;
+      b.onclick = ()=>{
+        Array.from(optsBox.children).forEach(c=>c.disabled=true);
+        if(i === item.correct){
+          b.classList.add('correct'); score++;
+          fb.className = 'fb good show'; fb.innerHTML = '✅ <b>Верно.</b> '+item.fb;
+        } else {
+          b.classList.add('wrong');
+          optsBox.children[item.correct].classList.add('correct');
+          fb.className = 'fb miss show'; fb.innerHTML = '🤔 <b>Не совсем.</b> '+item.fb;
+        }
+        nextBtn.classList.remove('hidden');
+      };
+      optsBox.appendChild(b);
+    });
+    nextBtn.onclick = ()=>{ idx++; render(); };
+
+  } else { // think
+    card.innerHTML = `
+      <div class="tag think">вопрос ${idx+1} · твоё мнение</div>
+      <div class="q">${item.q}</div>
+      <textarea placeholder="Пиши свободно…"></textarea>
+      <div class="hint">${item.hint}</div>
+      <div class="center" style="margin-top:18px"><button class="btn next">Дальше →</button></div>`;
+    const ta = card.querySelector('textarea');
+    card.querySelector('.next').onclick = ()=>{
+      reflections.push({q:item.q, a:ta.value.trim()});
+      idx++; render();
+    };
+  }
+  quiz.appendChild(card);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function finish(){
+  bar.style.width = '100%';
+  quiz.innerHTML = '';
+  const res = document.getElementById('result');
+  res.classList.remove('hidden');
+  document.getElementById('scoreNum').textContent = score + '/' + quizTotal;
+
+  let v, t;
+  const r = score/quizTotal;
+  if(r === 1){ v='🔥 Ты прочитал по-настоящему!'; t='Все факты на месте. Теперь самое интересное — что ты об этом думаешь (см. ниже).'; }
+  else if(r >= 0.6){ v='👍 Крепко держишь сюжет'; t='Основное помнишь, пара деталей ускользнула — глянь пояснения выше, они короткие.'; }
+  else { v='📖 Есть что перечитать'; t='Сюжет местами размылся — и это нормально. Главное, что ниже твои собственные мысли, а они важнее баллов.'; }
+  document.getElementById('verdict').textContent = v;
+  document.getElementById('resultText').textContent = t;
+
+  const dump = document.getElementById('reflectDump');
+  const filled = reflections.filter(x=>x.a.length>0);
+  if(filled.length){
+    dump.innerHTML = '<h3 style="margin-top:26px">💭 Твои мысли</h3>';
+    filled.forEach(x=>{
+      const b = document.createElement('div');
+      b.className = 'reflect-block';
+      b.innerHTML = `<div class="rq">${x.q}</div><div class="ra"></div>`;
+      b.querySelector('.ra').textContent = x.a;
+      dump.appendChild(b);
+    });
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
