@@ -1,0 +1,170 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maison · Воронка по странам</title>
+<style>
+:root{--bg:#0b0f14;--card:#121821;--line:#1f2937;--txt:#e5e7eb;--mut:#6b7280;
+--em:#10b981;--fc:#38bdf8;--chip:#182234}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;padding:28px;max-width:1080px}
+h2{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin:26px 0 8px}
+.muted{color:var(--mut)}
+.head{display:flex;justify-content:space-between;align-items:baseline;
+border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.logo{font-size:20px;font-weight:700} .logo b{color:var(--em)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:18px;margin-bottom:16px;overflow-x:auto}
+.kpi{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0 4px}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px 18px;min-width:140px}
+.kpi b{display:block;font-size:24px;color:var(--em)} .kpi span{color:var(--mut);font-size:12px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+.chip{background:var(--chip);border:1px solid var(--line);color:var(--txt);border-radius:999px;
+padding:6px 13px;font-size:12.5px;cursor:pointer;user-select:none;transition:.12s}
+.chip:hover{border-color:var(--fc)}
+.chip.on{background:var(--em);color:#04120c;border-color:var(--em);font-weight:600}
+.chip.all.on{background:var(--fc);color:#04121c;border-color:var(--fc)}
+input.search{background:var(--card);border:1px solid var(--line);color:var(--txt);
+border-radius:8px;padding:7px 11px;font-size:13px;min-width:180px}
+input.search::placeholder{color:var(--mut)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);
+font-size:13px;white-space:nowrap}
+th{color:var(--mut);font-size:11px;text-transform:uppercase;cursor:pointer;user-select:none;
+position:sticky;top:0;background:var(--card)}
+th.n,td.n{text-align:right;font-variant-numeric:tabular-nums}
+th.sortable:hover{color:var(--txt)}
+th .arw{color:var(--fc);font-size:10px}
+td.em{color:var(--em);font-weight:700} td.mut{color:var(--mut)} td.fc{color:var(--fc);font-weight:700}
+td.reg{color:var(--mut);font-size:11px}
+tr.tot td{border-top:2px solid var(--line);font-weight:700;position:sticky;bottom:0;background:var(--card)}
+.note{color:var(--mut);font-size:12px;margin-top:10px}
+</style></head><body>
+<div class="head">
+  <div class="logo">MAISON<b>.</b> <span class="muted" style="font-size:13px;font-weight:400">воронка продаж по странам</span></div>
+  <div class="muted">июль 2026 · 01.07 – 31.07 · собрано 13.07 12:28 МСК</div>
+</div>
+
+<div class="kpi" id="kpi"></div>
+
+<div class="controls" id="chips"></div>
+<div class="controls">
+  <input class="search" id="q" placeholder="Поиск страны…" autocomplete="off">
+  <span class="muted" id="shown" style="font-size:12px"></span>
+</div>
+
+<div class="card">
+<table>
+<thead><tr>
+  <th class="sortable" data-k="country">Страна</th>
+  <th class="sortable" data-k="region">Регион</th>
+  <th class="sortable n" data-k="numbers">Номеров</th>
+  <th class="sortable n" data-k="calls">Звонков</th>
+  <th class="sortable n" data-k="ansPct">Дозвон</th>
+  <th class="sortable n" data-k="sql">SQL</th>
+  <th class="sortable n" data-k="mp">Встреч<br>назн.</th>
+  <th class="sortable n" data-k="md">Провед.</th>
+  <th class="sortable n" data-k="conv">SQL/ном</th>
+</tr></thead>
+<tbody id="tb"></tbody>
+<tfoot><tr class="tot" id="tot"></tr></tfoot>
+</table>
+</div>
+
+<div class="note">Источник: amoCRM (RealOneAgency), call-notes CallGear + связка контакт→сделка.
+База - уникальные номера, по которым звонили в периоде. Страна - по телефонному префиксу
+(+7 не разделяет РФ / Казахстан; +1 не разделяет США / Канаду). SQL = номер дошёл до pipeline «Main».
+Встречи = статусы [S] zoom planned / ZOOM DONE. Скрипт: <code>report_countries.py</code>.</div>
+
+<script>
+const DATA = [{"country": "США / Канада", "en": "USA/Canada", "region": "США / Канада", "numbers": 77, "calls": 313, "ans": 193, "sql": 1, "mp": 1, "md": 1}, {"country": "Австралия", "en": "Australia", "region": "Азия / Океания", "numbers": 7, "calls": 30, "ans": 26, "sql": 1, "mp": 0, "md": 0}, {"country": "Индия", "en": "India", "region": "Азия / Океания", "numbers": 6, "calls": 35, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Япония", "en": "Japan", "region": "Азия / Океания", "numbers": 5, "calls": 20, "ans": 7, "sql": 1, "mp": 1, "md": 1}, {"country": "Катар", "en": "Qatar", "region": "Арабские страны", "numbers": 37, "calls": 147, "ans": 27, "sql": 5, "mp": 5, "md": 3}, {"country": "ОАЭ", "en": "UAE", "region": "Арабские страны", "numbers": 65, "calls": 276, "ans": 42, "sql": 7, "mp": 5, "md": 2}, {"country": "Иордания", "en": "Jordan", "region": "Арабские страны", "numbers": 1, "calls": 7, "ans": 1, "sql": 0, "mp": 0, "md": 0}, {"country": "Румыния", "en": "Romania", "region": "Европа Север", "numbers": 3, "calls": 16, "ans": 1, "sql": 0, "mp": 0, "md": 0}, {"country": "Греция", "en": "Greece", "region": "Европа Юг", "numbers": 6, "calls": 30, "ans": 4, "sql": 2, "mp": 0, "md": 0}, {"country": "Мальта", "en": "Malta", "region": "Европа Юг", "numbers": 6, "calls": 24, "ans": 8, "sql": 2, "mp": 2, "md": 2}, {"country": "Венгрия", "en": "Hungary", "region": "Европа Север", "numbers": 4, "calls": 18, "ans": 2, "sql": 0, "mp": 0, "md": 0}, {"country": "Израиль", "en": "Israel", "region": "Ближний Восток", "numbers": 9, "calls": 43, "ans": 2, "sql": 2, "mp": 1, "md": 1}, {"country": "Швейцария", "en": "Switzerland", "region": "Европа Север", "numbers": 2, "calls": 10, "ans": 9, "sql": 0, "mp": 0, "md": 0}, {"country": "Германия", "en": "Germany", "region": "Европа Север", "numbers": 3, "calls": 7, "ans": 3, "sql": 2, "mp": 2, "md": 1}, {"country": "Испания", "en": "Spain", "region": "Европа Юг", "numbers": 8, "calls": 24, "ans": 5, "sql": 0, "mp": 0, "md": 0}, {"country": "Словакия", "en": "Slovakia", "region": "Европа Север", "numbers": 4, "calls": 24, "ans": 3, "sql": 0, "mp": 0, "md": 0}, {"country": "Великобритания", "en": "UK", "region": "Европа Север", "numbers": 25, "calls": 100, "ans": 55, "sql": 4, "mp": 3, "md": 1}, {"country": "Словения", "en": "Slovenia", "region": "Европа Юг", "numbers": 4, "calls": 10, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Кипр", "en": "Cyprus", "region": "Европа Юг", "numbers": 5, "calls": 19, "ans": 9, "sql": 2, "mp": 1, "md": 1}, {"country": "Франция", "en": "France", "region": "Европа Север", "numbers": 10, "calls": 31, "ans": 15, "sql": 3, "mp": 2, "md": 2}, {"country": "Ирландия", "en": "Ireland", "region": "Европа Север", "numbers": 3, "calls": 5, "ans": 1, "sql": 0, "mp": 0, "md": 0}, {"country": "Италия", "en": "Italy", "region": "Европа Юг", "numbers": 12, "calls": 68, "ans": 22, "sql": 1, "mp": 1, "md": 1}, {"country": "Бразилия", "en": "Brazil", "region": "Латинская Америка", "numbers": 2, "calls": 17, "ans": 2, "sql": 0, "mp": 0, "md": 0}, {"country": "Болгария", "en": "Bulgaria", "region": "Европа Север", "numbers": 2, "calls": 4, "ans": 2, "sql": 1, "mp": 1, "md": 0}, {"country": "Не определено", "en": "Other/Unknown", "region": "Прочее", "numbers": 2, "calls": 5, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Гонконг", "en": "Hong Kong", "region": "Азия / Океания", "numbers": 8, "calls": 40, "ans": 20, "sql": 1, "mp": 1, "md": 0}, {"country": "Дания", "en": "Denmark", "region": "Европа Север", "numbers": 3, "calls": 19, "ans": 4, "sql": 0, "mp": 0, "md": 0}, {"country": "Сингапур", "en": "Singapore", "region": "Азия / Океания", "numbers": 10, "calls": 60, "ans": 15, "sql": 5, "mp": 3, "md": 3}, {"country": "Турция", "en": "Turkey", "region": "Ближний Восток", "numbers": 5, "calls": 31, "ans": 5, "sql": 3, "mp": 3, "md": 0}, {"country": "Россия / Казахстан", "en": "Russia/KZ", "region": "Европа СНГ", "numbers": 6, "calls": 22, "ans": 9, "sql": 2, "mp": 1, "md": 0}, {"country": "Ливан", "en": "Lebanon", "region": "Арабские страны", "numbers": 1, "calls": 5, "ans": 1, "sql": 0, "mp": 0, "md": 0}, {"country": "Португалия", "en": "Portugal", "region": "Европа Юг", "numbers": 3, "calls": 17, "ans": 9, "sql": 0, "mp": 0, "md": 0}, {"country": "Польша", "en": "Poland", "region": "Европа Север", "numbers": 3, "calls": 11, "ans": 6, "sql": 1, "mp": 0, "md": 0}, {"country": "Бельгия", "en": "Belgium", "region": "Европа Север", "numbers": 4, "calls": 22, "ans": 15, "sql": 1, "mp": 1, "md": 1}, {"country": "Юж. Корея", "en": "South Korea", "region": "Азия / Океания", "numbers": 1, "calls": 7, "ans": 5, "sql": 0, "mp": 0, "md": 0}, {"country": "Чехия", "en": "Czechia", "region": "Европа Север", "numbers": 8, "calls": 29, "ans": 0, "sql": 2, "mp": 1, "md": 1}, {"country": "Финляндия", "en": "Finland", "region": "Европа Север", "numbers": 4, "calls": 10, "ans": 2, "sql": 1, "mp": 0, "md": 0}, {"country": "Нидерланды", "en": "Netherlands", "region": "Европа Север", "numbers": 3, "calls": 8, "ans": 1, "sql": 0, "mp": 0, "md": 0}, {"country": "Оман", "en": "Oman", "region": "Арабские страны", "numbers": 1, "calls": 4, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Нов. Зеландия", "en": "New Zealand", "region": "Азия / Океания", "numbers": 4, "calls": 14, "ans": 13, "sql": 1, "mp": 1, "md": 0}, {"country": "Литва", "en": "Lithuania", "region": "Европа Север", "numbers": 1, "calls": 10, "ans": 10, "sql": 0, "mp": 0, "md": 0}, {"country": "Египет", "en": "Egypt", "region": "Арабские страны", "numbers": 1, "calls": 5, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Швеция", "en": "Sweden", "region": "Европа Север", "numbers": 1, "calls": 6, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Коста-Рика", "en": "Costa Rica", "region": "Латинская Америка", "numbers": 1, "calls": 2, "ans": 2, "sql": 0, "mp": 0, "md": 0}, {"country": "Латвия", "en": "Latvia", "region": "Европа Север", "numbers": 1, "calls": 3, "ans": 1, "sql": 0, "mp": 0, "md": 0}, {"country": "ЮАР", "en": "South Africa", "region": "Африка", "numbers": 1, "calls": 4, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Сенегал", "en": "Senegal", "region": "Африка", "numbers": 1, "calls": 3, "ans": 0, "sql": 0, "mp": 0, "md": 0}, {"country": "Марокко", "en": "Morocco", "region": "Арабские страны", "numbers": 1, "calls": 1, "ans": 1, "sql": 0, "mp": 0, "md": 0}];
+const CHIPS = ["Арабские страны", "Европа СНГ", "Европа Юг", "Европа Север", "США / Канада", "Латинская Америка", "Африка", "Азия / Океания", "Ближний Восток", "Прочее"];
+DATA.forEach(r=>{ r.ansPct = r.calls? r.ans/r.calls:0; r.conv = r.numbers? r.sql/r.numbers:0; });
+let active = new Set();          // empty = all
+let sortK = "numbers", sortDir = -1;
+
+const pct = x => (x*100).toFixed(0)+"%";
+const chipsEl=document.getElementById("chips"), tb=document.getElementById("tb"),
+      tot=document.getElementById("tot"), kpi=document.getElementById("kpi"),
+      shown=document.getElementById("shown"), q=document.getElementById("q");
+
+// build chips: "Все" + regions present in data
+const present = new Set(DATA.map(r=>r.region));
+const chipList = ["Все", ...CHIPS.filter(c=>present.has(c))];
+chipList.forEach(name=>{
+  const el=document.createElement("span");
+  el.className="chip"+(name==="Все"?" all on":"");
+  el.textContent=name; el.dataset.name=name;
+  el.onclick=()=>{
+    if(name==="Все"){ active.clear(); }
+    else{ active.has(name)?active.delete(name):active.add(name);
+      if(active.size===0){} }
+    render();
+  };
+  chipsEl.appendChild(el);
+});
+
+function agg(rows){
+  const a={numbers:0,calls:0,ans:0,sql:0,mp:0,md:0};
+  rows.forEach(r=>{for(const k in a)a[k]+=r[k];});
+  a.ansPct=a.calls?a.ans/a.calls:0; a.conv=a.numbers?a.sql/a.numbers:0;
+  return a;
+}
+function cmp(a,b){
+  let x=a[sortK],y=b[sortK];
+  if(typeof x==="string"){return x.localeCompare(y,"ru")*sortDir;}
+  return (x-y)*sortDir;
+}
+function render(){
+  // chip visual state
+  [...chipsEl.children].forEach(c=>{
+    const n=c.dataset.name;
+    if(n==="Все") c.classList.toggle("on", active.size===0);
+    else c.classList.toggle("on", active.has(n));
+  });
+  const term=q.value.trim().toLowerCase();
+  let rows=DATA.filter(r=>
+    (active.size===0||active.has(r.region)) &&
+    (!term || r.country.toLowerCase().includes(term) || r.en.toLowerCase().includes(term)));
+  rows.sort(cmp);
+  tb.innerHTML = rows.map(r=>`<tr>
+    <td>${r.country}</td>
+    <td class="reg">${r.region}</td>
+    <td class="n">${r.numbers}</td>
+    <td class="n">${r.calls}</td>
+    <td class="n mut">${pct(r.ansPct)}</td>
+    <td class="n em">${r.sql}</td>
+    <td class="n">${r.mp}</td>
+    <td class="n fc">${r.md}</td>
+    <td class="n mut">${pct(r.conv)}</td></tr>`).join("");
+  const a=agg(rows);
+  tot.innerHTML=`<td>ИТОГО</td><td class="reg">${rows.length} стран</td>
+    <td class="n">${a.numbers}</td><td class="n">${a.calls}</td>
+    <td class="n mut">${pct(a.ansPct)}</td><td class="n em">${a.sql}</td>
+    <td class="n">${a.mp}</td><td class="n fc">${a.md}</td>
+    <td class="n mut">${pct(a.conv)}</td>`;
+  shown.textContent=`показано ${rows.length} из ${DATA.length}`;
+  const g=agg(DATA);
+  kpi.innerHTML=`
+    <div><b>${g.numbers}</b><span>уникальных номеров</span></div>
+    <div><b>${g.calls}</b><span>звонков · дозвон ${pct(g.ansPct)}</span></div>
+    <div><b>${g.sql}</b><span>SQL (Main pipeline)</span></div>
+    <div><b>${g.mp}</b><span>встреч назначено</span></div>
+    <div><b>${g.md}</b><span>встреч проведено</span></div>`;
+  // header arrows
+  document.querySelectorAll("th.sortable").forEach(th=>{
+    const base=th.dataset.k;
+    th.querySelector(".arw")?.remove();
+    if(base===sortK){const s=document.createElement("span");s.className="arw";
+      s.textContent=sortDir<0?" ▼":" ▲";th.appendChild(s);}
+  });
+}
+document.querySelectorAll("th.sortable").forEach(th=>{
+  th.onclick=()=>{const k=th.dataset.k;
+    if(sortK===k)sortDir*=-1; else{sortK=k;sortDir=(k==="country"||k==="region")?1:-1;}
+    render();};
+});
+q.oninput=render;
+render();
+</script>
+</body></html>
