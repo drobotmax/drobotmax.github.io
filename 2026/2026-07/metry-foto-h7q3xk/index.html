@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>МЕТРЫ — фотофонд по объектам</title>
+<style>
+:root { --ink:#14171a; --muted:#6b7280; --line:#e3e6ea; --bg:#fff; --accent:#1b5e3f; --warn:#8a5a00; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+.wrap { max-width:1080px; margin:0 auto; padding:32px 20px 80px; }
+header { border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:28px; }
+h1 { font-size:28px; margin:0 0 6px; letter-spacing:-0.01em; }
+.sub { color:var(--muted); margin:0; }
+.stats { display:flex; flex-wrap:wrap; gap:20px; margin-top:16px; }
+.stat b { display:block; font-size:22px; }
+.stat span { color:var(--muted); font-size:13px; }
+nav { display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 8px; }
+nav a { font-size:13px; color:var(--ink); text-decoration:none; border:1px solid var(--line);
+  border-radius:6px; padding:6px 10px; }
+nav a:hover { border-color:var(--accent); color:var(--accent); }
+nav a span { color:var(--muted); }
+.obj { padding-top:36px; margin-top:20px; border-top:1px solid var(--line); }
+h2 { font-size:21px; margin:0 0 4px; }
+h3 { font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
+  margin:26px 0 10px; font-weight:600; }
+h3 .count { color:var(--ink); }
+.meta { color:var(--muted); margin:0 0 14px; font-size:14px; }
+.flag { background:#fdf6e7; border-left:3px solid var(--warn); color:#5c4200;
+  padding:9px 12px; margin:0 0 14px; font-size:14px; }
+table.lots { border-collapse:collapse; width:100%; font-size:14px; margin-bottom:4px; }
+table.lots th { text-align:left; font-weight:600; color:var(--muted); font-size:12px;
+  text-transform:uppercase; letter-spacing:.05em; padding:6px 10px 6px 0; border-bottom:1px solid var(--line); }
+table.lots td { padding:7px 10px 7px 0; border-bottom:1px solid var(--line); }
+table.lots td.warn { color:var(--warn); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; }
+.tile { padding:0; border:1px solid var(--line); background:#f6f7f8; border-radius:6px;
+  overflow:hidden; cursor:zoom-in; aspect-ratio:4/3; }
+.tile.portrait { aspect-ratio:3/4; }
+.tile img { width:100%; height:100%; object-fit:cover; display:block; }
+.tile:hover { border-color:var(--accent); }
+#lb { position:fixed; inset:0; background:rgba(10,12,14,.94); display:none;
+  align-items:center; justify-content:center; flex-direction:column; z-index:50; }
+#lb.on { display:flex; }
+#lb img { max-width:94vw; max-height:84vh; object-fit:contain; }
+#lb .cap { color:#cfd3d8; font-size:13px; margin-top:12px; }
+#lb button { position:absolute; top:14px; right:16px; background:none; border:0;
+  color:#fff; font-size:30px; cursor:pointer; line-height:1; }
+footer { margin-top:48px; padding-top:18px; border-top:1px solid var(--line);
+  color:var(--muted); font-size:13px; }
+@media (max-width:520px) {
+  .wrap { padding:20px 14px 60px; }
+  h1 { font-size:23px; }
+  .grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header data-hero>
+  <h1>МЕТРЫ — фотофонд по объектам</h1>
+  <p class="sub">Что у нас сейчас есть по каждому адресу: интерьер, планировки, дыры. Цены — прайс с 01.08.2026.</p>
+  <div class="stats">
+    <div class="stat"><b>25</b><span>лотов в фиде</span></div>
+    <div class="stat"><b>147</b><span>кадров всего</span></div>
+    <div class="stat"><b>7</b><span>объектов без интерьера</span></div>
+    <div class="stat"><b>41</b><span>Татарская, не в фиде</span></div>
+  </div>
+  <nav><a href="#ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2">ул. Большая Татарская, д. 20 (кв. 18) <span>8/1</span></a>
+<a href="#ul_timura_frunze_d_8_5_kv_5_4b796d">ул. Тимура Фрунзе, д. 8/5 (кв. 5) <span>8/8</span></a>
+<a href="#bolshoj_sergievskij_per_d_20_kv_4_39bcc6">Большой Сергиевский пер., д. 20 (кв. 4) <span>8/7</span></a>
+<a href="#strastnoj_bulvar_d_4_str_3_kv_52_defcbe">Страстной бульвар, д. 4 (кв. 52) <span>0/9</span></a>
+<a href="#strastnoj_bulvar_d_4_str_3_kv_48_524ca7">Страстной бульвар, д. 4 (кв. 48) <span>0/9</span></a>
+<a href="#ul_krasina_d_7_str_1_kv_136_7d392d">ул. Красина, д. 7 (кв. 136) <span>0/1</span></a>
+<a href="#strastnoj_bulvar_d_4_str_3_kv_17_3a69da">Страстной бульвар, д. 4 (кв. 17) <span>0/7</span></a>
+<a href="#devyatkin_per_d_2_kv_8_e05b2b">Девяткин пер., д. 2 (кв. 8) <span>0/12</span></a>
+<a href="#ul_bolshaya_dmitrovka_d_20_str_2_kv_26_19a5b0">ул. Большая Дмитровка, д. 20 (кв. 26) <span>0/1</span></a>
+<a href="#ul_tverskaya_d_12_str_8_kv_118_dom_solzh_199e5e">ул. Тверская, д. 12 (кв. 118 («Дом Солженицына»)) <span>0/0</span></a>
+<a href="#tatar-new">Татарская, свежая съёмка <span>41</span></a>
+<a href="#orphans">Вне стока <span>27</span></a></nav>
+</header>
+<section class="obj" id="ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2">
+<h2>ул. Большая Татарская, д. 20, стр. 2, кв. 18</h2>
+<p class="meta">Новокузнецкая · Замоскворечье · 2/4 эт. · потолки 3.2 м · Сдан</p>
+
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 1</td><td>18.5 м²</td><td>20 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 2</td><td>22.4 м²</td><td>24 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 3</td><td>21.2 м²</td><td>23 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 4</td><td>27.5 м²</td><td>25 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 5</td><td>26.4 м²</td><td>25 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 6</td><td>18.6 м²</td><td>20 500 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Интерьер <span class="count">8</span></h3><div class="grid"><button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_01.jpg" data-caption="Интерьер — интерьер 1"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_01_t.jpg" alt="Интерьер 1" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_02.jpg" data-caption="Интерьер — интерьер 2"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_02_t.jpg" alt="Интерьер 2" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_03.jpg" data-caption="Интерьер — интерьер 3"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_03_t.jpg" alt="Интерьер 3" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_04.jpg" data-caption="Интерьер — интерьер 4"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_04_t.jpg" alt="Интерьер 4" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_05.jpg" data-caption="Интерьер — интерьер 5"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_05_t.jpg" alt="Интерьер 5" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_06.jpg" data-caption="Интерьер — интерьер 6"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_06_t.jpg" alt="Интерьер 6" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_07.jpg" data-caption="Интерьер — интерьер 7"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_07_t.jpg" alt="Интерьер 7" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_08.jpg" data-caption="Интерьер — интерьер 8"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/photo_08_t.jpg" alt="Интерьер 8" loading="lazy"></button></div><h3>Планировки <span class="count">1</span></h3><div class="grid"><button class="tile portrait" data-full="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/ul_bolshaya_tatarskaya_d_20_str_2_kv_18_5328a2/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button></div>
+</section><section class="obj" id="ul_timura_frunze_d_8_5_kv_5_4b796d">
+<h2>ул. Тимура Фрунзе, д. 8/5, кв. 5</h2>
+<p class="meta">Парк Культуры · Хамовники · 1/4 эт. · потолки 3.2 м · Сдан</p>
+
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 2</td><td>24.6 м²</td><td>24 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 3</td><td>27.5 м²</td><td>26 500 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Интерьер <span class="count">8</span></h3><div class="grid"><button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_01.jpg" data-caption="Интерьер — интерьер 1"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_01_t.jpg" alt="Интерьер 1" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_02.jpg" data-caption="Интерьер — интерьер 2"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_02_t.jpg" alt="Интерьер 2" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_03.jpg" data-caption="Интерьер — интерьер 3"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_03_t.jpg" alt="Интерьер 3" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_04.jpg" data-caption="Интерьер — интерьер 4"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_04_t.jpg" alt="Интерьер 4" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_05.jpg" data-caption="Интерьер — интерьер 5"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_05_t.jpg" alt="Интерьер 5" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_06.jpg" data-caption="Интерьер — интерьер 6"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_06_t.jpg" alt="Интерьер 6" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_07.jpg" data-caption="Интерьер — интерьер 7"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_07_t.jpg" alt="Интерьер 7" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_08.jpg" data-caption="Интерьер — интерьер 8"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/photo_08_t.jpg" alt="Интерьер 8" loading="lazy"></button></div><h3>Планировки <span class="count">8</span></h3><div class="grid"><button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_02.jpg" data-caption="Планировка — планировка 2"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_02_t.jpg" alt="Планировка 2" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_03.jpg" data-caption="Планировка — планировка 3"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_03_t.jpg" alt="Планировка 3" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_04.jpg" data-caption="Планировка — планировка 4"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_04_t.jpg" alt="Планировка 4" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_05.jpg" data-caption="Планировка — планировка 5"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_05_t.jpg" alt="Планировка 5" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_06.jpg" data-caption="Планировка — планировка 6"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_06_t.jpg" alt="Планировка 6" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_07.jpg" data-caption="Планировка — планировка 7"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_07_t.jpg" alt="Планировка 7" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_08.jpg" data-caption="Планировка — планировка 8"><img src="assets/ul_timura_frunze_d_8_5_kv_5_4b796d/plan_08_t.jpg" alt="Планировка 8" loading="lazy"></button></div>
+</section><section class="obj" id="bolshoj_sergievskij_per_d_20_kv_4_39bcc6">
+<h2>Большой Сергиевский пер., д. 20, кв. 4</h2>
+<p class="meta">Трубная · Трубная/Цветной · 1/3 эт. · потолки 3.1 м · Сдан</p>
+
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 1</td><td>16.0 м²</td><td>20 400 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 3</td><td>15.9 м²</td><td>19 400 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Интерьер <span class="count">8</span></h3><div class="grid"><button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_01.jpg" data-caption="Интерьер — интерьер 1"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_01_t.jpg" alt="Интерьер 1" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_02.jpg" data-caption="Интерьер — интерьер 2"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_02_t.jpg" alt="Интерьер 2" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_03.jpg" data-caption="Интерьер — интерьер 3"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_03_t.jpg" alt="Интерьер 3" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_04.jpg" data-caption="Интерьер — интерьер 4"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_04_t.jpg" alt="Интерьер 4" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_05.jpg" data-caption="Интерьер — интерьер 5"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_05_t.jpg" alt="Интерьер 5" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_06.jpg" data-caption="Интерьер — интерьер 6"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_06_t.jpg" alt="Интерьер 6" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_07.jpg" data-caption="Интерьер — интерьер 7"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_07_t.jpg" alt="Интерьер 7" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_08.jpg" data-caption="Интерьер — интерьер 8"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/photo_08_t.jpg" alt="Интерьер 8" loading="lazy"></button></div><h3>Планировки <span class="count">7</span></h3><div class="grid"><button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_02.jpg" data-caption="Планировка — планировка 2"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_02_t.jpg" alt="Планировка 2" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_03.jpg" data-caption="Планировка — планировка 3"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_03_t.jpg" alt="Планировка 3" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_04.jpg" data-caption="Планировка — планировка 4"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_04_t.jpg" alt="Планировка 4" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_05.jpg" data-caption="Планировка — планировка 5"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_05_t.jpg" alt="Планировка 5" loading="lazy"></button>
+<button class="tile" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_06.jpg" data-caption="Планировка — планировка 6"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_06_t.jpg" alt="Планировка 6" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_07.jpg" data-caption="Планировка — планировка 7"><img src="assets/bolshoj_sergievskij_per_d_20_kv_4_39bcc6/plan_07_t.jpg" alt="Планировка 7" loading="lazy"></button></div>
+</section><section class="obj" id="strastnoj_bulvar_d_4_str_3_kv_52_defcbe">
+<h2>Страстной бульвар, д. 4, стр. 3, кв. 52</h2>
+<p class="meta">Чеховская · Тверская/Чеховская · 4/6 эт. · потолки 3.4 м · Передача ключей 30.08.2026</p>
+<p class="flag">Интерьерных фото нет — только планировки.</p>
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 1</td><td>18.6 м²</td><td>21 900 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 2</td><td>18.1 м²</td><td>21 700 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 3</td><td>19.5 м²</td><td>23 000 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 4</td><td>23.6 м²</td><td>25 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 6</td><td>17.4 м²</td><td>21 000 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 7</td><td>19.9 м²</td><td>23 500 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Планировки <span class="count">9</span></h3><div class="grid"><button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_02.jpg" data-caption="Планировка — планировка 2"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_02_t.jpg" alt="Планировка 2" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_03.jpg" data-caption="Планировка — планировка 3"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_03_t.jpg" alt="Планировка 3" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_04.jpg" data-caption="Планировка — планировка 4"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_04_t.jpg" alt="Планировка 4" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_05.jpg" data-caption="Планировка — планировка 5"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_05_t.jpg" alt="Планировка 5" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_06.jpg" data-caption="Планировка — планировка 6"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_06_t.jpg" alt="Планировка 6" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_07.jpg" data-caption="Планировка — планировка 7"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_07_t.jpg" alt="Планировка 7" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_08.jpg" data-caption="Планировка — планировка 8"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_08_t.jpg" alt="Планировка 8" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_09.jpg" data-caption="Планировка — планировка 9"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_52_defcbe/plan_09_t.jpg" alt="Планировка 9" loading="lazy"></button></div>
+</section><section class="obj" id="strastnoj_bulvar_d_4_str_3_kv_48_524ca7">
+<h2>Страстной бульвар, д. 4, стр. 3, кв. 48</h2>
+<p class="meta">Чеховская · Тверская/Чеховская · 3/6 эт. · потолки 3.3 м · Передача ключей 31.07.2026</p>
+<p class="flag">Интерьерных фото нет — только планировки.</p>
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 2</td><td>17.5 м²</td><td>—</td><td class="warn">Бронь / уточняется</td></tr>
+<tr><td>Студия 3</td><td>19.6 м²</td><td>22 900 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 4</td><td>22.2 м²</td><td>24 500 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 5</td><td>18.4 м²</td><td>21 900 000 ₽</td><td class="">Доступно</td></tr>
+<tr><td>Студия 7</td><td>20.5 м²</td><td>23 500 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Планировки <span class="count">9</span></h3><div class="grid"><button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_02.jpg" data-caption="Планировка — планировка 2"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_02_t.jpg" alt="Планировка 2" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_03.jpg" data-caption="Планировка — планировка 3"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_03_t.jpg" alt="Планировка 3" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_04.jpg" data-caption="Планировка — планировка 4"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_04_t.jpg" alt="Планировка 4" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_05.jpg" data-caption="Планировка — планировка 5"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_05_t.jpg" alt="Планировка 5" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_06.jpg" data-caption="Планировка — планировка 6"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_06_t.jpg" alt="Планировка 6" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_07.jpg" data-caption="Планировка — планировка 7"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_07_t.jpg" alt="Планировка 7" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_08.jpg" data-caption="Планировка — планировка 8"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_08_t.jpg" alt="Планировка 8" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_09.jpg" data-caption="Планировка — планировка 9"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_48_524ca7/plan_09_t.jpg" alt="Планировка 9" loading="lazy"></button></div>
+</section><section class="obj" id="ul_krasina_d_7_str_1_kv_136_7d392d">
+<h2>ул. Красина, д. 7, стр. 1, кв. 136</h2>
+<p class="meta">Маяковская · Маяковская/Красина · 2/5 эт. · потолки 3.2 м · Сдан</p>
+<p class="flag">Интерьерных фото нет — только планировки.</p>
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 4</td><td>14.8 м²</td><td>18 000 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Планировки <span class="count">1</span></h3><div class="grid"><button class="tile portrait" data-full="assets/ul_krasina_d_7_str_1_kv_136_7d392d/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/ul_krasina_d_7_str_1_kv_136_7d392d/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button></div>
+</section><section class="obj" id="strastnoj_bulvar_d_4_str_3_kv_17_3a69da">
+<h2>Страстной бульвар, д. 4, стр. 3, кв. 17</h2>
+<p class="meta">Чеховская · Тверская/Чеховская · 2/6 эт. · потолки 3.4 м · Сдан</p>
+<p class="flag">Интерьерных фото нет — только планировки.</p>
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 2</td><td>21.2 м²</td><td>26 000 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Планировки <span class="count">7</span></h3><div class="grid"><button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_02.jpg" data-caption="Планировка — планировка 2"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_02_t.jpg" alt="Планировка 2" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_03.jpg" data-caption="Планировка — планировка 3"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_03_t.jpg" alt="Планировка 3" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_04.jpg" data-caption="Планировка — планировка 4"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_04_t.jpg" alt="Планировка 4" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_05.jpg" data-caption="Планировка — планировка 5"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_05_t.jpg" alt="Планировка 5" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_06.jpg" data-caption="Планировка — планировка 6"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_06_t.jpg" alt="Планировка 6" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_07.jpg" data-caption="Планировка — планировка 7"><img src="assets/strastnoj_bulvar_d_4_str_3_kv_17_3a69da/plan_07_t.jpg" alt="Планировка 7" loading="lazy"></button></div>
+</section><section class="obj" id="devyatkin_per_d_2_kv_8_e05b2b">
+<h2>Девяткин пер., д. 2, кв. 8</h2>
+<p class="meta">Чистые пруды · Чистые пруды/Мясницкая · 2/4 эт. · потолки 3.4 м · Сдан</p>
+<p class="flag">Интерьерных фото нет — только планировки.</p>
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 6</td><td>16.8 м²</td><td>20 700 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Планировки <span class="count">12</span></h3><div class="grid"><button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_02.jpg" data-caption="Планировка — планировка 2"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_02_t.jpg" alt="Планировка 2" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_03.jpg" data-caption="Планировка — планировка 3"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_03_t.jpg" alt="Планировка 3" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_04.jpg" data-caption="Планировка — планировка 4"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_04_t.jpg" alt="Планировка 4" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_05.jpg" data-caption="Планировка — планировка 5"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_05_t.jpg" alt="Планировка 5" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_06.jpg" data-caption="Планировка — планировка 6"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_06_t.jpg" alt="Планировка 6" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_07.jpg" data-caption="Планировка — планировка 7"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_07_t.jpg" alt="Планировка 7" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_08.jpg" data-caption="Планировка — планировка 8"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_08_t.jpg" alt="Планировка 8" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_09.jpg" data-caption="Планировка — планировка 9"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_09_t.jpg" alt="Планировка 9" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_10.jpg" data-caption="Планировка — планировка 10"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_10_t.jpg" alt="Планировка 10" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_11.jpg" data-caption="Планировка — планировка 11"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_11_t.jpg" alt="Планировка 11" loading="lazy"></button>
+<button class="tile" data-full="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_12.jpg" data-caption="Планировка — планировка 12"><img src="assets/devyatkin_per_d_2_kv_8_e05b2b/plan_12_t.jpg" alt="Планировка 12" loading="lazy"></button></div>
+</section><section class="obj" id="ul_bolshaya_dmitrovka_d_20_str_2_kv_26_19a5b0">
+<h2>ул. Большая Дмитровка, д. 20, стр. 2, кв. 26</h2>
+<p class="meta">Чеховская · Тверская/Чеховская · 1/5 эт. · потолки 3.5 м · Сдан</p>
+<p class="flag">Интерьерных фото нет — только планировки.</p>
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 4</td><td>17.2 м²</td><td>22 500 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<h3>Планировки <span class="count">1</span></h3><div class="grid"><button class="tile portrait" data-full="assets/ul_bolshaya_dmitrovka_d_20_str_2_kv_26_19a5b0/plan_01.jpg" data-caption="Планировка — планировка 1"><img src="assets/ul_bolshaya_dmitrovka_d_20_str_2_kv_26_19a5b0/plan_01_t.jpg" alt="Планировка 1" loading="lazy"></button></div>
+</section><section class="obj" id="ul_tverskaya_d_12_str_8_kv_118_dom_solzh_199e5e">
+<h2>ул. Тверская, д. 12, стр. 8, кв. 118 («Дом Солженицына»)</h2>
+<p class="meta">Тверская · Тверская/Чеховская · 2/6 эт. · потолки 3.5 м · Сдан</p>
+<p class="flag">Интерьерных фото нет — только планировки.</p>
+<table class="lots"><thead><tr><th>Лот</th><th>Площадь</th><th>Цена с 01.08</th><th>Статус</th></tr></thead><tbody><tr><td>Студия 3</td><td>18.0 м²</td><td>22 500 000 ₽</td><td class="">Доступно</td></tr></tbody></table>
+<p class="flag">В папке объекта нет ни одного файла.</p>
+</section><section class="obj" id="tatar-new">
+<h2>Большая Татарская — свежая съёмка</h2>
+<p class="meta">Папка <code>feeds/tatar_new/</code> · 41 кадров · снято 18.06.2026</p>
+<p class="flag">В фид не заведена: кадры лежат отдельно и в выгрузку на Авито/Циан/Яндекс не попадают.</p>
+<div class="grid"><button class="tile" data-full="assets/tatar-new/DSCF4707.jpg" data-caption="Кадр — кадр 1"><img src="assets/tatar-new/DSCF4707_t.jpg" alt="Кадр 1" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4712.jpg" data-caption="Кадр — кадр 2"><img src="assets/tatar-new/DSCF4712_t.jpg" alt="Кадр 2" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4713.jpg" data-caption="Кадр — кадр 3"><img src="assets/tatar-new/DSCF4713_t.jpg" alt="Кадр 3" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4714.jpg" data-caption="Кадр — кадр 4"><img src="assets/tatar-new/DSCF4714_t.jpg" alt="Кадр 4" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4718.jpg" data-caption="Кадр — кадр 5"><img src="assets/tatar-new/DSCF4718_t.jpg" alt="Кадр 5" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4719.jpg" data-caption="Кадр — кадр 6"><img src="assets/tatar-new/DSCF4719_t.jpg" alt="Кадр 6" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4720.jpg" data-caption="Кадр — кадр 7"><img src="assets/tatar-new/DSCF4720_t.jpg" alt="Кадр 7" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4721.jpg" data-caption="Кадр — кадр 8"><img src="assets/tatar-new/DSCF4721_t.jpg" alt="Кадр 8" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4722.jpg" data-caption="Кадр — кадр 9"><img src="assets/tatar-new/DSCF4722_t.jpg" alt="Кадр 9" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4723.jpg" data-caption="Кадр — кадр 10"><img src="assets/tatar-new/DSCF4723_t.jpg" alt="Кадр 10" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4724.jpg" data-caption="Кадр — кадр 11"><img src="assets/tatar-new/DSCF4724_t.jpg" alt="Кадр 11" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4726.jpg" data-caption="Кадр — кадр 12"><img src="assets/tatar-new/DSCF4726_t.jpg" alt="Кадр 12" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4727.jpg" data-caption="Кадр — кадр 13"><img src="assets/tatar-new/DSCF4727_t.jpg" alt="Кадр 13" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4728.jpg" data-caption="Кадр — кадр 14"><img src="assets/tatar-new/DSCF4728_t.jpg" alt="Кадр 14" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4729.jpg" data-caption="Кадр — кадр 15"><img src="assets/tatar-new/DSCF4729_t.jpg" alt="Кадр 15" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4730.jpg" data-caption="Кадр — кадр 16"><img src="assets/tatar-new/DSCF4730_t.jpg" alt="Кадр 16" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4731.jpg" data-caption="Кадр — кадр 17"><img src="assets/tatar-new/DSCF4731_t.jpg" alt="Кадр 17" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4732.jpg" data-caption="Кадр — кадр 18"><img src="assets/tatar-new/DSCF4732_t.jpg" alt="Кадр 18" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4734.jpg" data-caption="Кадр — кадр 19"><img src="assets/tatar-new/DSCF4734_t.jpg" alt="Кадр 19" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4735.jpg" data-caption="Кадр — кадр 20"><img src="assets/tatar-new/DSCF4735_t.jpg" alt="Кадр 20" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4736.jpg" data-caption="Кадр — кадр 21"><img src="assets/tatar-new/DSCF4736_t.jpg" alt="Кадр 21" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4737.jpg" data-caption="Кадр — кадр 22"><img src="assets/tatar-new/DSCF4737_t.jpg" alt="Кадр 22" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4738.jpg" data-caption="Кадр — кадр 23"><img src="assets/tatar-new/DSCF4738_t.jpg" alt="Кадр 23" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4739.jpg" data-caption="Кадр — кадр 24"><img src="assets/tatar-new/DSCF4739_t.jpg" alt="Кадр 24" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4740.jpg" data-caption="Кадр — кадр 25"><img src="assets/tatar-new/DSCF4740_t.jpg" alt="Кадр 25" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4741.jpg" data-caption="Кадр — кадр 26"><img src="assets/tatar-new/DSCF4741_t.jpg" alt="Кадр 26" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4742.jpg" data-caption="Кадр — кадр 27"><img src="assets/tatar-new/DSCF4742_t.jpg" alt="Кадр 27" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4743.jpg" data-caption="Кадр — кадр 28"><img src="assets/tatar-new/DSCF4743_t.jpg" alt="Кадр 28" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4744.jpg" data-caption="Кадр — кадр 29"><img src="assets/tatar-new/DSCF4744_t.jpg" alt="Кадр 29" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4745.jpg" data-caption="Кадр — кадр 30"><img src="assets/tatar-new/DSCF4745_t.jpg" alt="Кадр 30" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4746.jpg" data-caption="Кадр — кадр 31"><img src="assets/tatar-new/DSCF4746_t.jpg" alt="Кадр 31" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4747.jpg" data-caption="Кадр — кадр 32"><img src="assets/tatar-new/DSCF4747_t.jpg" alt="Кадр 32" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4748.jpg" data-caption="Кадр — кадр 33"><img src="assets/tatar-new/DSCF4748_t.jpg" alt="Кадр 33" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4749.jpg" data-caption="Кадр — кадр 34"><img src="assets/tatar-new/DSCF4749_t.jpg" alt="Кадр 34" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4750.jpg" data-caption="Кадр — кадр 35"><img src="assets/tatar-new/DSCF4750_t.jpg" alt="Кадр 35" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4751.jpg" data-caption="Кадр — кадр 36"><img src="assets/tatar-new/DSCF4751_t.jpg" alt="Кадр 36" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4752.jpg" data-caption="Кадр — кадр 37"><img src="assets/tatar-new/DSCF4752_t.jpg" alt="Кадр 37" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4753.jpg" data-caption="Кадр — кадр 38"><img src="assets/tatar-new/DSCF4753_t.jpg" alt="Кадр 38" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4754.jpg" data-caption="Кадр — кадр 39"><img src="assets/tatar-new/DSCF4754_t.jpg" alt="Кадр 39" loading="lazy"></button>
+<button class="tile" data-full="assets/tatar-new/DSCF4755.jpg" data-caption="Кадр — кадр 40"><img src="assets/tatar-new/DSCF4755_t.jpg" alt="Кадр 40" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/tatar-new/DSCF4756.jpg" data-caption="Кадр — кадр 41"><img src="assets/tatar-new/DSCF4756_t.jpg" alt="Кадр 41" loading="lazy"></button></div>
+</section><section class="obj" id="orphans">
+<h2>Фото без лотов в текущем стоке</h2>
+<p class="meta">Папки остались от прошлых версий каталога — лотов этих адресов в прайсе от 21.07 нет.</p>
+<h3>strastnoj bulvar d 4 str 5 kv 4 95a67b <span class="count">17</span></h3><div class="grid"><button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_01.jpg" data-caption="Кадр — кадр 1"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_01_t.jpg" alt="Кадр 1" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_02.jpg" data-caption="Кадр — кадр 2"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_02_t.jpg" alt="Кадр 2" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_03.jpg" data-caption="Кадр — кадр 3"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_03_t.jpg" alt="Кадр 3" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_04.jpg" data-caption="Кадр — кадр 4"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_04_t.jpg" alt="Кадр 4" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_05.jpg" data-caption="Кадр — кадр 5"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_05_t.jpg" alt="Кадр 5" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_06.jpg" data-caption="Кадр — кадр 6"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_06_t.jpg" alt="Кадр 6" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_07.jpg" data-caption="Кадр — кадр 7"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_07_t.jpg" alt="Кадр 7" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_08.jpg" data-caption="Кадр — кадр 8"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/photo_08_t.jpg" alt="Кадр 8" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_01.jpg" data-caption="Кадр — кадр 9"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_01_t.jpg" alt="Кадр 9" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_02.jpg" data-caption="Кадр — кадр 10"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_02_t.jpg" alt="Кадр 10" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_03.jpg" data-caption="Кадр — кадр 11"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_03_t.jpg" alt="Кадр 11" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_04.jpg" data-caption="Кадр — кадр 12"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_04_t.jpg" alt="Кадр 12" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_05.jpg" data-caption="Кадр — кадр 13"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_05_t.jpg" alt="Кадр 13" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_06.jpg" data-caption="Кадр — кадр 14"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_06_t.jpg" alt="Кадр 14" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_07.jpg" data-caption="Кадр — кадр 15"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_07_t.jpg" alt="Кадр 15" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_08.jpg" data-caption="Кадр — кадр 16"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_08_t.jpg" alt="Кадр 16" loading="lazy"></button>
+<button class="tile" data-full="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_09.jpg" data-caption="Кадр — кадр 17"><img src="assets/strastnoj_bulvar_d_4_str_5_kv_4_95a67b/plan_09_t.jpg" alt="Кадр 17" loading="lazy"></button></div><h3>ul krasina d 7 str 1 kv 138 eb13cb <span class="count">10</span></h3><div class="grid"><button class="tile" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_01.jpg" data-caption="Кадр — кадр 1"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_01_t.jpg" alt="Кадр 1" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_02.jpg" data-caption="Кадр — кадр 2"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_02_t.jpg" alt="Кадр 2" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_03.jpg" data-caption="Кадр — кадр 3"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_03_t.jpg" alt="Кадр 3" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_04.jpg" data-caption="Кадр — кадр 4"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_04_t.jpg" alt="Кадр 4" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_05.jpg" data-caption="Кадр — кадр 5"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_05_t.jpg" alt="Кадр 5" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_06.jpg" data-caption="Кадр — кадр 6"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_06_t.jpg" alt="Кадр 6" loading="lazy"></button>
+<button class="tile" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_07.jpg" data-caption="Кадр — кадр 7"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_07_t.jpg" alt="Кадр 7" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_08.jpg" data-caption="Кадр — кадр 8"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/photo_08_t.jpg" alt="Кадр 8" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/plan_01.jpg" data-caption="Кадр — кадр 9"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/plan_01_t.jpg" alt="Кадр 9" loading="lazy"></button>
+<button class="tile portrait" data-full="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/plan_02.jpg" data-caption="Кадр — кадр 10"><img src="assets/ul_krasina_d_7_str_1_kv_138_eb13cb/plan_02_t.jpg" alt="Кадр 10" loading="lazy"></button></div>
+</section>
+<footer>
+  Собрано из <code>projects/metry/feeds/out/photos/</code> и <code>feeds/tatar_new/</code>.
+  Цены — наш ручной пересчёт +500 000 ₽ к прайсу от 21.07.2026; официальный лист с 01.08 не получен.
+  Страница закрыта от индексации, но доступна по ссылке — не публиковать дальше.
+</footer>
+</div>
+<div id="lb"><button aria-label="Закрыть">×</button><img alt="" hidden><div class="cap"></div></div>
+<script>
+const lb = document.getElementById('lb'), lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.cap');
+document.querySelectorAll('.tile').forEach(t => t.addEventListener('click', () => {
+  lbImg.src = t.dataset.full; lbImg.hidden = false; lbCap.textContent = t.dataset.caption; lb.classList.add('on');
+}));
+const close = () => { lb.classList.remove('on'); lbImg.removeAttribute('src'); };
+lb.addEventListener('click', close);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+</script>
+</body>
+</html>
