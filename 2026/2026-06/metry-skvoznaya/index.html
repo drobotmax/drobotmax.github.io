@@ -144,6 +144,9 @@ table.ch thead .sep{border-left:2px solid var(--green-200)}
 table.ch tbody tr{border-bottom:1px solid var(--ink-10);cursor:pointer;
   transition:background .1s}
 table.ch tbody tr:hover{background:var(--green-50)}
+/* Канал без заявок за период: строку показываем всегда, но приглушаем - ноль тут
+   значимая информация (канал молчит), а не повод прятать строку. */
+table.ch tbody tr.ch-idle{opacity:.55}
 table.ch td{padding:9px 10px;text-align:right;font-variant-numeric:tabular-nums}
 table.ch td.lft{text-align:left}
 table.ch td.ch-name{font-weight:600;color:var(--green-900)}
@@ -296,7 +299,8 @@ table.mini tr:last-child td{border-bottom:none}
               <th title="Создана сделка" class="sep">Сделок</th>
               <th title="Показ объекта">Показ</th>
               <th title="ДООУ">ДООУ</th>
-              <th title="Продаж">Продаж</th>
+              <th title="Бронь: ДВОУ оплачен, воронка менеджера">Броней</th>
+              <th title="Продажа: документы собственнику выданы, воронка юриста">Продаж</th>
               <th class="sep">Выручка ₽</th>
               <th>Расход ₽</th>
               <th>CPL</th>
@@ -343,7 +347,7 @@ table.mini tr:last-child td{border-bottom:none}
 
 <script>
 /* ─── CRYPTO CONSTANTS (substituted by build.py) ─────────────────────── */
-const PW_HASH="96bdd16e5f9280f59626b5724754ddd6c27800ce30d01270034f4686f6a334aa", SALT_HEX="c54e54fd00bd4419b4ab52e2d2654c6b", ITER=200000;
+const PW_HASH="96bdd16e5f9280f59626b5724754ddd6c27800ce30d01270034f4686f6a334aa", SALT_HEX="20a22167f1cc5d5f0b97939de1944d86", ITER=200000;
 let KEY=null;
 
 /* ─── CRYPTO UTILS ───────────────────────────────────────────────────── */
@@ -468,7 +472,8 @@ const FUNNEL_DEALS=[
   {key:'deal',     label:'Сделка создана'},
   {key:'show',     label:'Показ объекта'},
   {key:'dvou',     label:'ДООУ'},
-  {key:'won',      label:'Продажа'},
+  {key:'booking',  label:'Бронь (ДВОУ оплачен)'},
+  {key:'won',      label:'Продажа (документы выданы)'},
 ];
 
 function renderFunnelSidebar(funnel){
@@ -512,7 +517,12 @@ function renderKpiSidebar(totals){
     <div class="kpi-row accent">
       <div class="kpi-label">Выручка</div>
       <div class="kpi-value lg">${fmtMoney(t.revenue)} ₽</div>
-      <div class="kpi-sub">${fmtNum(t.funnel.won)} продаж</div>
+      <div class="kpi-sub">${fmtNum(t.funnel.won)} продаж (документы выданы)</div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi-label">Брони</div>
+      <div class="kpi-value">${fmtNum(t.funnel.booking)}</div>
+      <div class="kpi-sub">${fmtMoney(t.booking_revenue)} ₽ · ДВОУ оплачен, в выручку не входит</div>
     </div>
     <div class="kpi-row">
       <div class="kpi-label">Заявок</div>
@@ -544,6 +554,9 @@ function renderChannelTable(channels, totals){
   for(const r of channels){
     const f=r.funnel||{};
     const tr=document.createElement('tr');
+    // Канал без единой заявки за период показываем всё равно, но приглушённым:
+    // строка с нулём - это сигнал (обрыв формы, кончился бюджет), а не мусор.
+    if(!f.leads) tr.className='ch-idle';
     tr.onclick=()=>openChannel(r.channel,r.slug);
     tr.innerHTML=`
       <td class="lft ch-name">${r.channel}</td>
@@ -553,6 +566,7 @@ function renderChannelTable(channels, totals){
       <td class="sep">${fmtNum(f.deal)}</td>
       <td>${fmtNum(f.show)}</td>
       <td>${fmtNum(f.dvou)}</td>
+      <td>${fmtNum(f.booking)}</td>
       <td><strong>${fmtNum(f.won)}</strong></td>
       <td class="sep">${fmtNum(r.revenue?Math.round(r.revenue):null)}</td>
       <td>${r.spend?fmtNum(Math.round(r.spend)):'<span class="dash">—</span>'}</td>
@@ -572,6 +586,7 @@ function renderChannelTable(channels, totals){
     <td class="sep">${fmtNum(ff.deal)}</td>
     <td>${fmtNum(ff.show)}</td>
     <td>${fmtNum(ff.dvou)}</td>
+    <td>${fmtNum(ff.booking)}</td>
     <td><strong>${fmtNum(ff.won)}</strong></td>
     <td class="sep">${fmtNum(Math.round(tf.revenue||0))}</td>
     <td>${fmtNum(Math.round(tf.spend||0))}</td>
@@ -650,8 +665,8 @@ async function openChannel(ch, slug){
   ).join('')||'<tr><td colspan=4 class="dash" style="text-align:left;padding:8px">нет кампаний</td></tr>';
 
   const deals=d.won_deals.map(x=>
-    `<tr><td class="lft">${x.date}</td><td>${Math.round(x.amount).toLocaleString('ru-RU')} ₽</td><td class="dash">${x.attribution}</td></tr>`
-  ).join('')||'<tr><td colspan=3 class="dash" style="text-align:left;padding:8px">нет продаж</td></tr>';
+    `<tr><td class="lft">${x.date}</td><td>${x.kind==='sale'?'Продажа':'Бронь'}</td><td>${Math.round(x.amount).toLocaleString('ru-RU')} ₽</td><td class="dash">${x.attribution}</td></tr>`
+  ).join('')||'<tr><td colspan=4 class="dash" style="text-align:left;padding:8px">нет продаж и броней</td></tr>';
 
   document.getElementById('m-body').innerHTML=`
     <div>
@@ -659,8 +674,9 @@ async function openChannel(ch, slug){
       <table class="mini"><tbody>
         <tr><td class="lft">Заявок</td><td>${fmtNum(s.leads)}</td></tr>
         <tr><td class="lft">Дозвон / Квал</td><td>${fmtNum(s.reached)} / ${fmtNum(s.qualified)}</td></tr>
-        <tr><td class="lft">Сделок / Продаж</td><td>${fmtNum(s.deals)} / ${fmtNum(s.won)}</td></tr>
-        <tr><td class="lft">Выручка</td><td>${Math.round(s.revenue||0).toLocaleString('ru-RU')} ₽</td></tr>
+        <tr><td class="lft">Сделок / Броней / Продаж</td><td>${fmtNum(s.deals)} / ${fmtNum(s.booking)} / ${fmtNum(s.won)}</td></tr>
+        <tr><td class="lft">Выручка (продажи)</td><td>${Math.round(s.revenue||0).toLocaleString('ru-RU')} ₽</td></tr>
+        <tr><td class="lft">Сумма броней</td><td>${Math.round(s.booking_revenue||0).toLocaleString('ru-RU')} ₽</td></tr>
         <tr><td class="lft">Расход / CPL / CAC / ROMI</td>
           <td>${s.spend?Math.round(s.spend).toLocaleString('ru-RU'):'—'} /
               ${s.cpl??'—'} / ${s.cac??'—'} /
@@ -675,9 +691,9 @@ async function openChannel(ch, slug){
       </table>
     </div>
     <div>
-      <div class="modal-section-title">Продажи (обезличенно, до 50)</div>
+      <div class="modal-section-title">Продажи и брони (обезличенно, до 50)</div>
       <table class="mini">
-        <thead><tr><th class="lft">Дата</th><th>Сумма</th><th>Атрибуция</th></tr></thead>
+        <thead><tr><th class="lft">Дата</th><th>Тип</th><th>Сумма</th><th>Атрибуция</th></tr></thead>
         <tbody>${deals}</tbody>
       </table>
     </div>`;
