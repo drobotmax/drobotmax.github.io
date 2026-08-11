@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KUBRIK - Встроенный отдел маркетинга для застройщиков</title>
+<style>
+:root {
+    --bg: #07111f;
+    --bg-soft: #0d1a2c;
+    --panel: rgba(12, 24, 41, 0.82);
+    --panel-strong: rgba(9, 19, 33, 0.94);
+    --line: rgba(145, 198, 255, 0.14);
+    --line-strong: rgba(145, 198, 255, 0.28);
+    --text: #f4f8ff;
+    --muted: #97abc6;
+    --accent: #59b8ff;
+    --accent-soft: rgba(89, 184, 255, 0.12);
+    --good: #78e2b1;
+    --warn: #ffd57a;
+    --maxw: 1240px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Inter, Manrope, "Segoe UI", sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(89, 184, 255, 0.12), transparent 26%),
+        radial-gradient(circle at right 18% top 22%, rgba(89, 184, 255, 0.07), transparent 22%),
+        linear-gradient(180deg, #06101d 0%, #07111f 46%, #050b15 100%);
+    color: var(--text);
+    overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    background-size: 72px 72px;
+    opacity: 0.42;
+    pointer-events: none;
+}
+
+.progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, #5ed0ff, #2a75ff);
+    z-index: 30;
+    transition: width 0.3s ease;
+}
+
+.counter,
+.hint {
+    position: fixed;
+    z-index: 30;
+    color: var(--muted);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.counter {
+    left: 28px;
+    bottom: 24px;
+}
+
+.hint {
+    right: 28px;
+    bottom: 24px;
+}
+
+.nav {
+    position: fixed;
+    right: 24px;
+    top: 24px;
+    display: flex;
+    gap: 10px;
+    z-index: 30;
+}
+
+.nav button {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: rgba(8, 17, 30, 0.8);
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.nav button:hover {
+    border-color: var(--line-strong);
+    background: rgba(12, 24, 41, 0.95);
+}
+
+.deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    padding: 64px 72px 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(48px);
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.slide.prev {
+    transform: translateX(-48px);
+}
+
+.frame {
+    width: min(100%, var(--maxw));
+    min-height: min(82vh, 880px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 26px;
+}
+
+.frame.spread {
+    justify-content: space-between;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(10, 22, 38, 0.68);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 18px rgba(89, 184, 255, 0.7);
+}
+
+h1,
+h2 {
+    max-width: 980px;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+}
+
+h1 {
+    font-size: clamp(60px, 8vw, 104px);
+}
+
+.hero-title {
+    font-size: clamp(92px, 14vw, 184px);
+    line-height: 0.88;
+    letter-spacing: -0.08em;
+    margin: 0;
+}
+
+.hero-subtitle {
+    max-width: 760px;
+    font-size: clamp(18px, 2vw, 30px);
+    line-height: 1.2;
+    color: var(--muted);
+}
+
+h2 {
+    font-size: clamp(38px, 5.2vw, 72px);
+}
+
+.lead,
+.subline {
+    max-width: 860px;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+.lead {
+    font-size: clamp(18px, 2.1vw, 28px);
+}
+
+.subline {
+    font-size: 18px;
+}
+
+.accent {
+    color: var(--accent);
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 26px;
+    align-items: end;
+}
+
+.hero-figure {
+    min-height: 260px;
+    border-radius: 32px;
+    border: 1px solid var(--line);
+    background:
+        radial-gradient(circle at 25% 30%, rgba(89, 184, 255, 0.28), transparent 24%),
+        radial-gradient(circle at 72% 62%, rgba(89, 184, 255, 0.16), transparent 22%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)),
+        var(--panel);
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-figure::before,
+.hero-figure::after {
+    content: "";
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transform: rotate(45deg);
+}
+
+.hero-figure::before {
+    width: 180px;
+    height: 180px;
+}
+
+.hero-figure::after {
+    width: 320px;
+    height: 320px;
+}
+
+.hero-mark {
+    font-size: clamp(54px, 7vw, 96px);
+    letter-spacing: 0.16em;
+    font-weight: 800;
+    color: rgba(244, 248, 255, 0.88);
+}
+
+.fact-stack,
+.grid-3,
+.grid-4,
+.grid-logos,
+.grid-steps,
+.team-grid,
+.compare-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.fact-stack {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-logos {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-steps,
+.team-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.compare-grid {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: start;
+}
+
+.card,
+.panel,
+.step,
+.person,
+.metric,
+.logo-group,
+.mini-board {
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    backdrop-filter: blur(18px);
+}
+
+.card,
+.panel,
+.step,
+.person,
+.metric,
+.logo-group {
+    padding: 22px;
+}
+
+.mini-board {
+    padding: 0;
+    overflow: hidden;
+}
+
+.card h3,
+.panel h3,
+.step h3,
+.person h3,
+.logo-group h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+}
+
+.card p,
+.card li,
+.panel p,
+.panel li,
+.step p,
+.person p,
+.metric p,
+.logo-chip,
+.table-row,
+.pipe-caption,
+.case-line,
+.contact-line {
+    color: var(--muted);
+    line-height: 1.45;
+    font-size: 15px;
+}
+
+.card ul,
+.panel ul {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+.card li::before,
+.panel li::before {
+    content: "•";
+    color: var(--accent);
+    margin-right: 8px;
+}
+
+.card-icon,
+.step-index,
+.person-role,
+.metric-label,
+.group-label {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 14px;
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.step-index {
+    min-width: 38px;
+    height: 38px;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(89, 184, 255, 0.18);
+}
+
+.solution-map {
+    display: grid;
+    grid-template-columns: 0.8fr 0.6fr 1.6fr;
+    gap: 16px;
+    align-items: center;
+}
+
+.node {
+    min-height: 182px;
+    padding: 24px;
+    border-radius: 28px;
+    border: 1px solid var(--line);
+    background: var(--panel-strong);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+
+.node.center {
+    min-height: 228px;
+    background:
+        radial-gradient(circle at top, rgba(89, 184, 255, 0.16), transparent 48%),
+        var(--panel-strong);
+}
+
+.node h3 {
+    font-size: 22px;
+}
+
+.node p {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+.team-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.team-cloud span,
+.logo-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.brand-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.brand-item {
+    min-height: 78px;
+    padding: 14px 14px 12px;
+    border-radius: 22px;
+    border: 1px solid var(--line);
+    background: rgba(10, 22, 38, 0.62);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.brand-item img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.96;
+}
+
+.brand-item span {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.15;
+}
+
+.brand-item.wordmark strong {
+    font-size: 14px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+
+.brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+}
+
+.brand-mark.yandex {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+}
+
+.brand-mark.yandex .ya {
+    color: #ff4d4f;
+    margin-right: 1px;
+}
+
+.brand-mark.avito {
+    gap: 4px;
+}
+
+.brand-mark.avito span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.brand-mark.avito .c1 { background: #97cf26; }
+.brand-mark.avito .c2 { background: #ff6163; }
+.brand-mark.avito .c3 { background: #8a56ff; }
+.brand-mark.avito .c4 { background: #00c1ff; }
+
+.brand-mark.dzen {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.92);
+    position: relative;
+}
+
+.brand-mark.dzen::before,
+.brand-mark.dzen::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border: 2px solid rgba(255,255,255,0.92);
+    border-radius: 50%;
+}
+
+.brand-mark.bitrix,
+.brand-mark.amocrm {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text);
+}
+
+.brand-mark.bitrix .num24 {
+    color: #2fc7f7;
+}
+
+.brand-mark.amocrm .amo {
+    text-transform: lowercase;
+}
+
+.platform-slide h2 {
+    max-width: 900px;
+    font-size: clamp(34px, 4.8vw, 64px);
+    margin-bottom: 6px;
+}
+
+.platform-slide .frame {
+    gap: 18px;
+}
+
+.platform-slide .lead {
+    font-size: clamp(16px, 1.7vw, 24px);
+}
+
+.platform-slide .divider {
+    margin-top: 4px;
+}
+
+.table {
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--panel);
+}
+
+.table-header,
+.table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+}
+
+.table-header {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+.table-header div,
+.table-row div {
+    padding: 14px 16px;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.table-header div:last-child,
+.table-row div:last-child {
+    border-right: 0;
+}
+
+.table-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.table-row strong {
+    color: var(--text);
+}
+
+.table-row .best {
+    color: var(--good);
+    font-weight: 700;
+}
+
+.pipeline {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+}
+
+.pipe {
+    position: relative;
+    min-height: 122px;
+    padding: 18px;
+    border-radius: 22px;
+    border: 1px solid var(--line);
+    background: rgba(10, 22, 38, 0.74);
+}
+
+.pipe::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -12px;
+    width: 24px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.pipe:last-child::after {
+    display: none;
+}
+
+.pipe h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.pipe-caption {
+    font-size: 13px;
+}
+
+.proof-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.proof-row .panel p strong,
+.metric strong,
+.case-line strong,
+.contact-line strong {
+    color: var(--text);
+}
+
+.logo-group {
+    display: grid;
+    gap: 14px;
+}
+
+.logo-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.mini-board-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.mini-board-body {
+    padding: 20px;
+    display: grid;
+    gap: 14px;
+}
+
+.metric {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.metric-value {
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.metric-label {
+    margin-bottom: 0;
+}
+
+.team-grid .person {
+    min-height: 240px;
+}
+
+.person-role {
+    margin-bottom: 10px;
+}
+
+.contact-card {
+    display: grid;
+    gap: 16px;
+    max-width: 640px;
+}
+
+.contact-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px;
+    padding: 16px 28px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+        rgba(10, 22, 38, 0.72);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.divider {
+    width: min(100%, 420px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(89,184,255,0.85), transparent);
+    opacity: 0.75;
+}
+
+.quote-block {
+    display: grid;
+    gap: 18px;
+    max-width: 940px;
+}
+
+.quote-text {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 920px;
+}
+
+.quote-highlight {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.card-glow {
+    position: relative;
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(10, 22, 38, 0.84);
+    border: 1px solid rgba(89, 184, 255, 0.14);
+    overflow: hidden;
+}
+
+.card-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(89,184,255,0.08), transparent 40%, rgba(89,184,255,0.04));
+    pointer-events: none;
+}
+
+.sol-num {
+    position: relative;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+
+.tagline {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.contact-line {
+    padding: 18px 20px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.footnote {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+@media (max-width: 1100px) {
+    body {
+        overflow: auto;
+    }
+
+    .slide {
+        position: relative;
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+        min-height: 100vh;
+        padding: 72px 20px 48px;
+    }
+
+    .nav,
+    .counter,
+    .hint,
+    .progress {
+        display: none;
+    }
+
+    .hero-grid,
+    .fact-stack,
+    .grid-3,
+    .grid-4,
+    .grid-logos,
+    .grid-steps,
+    .team-grid,
+    .compare-grid,
+    .solution-map,
+    .proof-row,
+    .pipeline,
+    .brand-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .table-header,
+    .table-row {
+        grid-template-columns: repeat(4, minmax(160px, 1fr));
+        min-width: 720px;
+    }
+
+    .table {
+        overflow-x: auto;
+    }
+
+    .pipe::after {
+        display: none;
+    }
+
+    .quote-text {
+        font-size: 17px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+<div class="hint">← →</div>
+
+<div class="nav">
+    <button onclick="prevSlide()" aria-label="Назад">←</button>
+    <button onclick="nextSlide()" aria-label="Вперёд">→</button>
+</div>
+
+<main class="deck" id="deck">
+    <section class="slide active">
+        <div class="frame spread" style="align-items:center; text-align:center;">
+            <div style="width:100%; display:flex; flex-direction:column; align-items:center; gap:22px;">
+                <div class="eyebrow">KUBRIK</div>
+                <h1 class="hero-title">KUBRIK</h1>
+                <p class="hero-subtitle">AI-маркетинг-отдел для девелоперов и агентств недвижимости</p>
+                <div class="divider"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <div class="frame">
+            <div class="eyebrow">Проблема</div>
+            <h2>Почему ваш маркетинг<br>не эффективен</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-icon">Люди</div>
+                    <ul>
+                        <li>Нет возможности нанять лидеров отрасли в команду.</li>
+                        <li>Ваши возможности ограничены навыками сотрудников.</li>
+                        <li>Человеческий фактор.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">Бюджеты</div>
+                    <ul>
+                        <li>Высокий ФОТ и инфраструктурные расходы.</li>
+                        <li>Нет таких бюджетов, как у гигантов рынка.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">Подход</div>
+                    <ul>
+                        <li>Нет системного и научного подхода, вы просто тестируете гипотезы.</li>
+                        <li>Отсутствует прозрачная сквозная аналитика.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <div class="frame">
+            <div class="eyebrow">Решение</div>
+            <h2>Как вам поможет KUBRIK</h2>
+            <div class="grid-4">
+                <div class="card-glow">
+                    <div class="sol-num">01</div>
+                    <h3>Системность</h3>
+                    <p>В сервис зашиты лучшие мировые практики и фреймворки.</p>
+                </div>
+                <div class="card-glow">
+                    <div class="sol-num">02</div>
+                    <h3>Гиперскорость</h3>
+                    <p>Запускаем десятки рекламных кампаний за сутки.</p>
+                </div>
+                <div class="card-glow">
+                    <div class="sol-num">03</div>
+                    <h3>Прозрачность</h3>
+                    <p>Единый дашборд со сквозной аналитикой.</p>
+                </div>
+                <div class="card-glow">
+                    <div class="sol-num">04</div>
+                    <h3>Оптимизация</h3>
+                    <p>Сокращаем ФОТ и операционку.</p>
+                </div>
+            </div>
+            <p class="tagline">Кратный рост эффективности маркетинга</p>
+        </div>
+    </section>
+
+    <section class="slide">
+        <div class="frame">
+            <div class="eyebrow">Модель</div>
+            <h2>Как работает KUBRIK</h2>
+            <div class="quote-block">
+                <p class="quote-text">KUBRIK это огромная самообучающаяся сеть агентов и модулей, которые работают самостоятельно и согласовывают действия между собой. Мы автоматизируем рутину и усиливаем команду, а ключевые решения остаются под вашим контролем.</p>
+                <div class="divider" style="width:100%;"></div>
+                <p class="quote-text"><span class="quote-highlight">На вас будут работать:</span> Контекстолог, Аналитик, Дизайнер, Копирайтер, Таргетолог, Стратег, Медиапланер, Авитолог, специалисты по SMM, SEO, GEO и многие другие.</p>
+                <p class="quote-text"><span class="quote-highlight">Вы общаетесь с одним старшим представителем,</span> который координирует всю команду.</p>
+                <div class="divider" style="width:100%;"></div>
+                <p class="quote-text"><span class="quote-highlight">Если коротко:</span> вы получаете с десяток лучших специалистов на рынке, которые работают 24/7.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide platform-slide">
+        <div class="frame">
+            <div class="eyebrow">Площадки</div>
+            <h2>С какими площадками работает KUBRIK</h2>
+            <div class="brand-grid">
+                <div class="brand-item">
+                    <div class="brand-mark yandex"><span class="ya">Я</span><span>ндекс</span></div>
+                    <span>Яндекс</span>
+                </div>
+                <div class="brand-item"><img src="assets/logos/google.svg" alt="Google"><span>Google</span></div>
+                <div class="brand-item">
+                    <div class="brand-mark dzen" aria-hidden="true"></div>
+                    <span>Дзен</span>
+                </div>
+                <div class="brand-item">
+                    <div class="brand-mark avito" aria-hidden="true">
+                        <span class="c1"></span>
+                        <span class="c2"></span>
+                        <span class="c3"></span>
+                        <span class="c4"></span>
+                    </div>
+                    <span>Авито</span>
+                </div>
+                <div class="brand-item wordmark"><strong>Циан</strong><span>Недвижимость</span></div>
+                <div class="brand-item">
+                    <div class="brand-mark yandex"><span class="ya">Я</span><span>ндекс</span></div>
+                    <span>Яндекс.Недвижимость</span>
+                </div>
+                <div class="brand-item"><img src="assets/logos/instagram.svg" alt="Instagram"><span>Instagram</span></div>
+                <div class="brand-item"><img src="assets/logos/tiktok.svg" alt="TikTok"><span>TikTok</span></div>
+                <div class="brand-item"><img src="assets/logos/reddit.svg" alt="Reddit"><span>Reddit</span></div>
+                <div class="brand-item"><img src="assets/logos/youtube.svg" alt="YouTube"><span>YouTube</span></div>
+                <div class="brand-item"><img src="assets/logos/facebook.svg" alt="Facebook"><span>Facebook</span></div>
+                <div class="brand-item wordmark"><strong>VC</strong><span>Медиа</span></div>
+                <div class="brand-item wordmark"><strong>in</strong><span>LinkedIn</span></div>
+                <div class="brand-item"><img src="assets/logos/vk.svg" alt="VK"><span>VK</span></div>
+                <div class="brand-item"><img src="assets/logos/telegram.svg" alt="Telegram"><span>Telegram</span></div>
+                <div class="brand-item">
+                    <div class="brand-mark amocrm"><span class="amo">amo</span>CRM</div>
+                    <span>AmoCRM</span>
+                </div>
+                <div class="brand-item">
+                    <div class="brand-mark bitrix">Битрикс<span class="num24">24</span></div>
+                    <span>Битрикс24</span>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <p class="lead">Мы не очередной ваш подрядчик, а встроенный отдел маркетинга.</p>
+        </div>
+    </section>
+
+    <section class="slide">
+        <div class="frame">
+            <div class="eyebrow">Подключение</div>
+            <h2>Как подключить</h2>
+            <p class="lead">Мы все сделаем за вас! Вы предоставляете данные - мы полностью готовый отдел маркетинга, за 14 дней.</p>
+            <div class="grid-steps">
+                <div class="step">
+                    <div class="step-index">1</div>
+                    <h3>Бриф и данные</h3>
+                    <p>Вы предоставляете информацию о проекте и доступы.</p>
+                </div>
+                <div class="step">
+                    <div class="step-index">2</div>
+                    <h3>Настройка</h3>
+                    <p>Мы подключаем площадки, аналитику и запускаем агентов.</p>
+                </div>
+                <div class="step">
+                    <div class="step-index">3</div>
+                    <h3>Запуск</h3>
+                    <p>Полностью готовый отдел маркетинга за 14 дней.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <div class="frame" style="align-items:center; text-align:center;">
+            <div class="eyebrow">Контакты</div>
+            <h2>Давайте обсудим</h2>
+            <div class="divider"></div>
+            <div class="contact-row">
+                <a class="contact-btn" href="https://t.me/kubrik_marketing" target="_blank" rel="noopener">Telegram</a>
+                <a class="contact-btn" href="https://t.me/kubrik_marketing" target="_blank" rel="noopener">WhatsApp</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
+let current = 0;
+
+function render() {
+    slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === current);
+        slide.classList.toggle('prev', index < current);
+    });
+    progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+    counter.textContent = `${current + 1} / ${slides.length}`;
+}
+
+function nextSlide() {
+    if (window.innerWidth <= 1100) return;
+    current = Math.min(current + 1, slides.length - 1);
+    render();
+}
+
+function prevSlide() {
+    if (window.innerWidth <= 1100) return;
+    current = Math.max(current - 1, 0);
+    render();
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight' || event.key === ' ') {
+        event.preventDefault();
+        nextSlide();
+    }
+    if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prevSlide();
+    }
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', (event) => {
+    touchStartX = event.changedTouches[0].screenX;
+}, { passive: true });
+
+document.addEventListener('touchend', (event) => {
+    if (window.innerWidth <= 1100) return;
+    const diff = touchStartX - event.changedTouches[0].screenX;
+    if (Math.abs(diff) < 50) return;
+    if (diff > 0) nextSlide();
+    else prevSlide();
+}, { passive: true });
+
+render();
+</script>
+</body>
+</html>

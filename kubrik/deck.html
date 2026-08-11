@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KUBRIK - AI-маркетинг-отдел</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #fafafa;
+  --text: #111;
+  --text-2: #444;
+  --text-3: #999;
+  --accent: #1a56db;
+  --accent-light: #eef2ff;
+  --border: #e2e2e2;
+  --card-bg: #fff;
+  --red: #dc2626;
+  --green: #16a34a;
+}
+
+html, body {
+  width:100%; height:100%; overflow:hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck { width:100%; height:100%; position:relative; }
+
+.slide {
+  position:absolute; inset:0;
+  width:100vw; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:translateX(40px);
+  transition: opacity .4s ease, transform .4s ease;
+  pointer-events:none;
+  padding: 48px 80px;
+}
+.slide.active { opacity:1; transform:translateX(0); pointer-events:auto; }
+.slide.prev { opacity:0; transform:translateX(-40px); }
+
+.slide-inner { max-width:1200px; width:100%; }
+
+/* Typography */
+.label {
+  font-size:.7rem; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:1rem; display:block;
+}
+h1 { font-size:5rem; font-weight:900; letter-spacing:-.04em; line-height:1; color:var(--accent); }
+h2 { font-size:2.6rem; font-weight:800; letter-spacing:-.03em; line-height:1.15; margin-bottom:1.8rem; }
+h3 { font-size:1rem; font-weight:700; margin-bottom:.4rem; }
+.subtitle { font-size:1.2rem; color:var(--text-2); line-height:1.6; max-width:600px; }
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+}
+.card-icon {
+  width:48px; height:48px; border-radius:12px;
+  background:var(--accent-light); color:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; margin-bottom:16px;
+}
+.card-label {
+  font-size:.65rem; font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:14px;
+}
+.card p {
+  font-size:.9rem; color:var(--text-2); line-height:1.65;
+  padding:8px 0; border-bottom:1px solid #f0f0f0;
+}
+.card p:last-child { border-bottom:none; }
+
+/* Grids */
+.g2 { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+
+/* Numbered items */
+.num-card {
+  background:var(--card-bg); border:1px solid var(--border);
+  border-radius:16px; padding:28px;
+}
+.num-card .num {
+  font-size:2.4rem; font-weight:900; color:var(--accent);
+  line-height:1; margin-bottom:12px;
+}
+.num-card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; }
+.num-card p { font-size:.88rem; color:var(--text-2); line-height:1.55; }
+
+/* How it works - visual steps */
+.step-row {
+  display:flex; align-items:stretch; gap:0; position:relative;
+}
+.step-card {
+  flex:1; background:var(--card-bg); border:1px solid var(--border);
+  border-radius:16px; padding:28px; text-align:center;
+  position:relative; z-index:1;
+}
+.step-card .step-icon {
+  width:56px; height:56px; border-radius:14px;
+  background:var(--accent-light); color:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; margin:0 auto 14px;
+}
+.step-card h3 { font-size:.95rem; font-weight:700; margin-bottom:4px; }
+.step-card p { font-size:.82rem; color:var(--text-2); line-height:1.5; }
+.step-arrow {
+  display:flex; align-items:center; justify-content:center;
+  width:40px; flex-shrink:0; color:var(--text-3); font-size:1.2rem; z-index:0;
+}
+
+/* Comparison table */
+.compare {
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border-radius:16px; overflow:hidden; border:1px solid var(--border);
+}
+.compare-col { padding:36px 40px; }
+.compare-col.old { background:#fff; }
+.compare-col.new { background:var(--accent); color:#fff; }
+.compare-col h3 {
+  font-size:1.1rem; font-weight:700; margin-bottom:24px;
+  padding-bottom:16px; border-bottom:1px solid rgba(0,0,0,.08);
+}
+.compare-col.new h3 { border-bottom-color:rgba(255,255,255,.2); }
+.compare-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; font-size:.9rem;
+}
+.compare-row .val { font-weight:700; font-size:.95rem; }
+.compare-col.old .val.bad { color:var(--red); }
+.compare-col.new .val.good { color:#bbf7d0; }
+.compare-total {
+  margin-top:16px; padding-top:16px;
+  border-top:2px solid rgba(0,0,0,.1);
+  font-size:1.1rem; font-weight:800;
+  display:flex; justify-content:space-between;
+}
+.compare-col.new .compare-total { border-top-color:rgba(255,255,255,.3); }
+
+/* Platform pills */
+.pill-section { margin-bottom:16px; }
+.pill-label {
+  font-size:.65rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.08em; color:var(--text-3); margin-bottom:8px;
+}
+.pill-grid { display:flex; flex-wrap:wrap; gap:8px; }
+.pill {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 16px; border-radius:10px;
+  border:1px solid var(--border); background:var(--card-bg);
+  font-size:.85rem; font-weight:500; color:var(--text);
+}
+
+/* CTA */
+.cta-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:16px 36px; border-radius:12px;
+  font-size:1rem; font-weight:700;
+  text-decoration:none; border:none; cursor:pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.cta-btn:hover { transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,.12); }
+.cta-primary { background:var(--accent); color:#fff; }
+.cta-outline { background:transparent; color:var(--accent); border:1.5px solid var(--accent); }
+
+/* Big number */
+.big-num { font-size:4rem; font-weight:900; color:var(--accent); line-height:1; }
+.big-label { font-size:.85rem; color:var(--text-2); margin-top:4px; }
+.stats-row { gap:48px; }
+
+/* Highlight bar */
+.highlight-bar {
+  background:var(--accent-light); border-left:3px solid var(--accent);
+  padding:16px 20px; border-radius:0 12px 12px 0;
+  font-size:.95rem; font-weight:500; color:var(--text); margin-top:1.5rem;
+}
+
+/* Footer */
+.slide-footer {
+  position:absolute; bottom:32px; left:80px;
+  font-size:.75rem; color:var(--text-3); font-weight:500;
+}
+
+/* Counter */
+.counter {
+  position:fixed; bottom:28px; right:36px;
+  font-size:.7rem; color:var(--text-3); font-weight:500; z-index:100;
+}
+
+/* Separator */
+.sep { height:1px; background:var(--border); margin:1.5rem 0; }
+
+@media (max-width:768px) {
+  html, body { overflow:hidden; }
+  h1 { font-size:2.4rem; }
+  h2 { font-size:1.5rem; margin-bottom:1.2rem; }
+  h3 { font-size:.9rem; }
+  .subtitle { font-size:1rem; }
+  .label { font-size:.6rem; margin-bottom:.6rem; }
+
+  .slide {
+    padding:24px 20px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    align-items:flex-start;
+  }
+  .slide-inner { max-width:100%; padding-top:16px; padding-bottom:40px; }
+
+  .g2, .g3, .g4 { grid-template-columns:1fr; gap:12px; }
+
+  /* Cards */
+  .card { padding:20px; }
+  .card-icon { width:36px; height:36px; font-size:1.1rem; margin-bottom:10px; }
+  .card p { font-size:.82rem; padding:6px 0; }
+
+  /* Numbered cards */
+  .num-card { padding:20px; }
+  .num-card .num { font-size:1.8rem; margin-bottom:8px; }
+  .num-card p { font-size:.82rem; }
+
+  /* Compare table */
+  .compare { grid-template-columns:1fr; }
+  .compare-col { padding:24px 20px; }
+  .compare-row { font-size:.82rem; }
+  .compare-row .val { font-size:.85rem; }
+  .compare-total { font-size:.95rem; }
+
+  /* Platforms */
+  .pill { padding:6px 12px; font-size:.78rem; }
+  .pill-section { margin-bottom:12px; }
+
+  /* Stats row compact */
+  .big-num { font-size:1.2rem !important; }
+  .big-label { font-size:.58rem; }
+  .stats-row {
+    gap:0 !important;
+    background:var(--accent-light);
+    border-radius:12px;
+    padding:12px 0;
+  }
+  .stats-row > div { text-align:center; flex:1; }
+  .subtitle-mobile-gap { margin-bottom:1.5rem !important; }
+
+  /* How it works text */
+  .highlight-bar { font-size:.85rem; padding:14px 16px; }
+
+  /* CTA */
+  .cta-btn { padding:14px 24px; font-size:.9rem; }
+
+  /* Footer */
+  .slide-footer { left:20px; bottom:16px; font-size:.65rem; }
+  .counter { bottom:16px; right:20px; font-size:.6rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: TITLE -->
+  <div class="slide active" data-slide="0">
+    <div class="slide-inner" style="text-align:center;">
+      <h1 style="margin-bottom:1.5rem;">KUBRIK</h1>
+      <p class="subtitle subtitle-mobile-gap" style="margin:0 auto 3rem; max-width:620px;">AI-маркетинг-отдел для девелоперов<br>и агентств недвижимости</p>
+      <div class="stats-row" style="display:flex; justify-content:center;">
+        <div><div class="big-num">10+</div><div class="big-label">AI-специалистов</div></div>
+        <div><div class="big-num">24/7</div><div class="big-label">без выходных</div></div>
+        <div><div class="big-num">14</div><div class="big-label">дней на запуск</div></div>
+      </div>
+    </div>
+    <div class="slide-footer">kubrik.ai</div>
+  </div>
+
+  <!-- SLIDE 2: PROBLEM -->
+  <div class="slide" data-slide="1">
+    <div class="slide-inner">
+      <span class="label">Проблема</span>
+      <h2>Почему ваш маркетинг не эффективен</h2>
+      <div class="g3">
+        <div class="card">
+          <div class="card-icon">&#128101;</div>
+          <div class="card-label">Люди</div>
+          <p>Нет возможности нанять лидеров отрасли в команду</p>
+          <p>Ваши возможности ограничены навыками сотрудников</p>
+          <p>Человеческий фактор</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#128176;</div>
+          <div class="card-label">Бюджеты</div>
+          <p>Высокий ФОТ и инфраструктурные расходы</p>
+          <p>Нет таких бюджетов как у гигантов рынка</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">&#127919;</div>
+          <div class="card-label">Подход</div>
+          <p>Нет системного и научного подхода, вы просто тестируете гипотезы</p>
+          <p>Отсутствует прозрачная сквозная аналитика</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: SOLUTION -->
+  <div class="slide" data-slide="2">
+    <div class="slide-inner">
+      <span class="label">Решение</span>
+      <h2>Как вам поможет KUBRIK</h2>
+      <div class="g4">
+        <div class="num-card">
+          <div class="num">01</div>
+          <h3>Системность</h3>
+          <p>В сервис зашиты лучшие мировые практики и фреймворки</p>
+        </div>
+        <div class="num-card">
+          <div class="num">02</div>
+          <h3>Гиперскорость</h3>
+          <p>Запускаем десятки рекламных кампаний за сутки</p>
+        </div>
+        <div class="num-card">
+          <div class="num">03</div>
+          <h3>Прозрачность</h3>
+          <p>Единый дашборд со сквозной аналитикой</p>
+        </div>
+        <div class="num-card">
+          <div class="num">04</div>
+          <h3>Оптимизация</h3>
+          <p>Сокращаем ФОТ и операционку до 90%</p>
+        </div>
+      </div>
+      <p style="margin-top:2rem; font-size:1.05rem; color:var(--accent); font-weight:600;">Кратно растет эффективность вашего маркетинга, а значит и прибыль!</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: HOW IT WORKS -->
+  <div class="slide" data-slide="3">
+    <div class="slide-inner">
+      <span class="label">Как это работает</span>
+      <h2>Как работает KUBRIK</h2>
+      <div class="g2" style="gap:32px; align-items:start;">
+        <div>
+          <p style="font-size:1.05rem; color:var(--text-2); line-height:1.8; margin-bottom:1.2rem;">KUBRIK - это огромная самообучающаяся сеть агентов и модулей, которые работают самостоятельно и согласовывают действия между собой. Мы автоматизируем рутину и усиливаем команду, а ключевые решения остаются под вашим контролем. <strong style="color:var(--accent);">90% всей работы выполнит KUBRIK.</strong></p>
+          <p style="font-size:1.05rem; color:var(--text-2); line-height:1.8;"><strong style="color:var(--text);">На вас будут работать:</strong> Контекстолог, Аналитик, Дизайнер, Копирайтер, Таргетолог, Стратег, Медиапланер, Авитолог, специалисты по SMM, SEO, GEO и многие другие</p>
+        </div>
+        <div>
+          <div class="highlight-bar" style="font-size:1.1rem; padding:24px;">
+            Если коротко: вы получаете с десяток лучших специалистов на рынке которые работают 24/7
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: ECONOMICS (NEW) -->
+  <div class="slide" data-slide="4">
+    <div class="slide-inner">
+      <span class="label">Экономика</span>
+      <h2>Штатный отдел vs KUBRIK</h2>
+      <div class="compare">
+        <div class="compare-col old">
+          <h3>Штатный отдел</h3>
+          <div class="compare-row"><span>Маркетолог</span><span class="val bad">180 000 &#8381;</span></div>
+          <div class="compare-row"><span>Таргетолог</span><span class="val bad">120 000 &#8381;</span></div>
+          <div class="compare-row"><span>Дизайнер</span><span class="val bad">130 000 &#8381;</span></div>
+          <div class="compare-row"><span>Копирайтер</span><span class="val bad">80 000 &#8381;</span></div>
+          <div class="compare-row"><span>Аналитик</span><span class="val bad">150 000 &#8381;</span></div>
+          <div class="compare-row"><span>SMM</span><span class="val bad">90 000 &#8381;</span></div>
+          <div class="compare-total"><span>Итого ФОТ</span><span>~750 000 &#8381;/мес</span></div>
+        </div>
+        <div class="compare-col new">
+          <h3>KUBRIK</h3>
+          <div class="compare-row"><span>AI-стратег</span><span class="val good">&#10003;</span></div>
+          <div class="compare-row"><span>AI-таргетолог</span><span class="val good">&#10003;</span></div>
+          <div class="compare-row"><span>AI-дизайнер</span><span class="val good">&#10003;</span></div>
+          <div class="compare-row"><span>AI-копирайтер</span><span class="val good">&#10003;</span></div>
+          <div class="compare-row"><span>AI-аналитик</span><span class="val good">&#10003;</span></div>
+          <div class="compare-row"><span>Менеджер (человек)</span><span class="val good">&#10003;</span></div>
+          <div class="compare-total"><span>Итого</span><span>от 150 000 &#8381;/мес</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: PLATFORMS -->
+  <div class="slide" data-slide="5">
+    <div class="slide-inner">
+      <span class="label">Площадки</span>
+      <h2>С какими площадками работает KUBRIK</h2>
+      <div class="g2" style="gap:32px;">
+        <div>
+          <div class="pill-section">
+            <div class="pill-label">Реклама</div>
+            <div class="pill-grid">
+              <span class="pill">Google Ads</span>
+              <span class="pill">Яндекс Директ</span>
+              <span class="pill">Instagram</span>
+              <span class="pill">Facebook</span>
+              <span class="pill">TikTok</span>
+              <span class="pill">VK Реклама</span>
+            </div>
+          </div>
+          <div class="pill-section">
+            <div class="pill-label">Классифайды</div>
+            <div class="pill-grid">
+              <span class="pill">Авито</span>
+              <span class="pill">Циан</span>
+              <span class="pill">Яндекс.Недвижимость</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="pill-section">
+            <div class="pill-label">Контент и соцсети</div>
+            <div class="pill-grid">
+              <span class="pill">YouTube</span>
+              <span class="pill">Telegram</span>
+              <span class="pill">Дзен</span>
+              <span class="pill">VC</span>
+              <span class="pill">LinkedIn</span>
+              <span class="pill">Reddit</span>
+            </div>
+          </div>
+          <div class="pill-section">
+            <div class="pill-label">Аналитика и CRM</div>
+            <div class="pill-grid">
+              <span class="pill">AmoCRM</span>
+              <span class="pill">Битрикс24</span>
+              <span class="pill">Яндекс Метрика</span>
+              <span class="pill">Google Analytics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.95rem; color:var(--text-3); margin-top:12px;">и многие другие</p>
+      <div class="sep"></div>
+      <p style="font-size:.95rem; color:var(--text-2);">Мы не очередной ваш подрядчик, а встроенный отдел маркетинга</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: ONBOARDING -->
+  <div class="slide" data-slide="6">
+    <div class="slide-inner">
+      <span class="label">Подключение</span>
+      <h2>Как подключить</h2>
+      <p class="subtitle" style="margin-bottom:2.5rem;">Мы все сделаем за вас! Вы предоставляете данные - мы полностью готовый отдел маркетинга, за 14 дней!</p>
+      <div class="g3">
+        <div class="num-card" style="text-align:center;">
+          <div class="num">01</div>
+          <h3>Бриф</h3>
+          <p>Заполняете бриф, предоставляете доступы к площадкам</p>
+        </div>
+        <div class="num-card" style="text-align:center;">
+          <div class="num">02</div>
+          <h3>Настройка</h3>
+          <p>Подключаем каналы, аналитику, запускаем AI-агентов</p>
+        </div>
+        <div class="num-card" style="text-align:center;">
+          <div class="num">03</div>
+          <h3>Результат</h3>
+          <p>Первые лиды и полный дашборд через 14 дней</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: CTA -->
+  <div class="slide" data-slide="7">
+    <div class="slide-inner" style="text-align:center;">
+      <span class="label">Контакты</span>
+      <h2 style="font-size:3rem; margin-bottom:1rem;">Давайте обсудим</h2>
+      <p class="subtitle" style="margin:0 auto 2.5rem;">30 минут - покажем, как KUBRIK сработает для вашего объекта</p>
+      <div style="display:flex; gap:16px; justify-content:center;">
+        <a class="cta-btn cta-primary" href="https://t.me/kubrik_ai">Написать в Telegram</a>
+        <a class="cta-btn cta-outline" href="https://wa.me/79XXXXXXXXX">WhatsApp</a>
+      </div>
+      <p style="margin-top:3rem; font-size:.8rem; color:var(--text-3);">kubrik.ai</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="counter" id="counter">1 / 8</div>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  let cur = 0, total = slides.length;
+
+  function go(n){
+    if(n<0||n>=total||n===cur) return;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add(n>cur?'prev':'');
+    let old=cur; cur=n;
+    slides[cur].classList.remove('prev');
+    slides[cur].classList.add('active');
+    counter.textContent=(cur+1)+' / '+total;
+    setTimeout(()=>slides[old].classList.remove('prev'),500);
+  }
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();go(cur+1);}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();go(cur-1);}
+  });
+
+  document.getElementById('deck').addEventListener('click',e=>{
+    if(e.target.closest('a,button')) return;
+    e.clientX>innerWidth/2?go(cur+1):go(cur-1);
+  });
+
+  let tx=0,ty=0;
+  document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY},{passive:true});
+  document.addEventListener('touchend',e=>{
+    let dx=e.changedTouches[0].clientX-tx;
+    let dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5){dx<0?go(cur+1):go(cur-1);}
+  },{passive:true});
+})();
+</script>
+</body>
+</html>
